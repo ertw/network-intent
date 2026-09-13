@@ -1,0 +1,53 @@
+network-language 1.0
+
+network home {
+  domain home.arpa
+
+  vlan trusted 10 {
+    subnet 10.0.10.0/24
+    gateway +1
+    dhcp +100 .. +199
+  }
+
+  vlan servers 20 {
+    subnet 10.0.20.0/24
+    gateway +1
+    host nas +10
+    host hypervisor +11
+    host home-assistant +20
+  }
+
+  vlan iot 30 {
+    subnet 10.0.30.0/24
+    gateway +1
+    dhcp +100 .. +240
+  }
+
+  router gateway {
+    driver openwrt
+    port lan1 { access trusted }
+    port lan2 { access servers }
+    port lan4 { trunk trusted servers iot }
+  }
+
+  switch core {
+    driver cisco-ios
+    port Gi1/0/1 {
+      trunk trusted servers iot
+      connect gateway.lan4
+    }
+    port Gi1/0/2 {
+      access servers
+      connect nas.eth0
+    }
+  }
+
+  policy {
+    trusted -> internet allow
+    trusted -> servers allow
+    iot -> internet allow
+    iot -> gateway allow dns, ntp
+    iot -> trusted deny
+    iot -> servers deny
+  }
+}

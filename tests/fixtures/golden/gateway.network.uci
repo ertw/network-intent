@@ -1,0 +1,43 @@
+config device 'net_bridge'
+	option name 'br-net'
+	option type 'bridge'
+	option vlan_filtering '1'
+	list ports 'lan1'
+	list ports 'lan2'
+	list ports 'lan4'
+
+config bridge-vlan 'bridge_v10'
+	option device 'br-net'
+	option vlan '10'
+	list ports 'lan1:u*'
+	list ports 'lan4:t'
+
+config interface 'v10'
+	option device 'br-net.10'
+	option proto 'static'
+	option ipaddr '10.0.10.1'
+	option netmask '255.255.255.0'
+
+config bridge-vlan 'bridge_v20'
+	option device 'br-net'
+	option vlan '20'
+	list ports 'lan2:u*'
+	list ports 'lan4:t'
+
+config interface 'v20'
+	option device 'br-net.20'
+	option proto 'static'
+	option ipaddr '10.0.20.1'
+	option netmask '255.255.255.0'
+
+config bridge-vlan 'bridge_v30'
+	option device 'br-net'
+	option vlan '30'
+	list ports 'lan4:t'
+
+config interface 'v30'
+	option device 'br-net.30'
+	option proto 'static'
+	option ipaddr '10.0.30.1'
+	option netmask '255.255.255.0'
+

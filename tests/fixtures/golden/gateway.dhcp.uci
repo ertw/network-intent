@@ -1,0 +1,39 @@
+config dnsmasq 'net_dns'
+	option domainneeded '1'
+	option boguspriv '1'
+	option localise_queries '1'
+	option dhcpleasemax '241'
+	option domain 'home.arpa'
+	option local '/home.arpa/'
+	option expandhosts '1'
+
+config dhcp 'v10'
+	option interface 'v10'
+	option start '100'
+	option limit '100'
+	option leasetime '12h'
+	option dhcpv4 'server'
+
+config dhcp 'v20'
+	option interface 'v20'
+	option ignore '1'
+
+config domain 'v20_host_0'
+	option name 'nas'
+	option ip '10.0.20.10'
+
+config domain 'v20_host_1'
+	option name 'hypervisor'
+	option ip '10.0.20.11'
+
+config domain 'v20_host_2'
+	option name 'home-assistant'
+	option ip '10.0.20.20'
+
+config dhcp 'v30'
+	option interface 'v30'
+	option start '100'
+	option limit '141'
+	option leasetime '12h'
+	option dhcpv4 'server'
+

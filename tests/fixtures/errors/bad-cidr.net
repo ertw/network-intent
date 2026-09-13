@@ -1,0 +1,18 @@
+network-language 1.0
+
+network home {
+  domain home.arpa
+  vlan servers 20 {
+    subnet 10.0.20.0/33
+    gateway +1
+    host nas +10
+  }
+  switch core {
+    driver cisco-ios
+    port Gi1/0/2 { access servers }
+  }
+  router gateway {
+    driver openwrt
+    port lan2 { access servers }
+  }
+}

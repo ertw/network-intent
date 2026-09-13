@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if [ "${1-}" = schema ] && [ "${2-}" = diff ]; then
+  shift 2
+  exec python3 "$root/scripts/release.py" diff "$@"
+fi
+if [ "${1-}" = release-check ]; then
+  shift
+  exec python3 "$root/scripts/release.py" check "$@"
+fi
+if [ ! -x "$root/build/exec/netc" ]; then
+  (cd "$root" && make build >&2)
+fi
+exec "$root/build/exec/netc" "$@"

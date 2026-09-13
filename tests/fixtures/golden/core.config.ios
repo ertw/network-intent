@@ -1,0 +1,20 @@
+vlan dot1q tag native
+!
+vlan 10
+ name trusted
+!
+vlan 20
+ name servers
+!
+vlan 30
+ name iot
+!
+interface Gi1/0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+ switchport nonegotiate
+!
+interface Gi1/0/2
+ switchport mode access
+ switchport access vlan 20
+!

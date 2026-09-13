@@ -1,0 +1,12 @@
+flowchart LR
+  %% Desired physical topology; not observed connectivity
+  d0p0["gateway.lan1"]
+  d0p1["gateway.lan2"]
+  d0p2["gateway.lan4"]
+  d1p0["core.Gi1/0/1"]
+  d1p1["core.Gi1/0/2"]
+  h0["nas.eth0"]
+  h1["hypervisor.eth0"]
+  h2["home-assistant.eth0"]
+  d0p2 --- d1p0
+  d1p1 --- h0

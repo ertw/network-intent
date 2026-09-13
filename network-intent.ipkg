@@ -1,0 +1,6 @@
+package network-intent
+version = 0.1.0
+sourcedir = "src"
+main = Main
+executable = netc
+opts = "--total"

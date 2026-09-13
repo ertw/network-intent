@@ -1,0 +1,36 @@
+network-language 1.0
+
+network dependencies {
+  vlan servers 20 {
+    subnet 10.0.20.0/24
+    gateway +1
+    host upstream +2
+  }
+  router gateway {
+    driver openwrt
+    port lan2 { access servers }
+  }
+  service database { tcp 5432 }
+  service api {
+    tcp 8080
+    depends database
+  }
+  route branch {
+    destination 10.50.0.0/16
+    via 10.0.20.2
+    vlan servers
+    device gateway
+    metric 10
+    depends remote
+  }
+  route remote {
+    destination 10.60.0.0/16
+    via 10.0.20.2
+    vlan servers
+    device gateway
+    depends branch
+  }
+  policy {
+    servers -> gateway allow api
+  }
+}
