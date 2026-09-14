@@ -7,7 +7,7 @@ family and its remediation. Exact prose is not a compatibility API.
 | Family / common code | Meaning / correction |
 | --- | --- |
 | `syntax.*` | Correct statement shape, fields, braces, string escapes or input limits. |
-| `version.*` | Declare supported `network-language 1.0` explicitly. |
+| `version.*` | Declare supported `network-language 2.0` explicitly. |
 | `name.duplicate` / `name.duplicate-field` | Resolve the duplicate at the primary and related spans. |
 | `reference.unknown-*` | Correct or declare the reference in the expected namespace. |
 | `vlan.invalid-id` | Use an integer in 1–4094. |
@@ -17,7 +17,7 @@ family and its remediation. Exact prose is not a compatibility API.
 | `address.network-address` / `address.broadcast-address` | Avoid reserved host addresses where applicable. |
 | `address.duplicate-static` | Distinguish host and gateway assignments. |
 | `address.static-dhcp-overlap` | Move the static address or resize the DHCP pool. |
-| `address.prefix-overlap` | Use nonoverlapping VLAN prefixes; v1 has no VRF exception. |
+| `address.prefix-overlap` | Use nonoverlapping VLAN prefixes; this routing context has no VRF exception. |
 | `topology.port-mode` | Exactly one access/trunk declaration is required. |
 | `topology.incompatible-link` | Match both endpoints' tagged/untagged VLAN memberships. |
 | `topology.multiple-peers` / `topology.self-link` | Correct the physical endpoint relationship. |
@@ -28,7 +28,17 @@ family and its remediation. Exact prose is not a compatibility API.
 | `service.dependency-cycle` / `routing.dependency-cycle` | Follow the directed witness and break the dependency cycle. |
 | `backend.capability-mismatch` | Choose a target/profile with the required capacity and features. |
 | `backend.unsafe-value` | Remove control or line-separator characters from target text. |
-| `aaa.*` / `secret.*` | API-spike contract/reference failure; source syntax is not implemented. |
+| `aaa.*` | AAA foundation API contract failure; AAA source realization is not implemented. |
+| `secret.invalid-reference` / `secret.wifi-credential` | Use an opaque Wi-Fi reference for secured APs; see [secrets.md](secrets.md). |
+| `address.invalid-ipv6` / `address.invalid-ipv6-prefix` | Correct IPv6 notation, width, or canonical prefix bits. |
+| `address.invalid-dhcp-count` / `address.invalid-dhcp-range` | Use a positive count and ordered usable in-subnet endpoints. |
+| `topology.multiple-masters` / `topology.slave-interface` | Use one bridge/bond master per link; bind logical interfaces to masters. |
+| `topology.attachment-cycle` | Break the cycle between virtual link attachments. |
+| `router.*` / `bond.*` | Correct required protocols, protocol-specific settings, DUID, bond membership, MAC or limits. |
+| `dhcp.*` | Correct daemon configuration, pool mode/capacity, RA flags, or IPv6 prerequisites. |
+| `policy.family-*` / `policy.port-protocol` / `policy.icmp-*` | Make address families and protocol/type/port matches consistent. |
+| `wireless.*` | Correct radio/AP references, band/width/channel, country, SSID, or security settings. |
+| `backend.section-collision` | Rename the conflicting source entity to avoid a generated UCI section collision. |
 | `io.read` | Check the source path and read permissions. |
 
 Positions use one-based lines/columns; end positions are exclusive. Primary

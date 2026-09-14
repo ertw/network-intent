@@ -1,4 +1,4 @@
-network-language 1.0
+network-language 2.0
 
 network home {
   domain home.arpa

@@ -1,6 +1,6 @@
 # Network home
 
-Language 1.0. State: **Desired**. Domain: home.arpa.
+Language 2.0. State: **Desired**. Domain: home.arpa.
 
 Model invariants and dependency ordering are certificate-checked by the Idris semantic core. Target realization is conditional on documented profiles. Applied state, physical connectivity, service health and observations are **Unknown**.
 
@@ -47,9 +47,9 @@ Static IP assignments must be configured on the hosts. No MAC-bound reservations
 | Route | Destination | Next hop | Device | VLAN | Metric |
 | --- | --- | --- | --- | --- | --- |
 
-## Policy matrix
+## VLAN shorthand policy matrix
 
-IPv4 connection initiation; established/related return traffic is accepted. New input and forwarding default to deny. Rules use declaration order. Gateway means local input; other destinations mean forwarding. DHCP requires gateway UDP/67 and TCP+UDP/53; contradictory denials are rejected. NAT is not inferred. Existing flows are not revoked.
+For VLAN shorthand: IPv4 connection initiation; established/related return traffic is accepted. New input and forwarding default to deny. Rules use declaration order. Gateway means local input; other destinations mean forwarding. DHCP requires gateway UDP/67 and TCP+UDP/53; contradictory denials are rejected. NAT is not inferred. Existing flows are not revoked.
 
 | From | To | Action | Services |
 | --- | --- | --- | --- |
@@ -62,7 +62,7 @@ IPv4 connection initiation; established/related return traffic is accepted. New 
 
 ## AAA and migration
 
-AAA realization and migration source syntax are deferred beyond language 1.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.
+AAA realization and migration source syntax are deferred beyond language 2.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.
 
 ## Physical topology
 

@@ -1,5 +1,5 @@
 package network-intent-tests
-version = 0.1.0
+version = 0.2.0
 sourcedir = "src"
 builddir = "build/core-tests"
 main = NetDSL.Tests

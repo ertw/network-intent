@@ -4,6 +4,8 @@ import NetDSL.Common
 import NetDSL.Syntax.Parser
 import NetDSL.Domain.Address
 import NetDSL.Domain.Model
+import NetDSL.Router.Parse
+import NetDSL.Router.Address
 import Data.List
 import Data.String
 
@@ -97,14 +99,9 @@ parseVlan st = case (stmtTokens st,hasBlock st) of
     hosts <- traverse (parseHost subnet) (filter ((=="host") . keyword) (children st))
     pool <- case filter ((=="dhcp") . keyword) (children st) of
       [] => Right Nothing
-      [s] => case (stmtTokens s,hasBlock s) of
-        ([_,a,dots,b],False) => if dots.text /= ".." then err "syntax.dhcp" s "Expected dhcp START .. END" else do
-          first <- assignment subnet a.source a.text
-          last <- assignment subnet b.source b.text
-          if first.number > last.number then err "address.inverted-dhcp-range" s "DHCP start must not exceed its end" else Right ()
-          if subnet.width >= 31 then err "address.dhcp-prefix-too-small" s "DHCP requires a prefix with broadcast and host space" else Right ()
-          Right (Just (Pool (At a.source first) (At b.source last)))
-        _ => err "syntax.dhcp" s "Expected dhcp START .. END"
+      [s] => do
+        (first,last) <- poolEndpoints subnet s
+        Right (Just (Pool first last))
       _ => err "name.duplicate-field" st "Only one DHCP range is supported per VLAN"
     case (pool,gateway) of
       (Just _,Nothing) => err "address.dhcp-without-gateway" st "A DHCP VLAN requires a gateway"
@@ -131,7 +128,7 @@ resolvePeer devices hosts t = case splitOn '.' t.text of
       Just (j,_) => Right (DevicePort (PortId (Id i) j))
       Nothing => Left (failure "topology.unknown-port" t.source ("Unknown device port: " ++ t.text))
     Nothing => case find ((==device) . snd) (indexed hosts) of
-      Just (i,_) => if port == "eth0" then Right (HostPort (Id i)) else Left (failure "topology.unknown-port" t.source "Static hosts expose one implicit interface named eth0 in language 1.0")
+      Just (i,_) => if port == "eth0" then Right (HostPort (Id i)) else Left (failure "topology.unknown-port" t.source "Static hosts expose one implicit interface named eth0 in language 2.0")
       Nothing => Left (failure "topology.unknown-endpoint" t.source ("Unknown link endpoint: " ++ t.text))
   _ => Left (failure "topology.invalid-endpoint" t.source "Expected device.port or host.eth0")
 
@@ -170,7 +167,7 @@ parseDevice : List Vlan -> List Statement -> List String -> (Nat,Statement) -> E
 parseDevice vlans devices hosts (i,st) = case (stmtTokens st,hasBlock st) of
   ([_,n],True) => do
     checkName st n.text
-    allowed ["driver","port","max-tagged-vlans"] st
+    allowed ["driver","port","max-tagged-vlans","routing"] st
     driver <- required "driver" st >>= parseDriver
     cap <- field "max-tagged-vlans" st
     limit <- case cap of
@@ -180,7 +177,8 @@ parseDevice vlans devices hosts (i,st) = case (stmtTokens st,hasBlock st) of
         Nothing => err "backend.invalid-capability" st "Tagged VLAN budget must be an integer"
     duplicates "port" (map (\p => (named p,stmtSpan p)) (portStatements st))
     ports <- traverse (parsePort vlans devices hosts (Id i)) (portStatements st)
-    Right (MkDevice n.text (keyword st == "router") driver ports limit (stmtSpan st))
+    routing <- parseRouting st
+    Right (MkDevice n.text (keyword st == "router") driver ports limit routing (stmtSpan st))
   _ => err "syntax.device" st "Expected router/switch/device NAME { ... }"
 
 private
@@ -255,13 +253,13 @@ parseRoute vlans devices names st = case (stmtTokens st,hasBlock st) of
   _ => err "syntax.route" st "Expected route NAME { ... }"
 
 public export
-resolve : Document -> Either (List Diagnostic) (Network V1)
+resolve : Document -> Either (List Diagnostic) (Network V2)
 resolve doc = either (Left . pure) Right (run doc.statements)
   where
-    run : List Statement -> Either Diagnostic (Network V1)
+    run : List Statement -> Either Diagnostic (Network V2)
     run [version,network] = do
-      if stmtWords version == ["network-language","1.0"] && not (hasBlock version) then Right ()
-        else err "version.unsupported" version "Every document must begin with network-language 1.0; other versions are not reinterpreted"
+      if stmtWords version == ["network-language","2.0"] && not (hasBlock version) then Right ()
+        else err "version.unsupported" version "Every document must begin with network-language 2.0; other versions are not reinterpreted"
       case (stmtWords network,hasBlock network) of
         (["network",n],True) => checkName network n
         _ => err "syntax.network" network "Expected network NAME { ... }"
@@ -292,11 +290,11 @@ resolve doc = either (Left . pure) Right (run doc.statements)
       enforcer <- case routers of
         [] => Right Nothing
         [(i,_)] => Right (Just (Id i))
-        _ => err "policy.ambiguous-enforcer" network "Language 1.0 supports one routing/enforcement owner; multiple routers require explicit future ownership semantics"
+        _ => err "policy.ambiguous-enforcer" network "Language 2.0 supports one routing/enforcement owner; multiple routers require explicit future ownership semantics"
       let blocks = filter ((=="policy") . keyword) (children network)
       traverse_ (\s => if stmtWords s == ["policy"] && hasBlock s then Right () else err "syntax.policy" s "Expected policy { ... }") blocks
       policies <- traverse (parsePolicy vlans devices services enforcer) (concatMap children blocks)
       routes <- traverse (parseRoute vlans devices (map named routeStmts)) routeStmts
       Right (MkNetwork (named network) (map text domain) vlans devices services routes policies enforcer (stmtSpan network))
-    run [] = Left (failure "version.missing" (MkSpan doc.sourceFile 1 1 1 1) "Missing network-language 1.0 header")
-    run (s :: _) = err "version.document-shape" s "Expected exactly a network-language 1.0 header and one network block"
+    run [] = Left (failure "version.missing" (MkSpan doc.sourceFile 1 1 1 1) "Missing network-language 2.0 header")
+    run (s :: _) = err "version.document-shape" s "Expected exactly a network-language 2.0 header and one network block"

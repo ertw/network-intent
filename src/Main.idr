@@ -43,7 +43,7 @@ options seen ("--dependencies" :: rest) o = options ("--dependencies" :: seen) r
 options _ (x :: _) _ = Left ("Unknown or incomplete option: " ++ x)
 
 help : String
-help = "netc 0.1.0 — Network Intent DSL 1.0\n\n" ++
+help = "netc 0.2.0 — Network Intent DSL 2.0\n\n" ++
   "Usage:\n  netc check FILE [--format json]\n  netc fmt FILE\n" ++
   "  netc compile FILE (--target NAME | --all) [--format json] [--max-tagged-vlans N]\n" ++
   "  netc docs FILE\n  netc graph FILE [--dependencies]\n  netc export FILE\n  netc schema\n  netc explain CODE\n\n" ++
@@ -76,7 +76,7 @@ execute cmd file opts = do
         else case elaborate document of
           Left ds => report opts.json ds
           Right stable => case cmd of
-            "check" => if opts.json then putStrLn ("{\"ok\":true,\"languageVersion\":\"1.0\",\"assurance\":\"certified-model\",\"observed\":\"unknown\",\"diagnostics\":[],\"model\":" ++ semanticJSON stable ++ "}")
+            "check" => if opts.json then putStrLn ("{\"ok\":true,\"languageVersion\":\"2.0\",\"assurance\":\"certified-model\",\"observed\":\"unknown\",\"diagnostics\":[],\"model\":" ++ semanticJSON stable ++ "}")
               else putStrLn ("OK: " ++ stable.model.name ++ " — model certified; target realization not checked; operational state unknown")
             "docs" => putStr (markdown stable)
             "graph" => putStr (if opts.dependencies then dependencyGraph stable else graph stable)
@@ -86,14 +86,14 @@ execute cmd file opts = do
               if null targets then die "compile requires --target NAME or --all and at least one target" else
                 case traverse (\t => compileTarget stable t opts.maxTagged) targets of
                   Left ds => report opts.json ds
-                  Right outputs => if opts.json then putStrLn ("{\"ok\":true,\"exportVersion\":\"1.0\",\"targets\":" ++ jsonArray (map realizationJSON outputs) ++ "}") else putStr (join "\n" (map realizationText outputs))
+                  Right outputs => if opts.json then putStrLn ("{\"ok\":true,\"exportVersion\":\"2.0\",\"targets\":" ++ jsonArray (map realizationJSON outputs) ++ "}") else putStr (join "\n" (map realizationText outputs))
             _ => die ("Unknown command: " ++ cmd)
 
 covering
 run : List String -> IO ()
 run [] = putStr help
 run ["--help"] = putStr help
-run ["--version"] = putStrLn "netc 0.1.0 (language 1.0)"
+run ["--version"] = putStrLn "netc 0.2.0 (language 2.0)"
 run ["schema"] = putStrLn manifest
 run ["explain",code] = case explain code of
   Just help => putStrLn (code ++ "\n\n" ++ help)

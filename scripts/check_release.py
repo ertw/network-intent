@@ -12,24 +12,24 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class ReleaseChecks(unittest.TestCase):
     def setUp(self):
-        self.old = json.loads((ROOT / "docs/schema/1.0.json").read_text())
+        self.old = json.loads((ROOT / "docs/schema/2.0.json").read_text())
         self.new = copy.deepcopy(self.old)
 
     def test_unchanged_compatible(self):
         self.assertTrue(compare(self.old, self.new)["accepted"])
 
     def test_optional_addition_requires_minor(self):
-        self.new["constructs"].append({"name": "future", "required": False, "introduced": "1.1"})
+        self.new["constructs"].append({"name": "future", "required": False, "introduced": "2.1"})
         self.assertEqual(compare(self.old, self.new)["minimumBump"], "minor")
         self.assertFalse(compare(self.old, self.new)["accepted"])
-        self.new["languageVersion"] = "1.1"
+        self.new["languageVersion"] = "2.1"
         self.assertTrue(compare(self.old, self.new)["accepted"])
 
     def test_required_or_removed_field_requires_major(self):
-        self.new["constructs"].append({"name": "required", "required": True, "introduced": "2.0"})
-        self.new["languageVersion"] = "1.1"
+        self.new["constructs"].append({"name": "required", "required": True, "introduced": "3.0"})
+        self.new["languageVersion"] = "2.1"
         self.assertFalse(compare(self.old, self.new)["accepted"])
-        self.new["languageVersion"] = "2.0"
+        self.new["languageVersion"] = "3.0"
         self.assertTrue(compare(self.old, self.new)["accepted"])
         self.new = copy.deepcopy(self.old)
         self.new["constructs"].pop()
@@ -38,14 +38,14 @@ class ReleaseChecks(unittest.TestCase):
     def test_semantics_raise_never_lower_requirement(self):
         self.new["constraints"]["vlanMax"] = 100
         self.new["semanticBump"] = "patch"
-        self.new["languageVersion"] = "1.0.1"
+        self.new["languageVersion"] = "2.0.1"
         self.assertFalse(compare(self.old, self.new)["accepted"])
         self.new = copy.deepcopy(self.old)
         self.new["semanticBump"] = "major"
         self.assertFalse(compare(self.old, self.new)["accepted"])
 
     def test_backend_version_independent(self):
-        self.new["backendApiVersion"] = "2.0"
+        self.new["backendApiVersion"] = "3.0"
         self.assertTrue(compare(self.old, self.new)["accepted"])
 
     def test_downgrades_and_malformed_manifests_fail(self):

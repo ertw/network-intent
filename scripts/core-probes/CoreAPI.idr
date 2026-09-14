@@ -24,22 +24,22 @@ port : Port
 port = MkPort (Id 0) "lan1" Nothing (Access (Id 0)) Nothing at
 
 router : Device
-router = MkDevice "router" True OpenWrt [port] 4094 at
+router = MkDevice "router" True OpenWrt [port] 4094 Nothing at
 
-network : Network V1
+network : Network V2
 network = MkNetwork "home" Nothing [vlan] [router] [] [] [] (Just (Id 0)) at
 
-rejects : Network V1 -> Bool
+rejects : Network V2 -> Bool
 rejects n = case certify n of
   Left _ => True
   Right _ => False
 
-rejectsWith : String -> Network V1 -> Bool
+rejectsWith : String -> Network V2 -> Bool
 rejectsWith expected n = case certify n of
   Left diagnostics => any ((== expected) . code) diagnostics
   Right _ => False
 
-accepts : Network V1 -> Bool
+accepts : Network V2 -> Bool
 accepts = not . rejects
 
 service : Service

@@ -1,1 +1,675 @@
-{"ok":true,"exportVersion":"1.0","targets":[{"target":"gateway","profile":"openwrt-dsa-fw4-ipv4-v1","state":"Intended","realization":"conditional","assumptions":["OpenWrt DSA/netifd, firewall4 and dnsmasq profile; physical port labels match hardware","Owns generated bridge/interfaces and, for the router, DHCP/firewall packages; deployment must reconcile existing conflicting configuration","IPv4 only; IPv6 behavior is outside this profile and must be disabled or separately governed","Existing external logical interface wan and an upstream route are required; NAT is not inferred"],"files":[{"path":"/etc/config/network","content":"config device 'net_bridge'\n\toption name 'br-net'\n\toption type 'bridge'\n\toption vlan_filtering '1'\n\tlist ports 'lan1'\n\tlist ports 'lan2'\n\tlist ports 'lan4'\n\nconfig bridge-vlan 'bridge_v10'\n\toption device 'br-net'\n\toption vlan '10'\n\tlist ports 'lan1:u*'\n\tlist ports 'lan4:t'\n\nconfig interface 'v10'\n\toption device 'br-net.10'\n\toption proto 'static'\n\toption ipaddr '10.0.10.1'\n\toption netmask '255.255.255.0'\n\nconfig bridge-vlan 'bridge_v20'\n\toption device 'br-net'\n\toption vlan '20'\n\tlist ports 'lan2:u*'\n\tlist ports 'lan4:t'\n\nconfig interface 'v20'\n\toption device 'br-net.20'\n\toption proto 'static'\n\toption ipaddr '10.0.20.1'\n\toption netmask '255.255.255.0'\n\nconfig bridge-vlan 'bridge_v30'\n\toption device 'br-net'\n\toption vlan '30'\n\tlist ports 'lan4:t'\n\nconfig interface 'v30'\n\toption device 'br-net.30'\n\toption proto 'static'\n\toption ipaddr '10.0.30.1'\n\toption netmask '255.255.255.0'\n\n"},{"path":"/etc/config/dhcp","content":"config dnsmasq 'net_dns'\n\toption domainneeded '1'\n\toption boguspriv '1'\n\toption localise_queries '1'\n\toption dhcpleasemax '241'\n\toption domain 'home.arpa'\n\toption local '/home.arpa/'\n\toption expandhosts '1'\n\nconfig dhcp 'v10'\n\toption interface 'v10'\n\toption start '100'\n\toption limit '100'\n\toption leasetime '12h'\n\toption dhcpv4 'server'\n\nconfig dhcp 'v20'\n\toption interface 'v20'\n\toption ignore '1'\n\nconfig domain 'v20_host_0'\n\toption name 'nas'\n\toption ip '10.0.20.10'\n\nconfig domain 'v20_host_1'\n\toption name 'hypervisor'\n\toption ip '10.0.20.11'\n\nconfig domain 'v20_host_2'\n\toption name 'home-assistant'\n\toption ip '10.0.20.20'\n\nconfig dhcp 'v30'\n\toption interface 'v30'\n\toption start '100'\n\toption limit '141'\n\toption leasetime '12h'\n\toption dhcpv4 'server'\n\n"},{"path":"/etc/config/firewall","content":"config defaults 'net_defaults'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\toption synflood_protect '1'\n\nconfig zone 'zone_v10'\n\toption name 'v10'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'v10'\n\nconfig zone 'zone_v20'\n\toption name 'v20'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'v20'\n\nconfig zone 'zone_v30'\n\toption name 'v30'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'v30'\n\nconfig zone 'net_wan'\n\toption name 'wan'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'wan'\n\nconfig rule 'dhcp_v10'\n\toption name 'DHCP trusted'\n\toption src 'v10'\n\toption proto 'udp'\n\toption dest_port '67'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'dhcp_dns_v10'\n\toption name 'DHCP DNS trusted'\n\toption src 'v10'\n\toption proto 'tcp udp'\n\toption dest_port '53'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'dhcp_v30'\n\toption name 'DHCP iot'\n\toption src 'v30'\n\toption proto 'udp'\n\toption dest_port '67'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'dhcp_dns_v30'\n\toption name 'DHCP DNS iot'\n\toption src 'v30'\n\toption proto 'tcp udp'\n\toption dest_port '53'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'policy_0'\n\toption src 'v10'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption dest 'wan'\n\toption proto 'all'\n\nconfig rule 'policy_1'\n\toption src 'v10'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption dest 'v20'\n\toption proto 'all'\n\nconfig rule 'policy_2'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption dest 'wan'\n\toption proto 'all'\n\nconfig rule 'policy_3_0_0'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption proto 'udp'\n\toption dest_port '53'\n\nconfig rule 'policy_3_0_1'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption proto 'tcp'\n\toption dest_port '53'\n\nconfig rule 'policy_3_1_0'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption proto 'udp'\n\toption dest_port '123'\n\nconfig rule 'policy_4'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'DROP'\n\toption dest 'v10'\n\toption proto 'all'\n\nconfig rule 'policy_5'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'DROP'\n\toption dest 'v20'\n\toption proto 'all'\n\n"}],"sourceMap":[{"generated":"network.net_bridge","source":{"file":"examples/home.net","line":26,"column":3,"endLine":26,"endColumn":9},"derivation":["device gateway","DSA bridge"]},{"generated":"network.bridge_v10","source":{"file":"examples/home.net","line":6,"column":3,"endLine":6,"endColumn":7},"derivation":["VLAN trusted","port memberships"]},{"generated":"network.v10","source":{"file":"examples/home.net","line":6,"column":3,"endLine":6,"endColumn":7},"derivation":["VLAN trusted","logical interface"]},{"generated":"network.bridge_v20","source":{"file":"examples/home.net","line":12,"column":3,"endLine":12,"endColumn":7},"derivation":["VLAN servers","port memberships"]},{"generated":"network.v20","source":{"file":"examples/home.net","line":12,"column":3,"endLine":12,"endColumn":7},"derivation":["VLAN servers","logical interface"]},{"generated":"network.bridge_v30","source":{"file":"examples/home.net","line":20,"column":3,"endLine":20,"endColumn":7},"derivation":["VLAN iot","port memberships"]},{"generated":"network.v30","source":{"file":"examples/home.net","line":20,"column":3,"endLine":20,"endColumn":7},"derivation":["VLAN iot","logical interface"]},{"generated":"dhcp.net_dns","source":{"file":"examples/home.net","line":26,"column":3,"endLine":26,"endColumn":9},"derivation":["router DNS and DHCP profile"]},{"generated":"dhcp.v10","source":{"file":"examples/home.net","line":9,"column":10,"endLine":9,"endColumn":14},"derivation":["VLAN trusted","DHCP range"]},{"generated":"dhcp.v20","source":{"file":"examples/home.net","line":12,"column":3,"endLine":12,"endColumn":7},"derivation":["VLAN servers","DHCP disabled"]},{"generated":"dhcp.v20_host_0","source":{"file":"examples/home.net","line":15,"column":5,"endLine":15,"endColumn":9},"derivation":["host nas","static DNS record; address must be set on host"]},{"generated":"dhcp.v20_host_1","source":{"file":"examples/home.net","line":16,"column":5,"endLine":16,"endColumn":9},"derivation":["host hypervisor","static DNS record; address must be set on host"]},{"generated":"dhcp.v20_host_2","source":{"file":"examples/home.net","line":17,"column":5,"endLine":17,"endColumn":9},"derivation":["host home-assistant","static DNS record; address must be set on host"]},{"generated":"dhcp.v30","source":{"file":"examples/home.net","line":23,"column":10,"endLine":23,"endColumn":14},"derivation":["VLAN iot","DHCP range"]},{"generated":"firewall.net_defaults","source":{"file":"examples/home.net","line":26,"column":3,"endLine":26,"endColumn":9},"derivation":["stateful policy default profile"]},{"generated":"firewall.zone_v10","source":{"file":"examples/home.net","line":6,"column":3,"endLine":6,"endColumn":7},"derivation":["VLAN trusted","security zone"]},{"generated":"firewall.zone_v20","source":{"file":"examples/home.net","line":12,"column":3,"endLine":12,"endColumn":7},"derivation":["VLAN servers","security zone"]},{"generated":"firewall.zone_v30","source":{"file":"examples/home.net","line":20,"column":3,"endLine":20,"endColumn":7},"derivation":["VLAN iot","security zone"]},{"generated":"firewall.net_wan","source":{"file":"examples/home.net","line":26,"column":3,"endLine":26,"endColumn":9},"derivation":["external WAN binding"]},{"generated":"firewall.dhcp_v10","source":{"file":"examples/home.net","line":6,"column":3,"endLine":6,"endColumn":7},"derivation":["VLAN trusted","DHCP server control traffic"]},{"generated":"firewall.dhcp_dns_v10","source":{"file":"examples/home.net","line":6,"column":3,"endLine":6,"endColumn":7},"derivation":["VLAN trusted","DNS advertised by DHCP"]},{"generated":"firewall.dhcp_v30","source":{"file":"examples/home.net","line":20,"column":3,"endLine":20,"endColumn":7},"derivation":["VLAN iot","DHCP server control traffic"]},{"generated":"firewall.dhcp_dns_v30","source":{"file":"examples/home.net","line":20,"column":3,"endLine":20,"endColumn":7},"derivation":["VLAN iot","DNS advertised by DHCP"]},{"generated":"firewall.policy_0","source":{"file":"examples/home.net","line":46,"column":5,"endLine":46,"endColumn":12},"derivation":["policy 0","all IPv4 protocols"]},{"generated":"firewall.policy_1","source":{"file":"examples/home.net","line":47,"column":5,"endLine":47,"endColumn":12},"derivation":["policy 1","all IPv4 protocols"]},{"generated":"firewall.policy_2","source":{"file":"examples/home.net","line":48,"column":5,"endLine":48,"endColumn":8},"derivation":["policy 2","all IPv4 protocols"]},{"generated":"firewall.policy_3_0_0","source":{"file":"examples/home.net","line":49,"column":5,"endLine":49,"endColumn":8},"derivation":["policy 3","service dns","transport expansion"]},{"generated":"firewall.policy_3_0_1","source":{"file":"examples/home.net","line":49,"column":5,"endLine":49,"endColumn":8},"derivation":["policy 3","service dns","transport expansion"]},{"generated":"firewall.policy_3_1_0","source":{"file":"examples/home.net","line":49,"column":5,"endLine":49,"endColumn":8},"derivation":["policy 3","service ntp","transport expansion"]},{"generated":"firewall.policy_4","source":{"file":"examples/home.net","line":50,"column":5,"endLine":50,"endColumn":8},"derivation":["policy 4","all IPv4 protocols"]},{"generated":"firewall.policy_5","source":{"file":"examples/home.net","line":51,"column":5,"endLine":51,"endColumn":8},"derivation":["policy 5","all IPv4 protocols"]}]},{"target":"core","profile":"cisco-ios-l2-v1","state":"Intended","realization":"conditional","assumptions":["Catalyst IOS L2 profile supports native VLAN tagging and static trunk configuration","Owns configured VLAN/interface fields and global native-tagging mode; existing conflicting configuration must be reconciled","Routing, DHCP and stateful policy are realized by the network router; this target realizes its L2 projection"],"files":[{"path":"config.ios","content":"vlan dot1q tag native\n!\nvlan 10\n name trusted\n!\nvlan 20\n name servers\n!\nvlan 30\n name iot\n!\ninterface Gi1/0/1\n switchport mode trunk\n switchport trunk allowed vlan 10,20,30\n switchport nonegotiate\n!\ninterface Gi1/0/2\n switchport mode access\n switchport access vlan 20\n!\n"}],"sourceMap":[{"generated":"vlan dot1q tag native","source":{"file":"examples/home.net","line":33,"column":3,"endLine":33,"endColumn":9},"derivation":["tagged-only trunk profile"]},{"generated":"vlan","source":{"file":"examples/home.net","line":6,"column":3,"endLine":6,"endColumn":7},"derivation":["VLAN trusted"]},{"generated":"name","source":{"file":"examples/home.net","line":6,"column":3,"endLine":6,"endColumn":7},"derivation":["VLAN trusted"]},{"generated":"vlan","source":{"file":"examples/home.net","line":12,"column":3,"endLine":12,"endColumn":7},"derivation":["VLAN servers"]},{"generated":"name","source":{"file":"examples/home.net","line":12,"column":3,"endLine":12,"endColumn":7},"derivation":["VLAN servers"]},{"generated":"vlan","source":{"file":"examples/home.net","line":20,"column":3,"endLine":20,"endColumn":7},"derivation":["VLAN iot"]},{"generated":"name","source":{"file":"examples/home.net","line":20,"column":3,"endLine":20,"endColumn":7},"derivation":["VLAN iot"]},{"generated":"interface","source":{"file":"examples/home.net","line":35,"column":5,"endLine":35,"endColumn":9},"derivation":["device core","port Gi1/0/1"]},{"generated":"switchport mode trunk","source":{"file":"examples/home.net","line":35,"column":5,"endLine":35,"endColumn":9},"derivation":["tagged memberships"]},{"generated":"switchport trunk allowed vlan","source":{"file":"examples/home.net","line":35,"column":5,"endLine":35,"endColumn":9},"derivation":["tagged memberships"]},{"generated":"switchport nonegotiate","source":{"file":"examples/home.net","line":35,"column":5,"endLine":35,"endColumn":9},"derivation":["static trunk profile"]},{"generated":"interface","source":{"file":"examples/home.net","line":39,"column":5,"endLine":39,"endColumn":9},"derivation":["device core","port Gi1/0/2"]},{"generated":"switchport mode access","source":{"file":"examples/home.net","line":39,"column":5,"endLine":39,"endColumn":9},"derivation":["access membership"]},{"generated":"switchport access vlan","source":{"file":"examples/home.net","line":39,"column":5,"endLine":39,"endColumn":9},"derivation":["access membership"]}]}]}
+{
+  "ok": true,
+  "exportVersion": "2.0",
+  "targets": [
+    {
+      "target": "gateway",
+      "profile": "openwrt-dsa-fw4-ipv4-v2",
+      "state": "Intended",
+      "realization": "conditional",
+      "assumptions": [
+        "OpenWrt DSA/netifd, firewall4 and dnsmasq profile; physical port labels match hardware",
+        "Owns generated bridge/interfaces and, for the router, DHCP/firewall packages; deployment must reconcile existing conflicting configuration",
+        "IPv4 only; IPv6 behavior is outside this profile and must be disabled or separately governed",
+        "Existing external logical interface wan and an upstream route are required; NAT is not inferred"
+      ],
+      "readiness": "intended-config",
+      "requiresSecretBinding": false,
+      "files": [
+        {
+          "path": "/etc/config/network",
+          "content": "config device 'net_bridge'\n\toption name 'br-net'\n\toption type 'bridge'\n\toption vlan_filtering '1'\n\tlist ports 'lan1'\n\tlist ports 'lan2'\n\tlist ports 'lan4'\n\nconfig bridge-vlan 'bridge_v10'\n\toption device 'br-net'\n\toption vlan '10'\n\tlist ports 'lan1:u*'\n\tlist ports 'lan4:t'\n\nconfig interface 'v10'\n\toption device 'br-net.10'\n\toption proto 'static'\n\toption ipaddr '10.0.10.1'\n\toption netmask '255.255.255.0'\n\nconfig bridge-vlan 'bridge_v20'\n\toption device 'br-net'\n\toption vlan '20'\n\tlist ports 'lan2:u*'\n\tlist ports 'lan4:t'\n\nconfig interface 'v20'\n\toption device 'br-net.20'\n\toption proto 'static'\n\toption ipaddr '10.0.20.1'\n\toption netmask '255.255.255.0'\n\nconfig bridge-vlan 'bridge_v30'\n\toption device 'br-net'\n\toption vlan '30'\n\tlist ports 'lan4:t'\n\nconfig interface 'v30'\n\toption device 'br-net.30'\n\toption proto 'static'\n\toption ipaddr '10.0.30.1'\n\toption netmask '255.255.255.0'\n\n"
+        },
+        {
+          "path": "/etc/config/dhcp",
+          "content": "config dnsmasq 'net_dns'\n\toption domainneeded '1'\n\toption boguspriv '1'\n\toption localise_queries '1'\n\toption dhcpleasemax '241'\n\toption domain 'home.arpa'\n\toption local '/home.arpa/'\n\toption expandhosts '1'\n\nconfig dhcp 'v10'\n\toption interface 'v10'\n\toption start '100'\n\toption limit '100'\n\toption leasetime '12h'\n\toption dhcpv4 'server'\n\nconfig dhcp 'v20'\n\toption interface 'v20'\n\toption ignore '1'\n\nconfig domain 'v20_host_0'\n\toption name 'nas'\n\toption ip '10.0.20.10'\n\nconfig domain 'v20_host_1'\n\toption name 'hypervisor'\n\toption ip '10.0.20.11'\n\nconfig domain 'v20_host_2'\n\toption name 'home-assistant'\n\toption ip '10.0.20.20'\n\nconfig dhcp 'v30'\n\toption interface 'v30'\n\toption start '100'\n\toption limit '141'\n\toption leasetime '12h'\n\toption dhcpv4 'server'\n\n"
+        },
+        {
+          "path": "/etc/config/firewall",
+          "content": "config defaults 'net_defaults'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\toption synflood_protect '1'\n\nconfig zone 'zone_v10'\n\toption name 'v10'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'v10'\n\nconfig zone 'zone_v20'\n\toption name 'v20'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'v20'\n\nconfig zone 'zone_v30'\n\toption name 'v30'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'v30'\n\nconfig zone 'net_wan'\n\toption name 'wan'\n\toption input 'DROP'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\tlist network 'wan'\n\nconfig rule 'dhcp_v10'\n\toption name 'DHCP trusted'\n\toption src 'v10'\n\toption proto 'udp'\n\toption dest_port '67'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'dhcp_dns_v10'\n\toption name 'DHCP DNS trusted'\n\toption src 'v10'\n\toption proto 'tcp udp'\n\toption dest_port '53'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'dhcp_v30'\n\toption name 'DHCP iot'\n\toption src 'v30'\n\toption proto 'udp'\n\toption dest_port '67'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'dhcp_dns_v30'\n\toption name 'DHCP DNS iot'\n\toption src 'v30'\n\toption proto 'tcp udp'\n\toption dest_port '53'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'policy_0'\n\toption src 'v10'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption dest 'wan'\n\toption proto 'all'\n\nconfig rule 'policy_1'\n\toption src 'v10'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption dest 'v20'\n\toption proto 'all'\n\nconfig rule 'policy_2'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption dest 'wan'\n\toption proto 'all'\n\nconfig rule 'policy_3_0_0'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption proto 'udp'\n\toption dest_port '53'\n\nconfig rule 'policy_3_0_1'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption proto 'tcp'\n\toption dest_port '53'\n\nconfig rule 'policy_3_1_0'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\toption proto 'udp'\n\toption dest_port '123'\n\nconfig rule 'policy_4'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'DROP'\n\toption dest 'v10'\n\toption proto 'all'\n\nconfig rule 'policy_5'\n\toption src 'v30'\n\toption family 'ipv4'\n\toption target 'DROP'\n\toption dest 'v20'\n\toption proto 'all'\n\n"
+        }
+      ],
+      "sourceMap": [
+        {
+          "generated": "/etc/config/network#net_bridge",
+          "source": {
+            "file": "examples/home.net",
+            "line": 26,
+            "column": 3,
+            "endLine": 26,
+            "endColumn": 9
+          },
+          "derivation": [
+            "device gateway",
+            "DSA bridge"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#bridge_v10",
+          "source": {
+            "file": "examples/home.net",
+            "line": 6,
+            "column": 3,
+            "endLine": 6,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN trusted",
+            "port memberships"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#v10",
+          "source": {
+            "file": "examples/home.net",
+            "line": 6,
+            "column": 3,
+            "endLine": 6,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN trusted",
+            "logical interface"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#bridge_v20",
+          "source": {
+            "file": "examples/home.net",
+            "line": 12,
+            "column": 3,
+            "endLine": 12,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN servers",
+            "port memberships"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#v20",
+          "source": {
+            "file": "examples/home.net",
+            "line": 12,
+            "column": 3,
+            "endLine": 12,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN servers",
+            "logical interface"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#bridge_v30",
+          "source": {
+            "file": "examples/home.net",
+            "line": 20,
+            "column": 3,
+            "endLine": 20,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN iot",
+            "port memberships"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#v30",
+          "source": {
+            "file": "examples/home.net",
+            "line": 20,
+            "column": 3,
+            "endLine": 20,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN iot",
+            "logical interface"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#net_dns",
+          "source": {
+            "file": "examples/home.net",
+            "line": 26,
+            "column": 3,
+            "endLine": 26,
+            "endColumn": 9
+          },
+          "derivation": [
+            "router DNS and DHCP profile"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#v10",
+          "source": {
+            "file": "examples/home.net",
+            "line": 9,
+            "column": 10,
+            "endLine": 9,
+            "endColumn": 14
+          },
+          "derivation": [
+            "VLAN trusted",
+            "DHCP range"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#v20",
+          "source": {
+            "file": "examples/home.net",
+            "line": 12,
+            "column": 3,
+            "endLine": 12,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN servers",
+            "DHCP disabled"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#v20_host_0",
+          "source": {
+            "file": "examples/home.net",
+            "line": 15,
+            "column": 5,
+            "endLine": 15,
+            "endColumn": 9
+          },
+          "derivation": [
+            "host nas",
+            "static DNS record; address must be set on host"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#v20_host_1",
+          "source": {
+            "file": "examples/home.net",
+            "line": 16,
+            "column": 5,
+            "endLine": 16,
+            "endColumn": 9
+          },
+          "derivation": [
+            "host hypervisor",
+            "static DNS record; address must be set on host"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#v20_host_2",
+          "source": {
+            "file": "examples/home.net",
+            "line": 17,
+            "column": 5,
+            "endLine": 17,
+            "endColumn": 9
+          },
+          "derivation": [
+            "host home-assistant",
+            "static DNS record; address must be set on host"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#v30",
+          "source": {
+            "file": "examples/home.net",
+            "line": 23,
+            "column": 10,
+            "endLine": 23,
+            "endColumn": 14
+          },
+          "derivation": [
+            "VLAN iot",
+            "DHCP range"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#net_defaults",
+          "source": {
+            "file": "examples/home.net",
+            "line": 26,
+            "column": 3,
+            "endLine": 26,
+            "endColumn": 9
+          },
+          "derivation": [
+            "stateful policy default profile"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#zone_v10",
+          "source": {
+            "file": "examples/home.net",
+            "line": 6,
+            "column": 3,
+            "endLine": 6,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN trusted",
+            "security zone"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#zone_v20",
+          "source": {
+            "file": "examples/home.net",
+            "line": 12,
+            "column": 3,
+            "endLine": 12,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN servers",
+            "security zone"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#zone_v30",
+          "source": {
+            "file": "examples/home.net",
+            "line": 20,
+            "column": 3,
+            "endLine": 20,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN iot",
+            "security zone"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#net_wan",
+          "source": {
+            "file": "examples/home.net",
+            "line": 26,
+            "column": 3,
+            "endLine": 26,
+            "endColumn": 9
+          },
+          "derivation": [
+            "external WAN binding"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#dhcp_v10",
+          "source": {
+            "file": "examples/home.net",
+            "line": 6,
+            "column": 3,
+            "endLine": 6,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN trusted",
+            "DHCP server control traffic"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#dhcp_dns_v10",
+          "source": {
+            "file": "examples/home.net",
+            "line": 6,
+            "column": 3,
+            "endLine": 6,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN trusted",
+            "DNS advertised by DHCP"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#dhcp_v30",
+          "source": {
+            "file": "examples/home.net",
+            "line": 20,
+            "column": 3,
+            "endLine": 20,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN iot",
+            "DHCP server control traffic"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#dhcp_dns_v30",
+          "source": {
+            "file": "examples/home.net",
+            "line": 20,
+            "column": 3,
+            "endLine": 20,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN iot",
+            "DNS advertised by DHCP"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_0",
+          "source": {
+            "file": "examples/home.net",
+            "line": 46,
+            "column": 5,
+            "endLine": 46,
+            "endColumn": 12
+          },
+          "derivation": [
+            "policy 0",
+            "all IPv4 protocols"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_1",
+          "source": {
+            "file": "examples/home.net",
+            "line": 47,
+            "column": 5,
+            "endLine": 47,
+            "endColumn": 12
+          },
+          "derivation": [
+            "policy 1",
+            "all IPv4 protocols"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_2",
+          "source": {
+            "file": "examples/home.net",
+            "line": 48,
+            "column": 5,
+            "endLine": 48,
+            "endColumn": 8
+          },
+          "derivation": [
+            "policy 2",
+            "all IPv4 protocols"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_3_0_0",
+          "source": {
+            "file": "examples/home.net",
+            "line": 49,
+            "column": 5,
+            "endLine": 49,
+            "endColumn": 8
+          },
+          "derivation": [
+            "policy 3",
+            "service dns",
+            "transport expansion"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_3_0_1",
+          "source": {
+            "file": "examples/home.net",
+            "line": 49,
+            "column": 5,
+            "endLine": 49,
+            "endColumn": 8
+          },
+          "derivation": [
+            "policy 3",
+            "service dns",
+            "transport expansion"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_3_1_0",
+          "source": {
+            "file": "examples/home.net",
+            "line": 49,
+            "column": 5,
+            "endLine": 49,
+            "endColumn": 8
+          },
+          "derivation": [
+            "policy 3",
+            "service ntp",
+            "transport expansion"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_4",
+          "source": {
+            "file": "examples/home.net",
+            "line": 50,
+            "column": 5,
+            "endLine": 50,
+            "endColumn": 8
+          },
+          "derivation": [
+            "policy 4",
+            "all IPv4 protocols"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#policy_5",
+          "source": {
+            "file": "examples/home.net",
+            "line": 51,
+            "column": 5,
+            "endLine": 51,
+            "endColumn": 8
+          },
+          "derivation": [
+            "policy 5",
+            "all IPv4 protocols"
+          ]
+        }
+      ]
+    },
+    {
+      "target": "core",
+      "profile": "cisco-ios-l2-v2",
+      "state": "Intended",
+      "realization": "conditional",
+      "assumptions": [
+        "Catalyst IOS L2 profile supports native VLAN tagging and static trunk configuration",
+        "Owns configured VLAN/interface fields and global native-tagging mode; existing conflicting configuration must be reconciled",
+        "Routing, DHCP and stateful policy are realized by the network router; this target realizes its L2 projection"
+      ],
+      "readiness": "intended-config",
+      "requiresSecretBinding": false,
+      "files": [
+        {
+          "path": "config.ios",
+          "content": "vlan dot1q tag native\n!\nvlan 10\n name trusted\n!\nvlan 20\n name servers\n!\nvlan 30\n name iot\n!\ninterface Gi1/0/1\n switchport mode trunk\n switchport trunk allowed vlan 10,20,30\n switchport nonegotiate\n!\ninterface Gi1/0/2\n switchport mode access\n switchport access vlan 20\n!\n"
+        }
+      ],
+      "sourceMap": [
+        {
+          "generated": "vlan dot1q tag native",
+          "source": {
+            "file": "examples/home.net",
+            "line": 33,
+            "column": 3,
+            "endLine": 33,
+            "endColumn": 9
+          },
+          "derivation": [
+            "tagged-only trunk profile"
+          ]
+        },
+        {
+          "generated": "vlan",
+          "source": {
+            "file": "examples/home.net",
+            "line": 6,
+            "column": 3,
+            "endLine": 6,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN trusted"
+          ]
+        },
+        {
+          "generated": "name",
+          "source": {
+            "file": "examples/home.net",
+            "line": 6,
+            "column": 3,
+            "endLine": 6,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN trusted"
+          ]
+        },
+        {
+          "generated": "vlan",
+          "source": {
+            "file": "examples/home.net",
+            "line": 12,
+            "column": 3,
+            "endLine": 12,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN servers"
+          ]
+        },
+        {
+          "generated": "name",
+          "source": {
+            "file": "examples/home.net",
+            "line": 12,
+            "column": 3,
+            "endLine": 12,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN servers"
+          ]
+        },
+        {
+          "generated": "vlan",
+          "source": {
+            "file": "examples/home.net",
+            "line": 20,
+            "column": 3,
+            "endLine": 20,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN iot"
+          ]
+        },
+        {
+          "generated": "name",
+          "source": {
+            "file": "examples/home.net",
+            "line": 20,
+            "column": 3,
+            "endLine": 20,
+            "endColumn": 7
+          },
+          "derivation": [
+            "VLAN iot"
+          ]
+        },
+        {
+          "generated": "interface",
+          "source": {
+            "file": "examples/home.net",
+            "line": 35,
+            "column": 5,
+            "endLine": 35,
+            "endColumn": 9
+          },
+          "derivation": [
+            "device core",
+            "port Gi1/0/1"
+          ]
+        },
+        {
+          "generated": "switchport mode trunk",
+          "source": {
+            "file": "examples/home.net",
+            "line": 35,
+            "column": 5,
+            "endLine": 35,
+            "endColumn": 9
+          },
+          "derivation": [
+            "tagged memberships"
+          ]
+        },
+        {
+          "generated": "switchport trunk allowed vlan",
+          "source": {
+            "file": "examples/home.net",
+            "line": 35,
+            "column": 5,
+            "endLine": 35,
+            "endColumn": 9
+          },
+          "derivation": [
+            "tagged memberships"
+          ]
+        },
+        {
+          "generated": "switchport nonegotiate",
+          "source": {
+            "file": "examples/home.net",
+            "line": 35,
+            "column": 5,
+            "endLine": 35,
+            "endColumn": 9
+          },
+          "derivation": [
+            "static trunk profile"
+          ]
+        },
+        {
+          "generated": "interface",
+          "source": {
+            "file": "examples/home.net",
+            "line": 39,
+            "column": 5,
+            "endLine": 39,
+            "endColumn": 9
+          },
+          "derivation": [
+            "device core",
+            "port Gi1/0/2"
+          ]
+        },
+        {
+          "generated": "switchport mode access",
+          "source": {
+            "file": "examples/home.net",
+            "line": 39,
+            "column": 5,
+            "endLine": 39,
+            "endColumn": 9
+          },
+          "derivation": [
+            "access membership"
+          ]
+        },
+        {
+          "generated": "switchport access vlan",
+          "source": {
+            "file": "examples/home.net",
+            "line": 39,
+            "column": 5,
+            "endLine": 39,
+            "endColumn": 9
+          },
+          "derivation": [
+            "access membership"
+          ]
+        }
+      ]
+    }
+  ]
+}

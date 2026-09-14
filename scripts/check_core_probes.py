@@ -14,7 +14,8 @@ def main():
         shutil.copytree(ROOT / "src/NetDSL", folder / "NetDSL")
         for source in (ROOT / "scripts/core-probes").glob("*.idr"):
             shutil.copy(source, folder / source.name)
-        for name in ("CoreAPI", "GraphProperties"):
+        shutil.copy(ROOT / "examples/core-router.net", folder / "core-router.net")
+        for name in ("CoreAPI", "GraphProperties", "RouterAPI"):
             result = subprocess.run(["idris2", "-o", name, f"{name}.idr"], cwd=folder,
                                     text=True, capture_output=True, timeout=180)
             assert result.returncode == 0, result.stdout + result.stderr
@@ -22,7 +23,7 @@ def main():
                                     text=True, capture_output=True, timeout=60)
             assert result.returncode == 0, result.stdout + result.stderr
             print(result.stdout, end="")
-        negative = sorted(folder.glob("Forged*.idr")) + [folder / "WrongRefKind.idr"]
+        negative = sorted(folder.glob("Forged*.idr")) + sorted(folder.glob("Wrong*.idr"))
         for source in negative:
             result = subprocess.run(["idris2", "--check", source.name], cwd=folder,
                                     text=True, capture_output=True, timeout=60)

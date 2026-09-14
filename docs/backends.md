@@ -6,7 +6,7 @@ includes intended-state labels, profile assumptions and provenance chains.
 Capability metadata is an assumption about firmware/hardware, not a discovery
 result. No live firmware or device has been tested in this implementation.
 
-## OpenWrt: `openwrt-dsa-fw4-ipv4-v1`
+## OpenWrt: `openwrt-dsa-fw4-ipv4-v2`
 
 Assumes DSA/netifd, firewall4 and dnsmasq, and matching Linux physical port labels.
 Names are at most 15 ASCII characters and cannot contain `/` or be `.`/`..`.
@@ -39,7 +39,7 @@ image. Existing conflicting settings must be reconciled before deployment.
 In particular, internet policy assumes an existing external logical `wan` and
 upstream route; it never adds NAT. IPv6 must be disabled or governed separately.
 
-## Cisco: `cisco-ios-l2-v1`
+## Cisco: `cisco-ios-l2-v2`
 
 Assumes a Catalyst-style IOS L2 target supporting explicit access/trunk modes,
 allowed VLAN lists, static negotiation control and native tagging. VLAN names
@@ -72,3 +72,44 @@ discovery remain future work. The backends neither deploy nor inspect existing
 configuration, and therefore do not infer deletion, adoption or successful apply.
 The configuration artifacts and tests support confidence in the documented
 abstract profile, not a formal theorem of vendor firmware behavior.
+
+
+## OpenWrt explicit router: `openwrt-router-fw4-dualstack-v2`
+
+The `routing` model owns `network`, `dhcp`, `firewall`, and declared wireless
+configuration. Its typed bridge/bond/interface graph replaces the derived VLAN
+bridge for that router. Physical labels and radio paths must match the target.
+The profile assumes native netifd bonding, firewall4, dnsmasq, odhcpd, and
+mac80211/wpad supporting the declared radio and security settings. Actual
+firmware/package versions are not present in the backup and are not discovered.
+
+- Network output preserves declared link and logical-interface names, static
+  addresses, DHCP/DHCPv6 clients, globals, and explicit bond parameters.
+  Bonding uses native `config device` / `type bonding`, not the older
+  protocol-based bonding package. Multiple interfaces may share a bond.
+- DHCP output preserves typed dnsmasq, pool, DHCPv6/RA, and odhcpd options.
+  Address/count form emits the same range as finite endpoints. Derived capacity
+  is emitted only when an unspecified default of 150 would be insufficient.
+- Firewall output preserves zone verdicts, forwarding, explicit IPv4 NAT,
+  MSS adjustment, family/protocol matches, ICMP types, and rule order. Generated
+  zone/rule section IDs are safe numeric identifiers; their semantic names stay
+  in `option name`. `REJECT` is never approximated with `DROP`.
+- Wireless output preserves radio/AP identifiers and configuration. Secret-bearing
+  UCI fields have a dedicated AST constructor. They produce a `.template`
+  artifact and binding manifest with readiness metadata. See
+  [secrets.md](secrets.md); secret resolution and installation are external.
+
+The [parity report](core-router-parity.md) compares all 188 supplied options.
+Equivalent IPv4 netmask/CIDR notation, IPv6 compression, singleton list forms,
+option ordering, and anonymous section IDs are normalized. Firewall rule order
+is preserved. The only intended behavior change is the approved DHCP count.
+
+The profile makes no Applied or Observed claim. ISP leases/prefix delegation,
+LACP peer negotiation, wireless capabilities/regulatory state, external secrets,
+and services remain unknown. Management/OS settings are outside owned scope.
+An applying system must reconcile existing configuration before replacement.
+
+References: [native netifd bonding](https://lxr.openwrt.org/source/netifd/bonding.c),
+[firewall4 option handling](https://lxr.openwrt.org/source/firewall4/root/usr/share/ucode/fw4.uc),
+[UCI syntax and identifiers](https://openwrt.org/docs/guide-user/base-system/uci),
+[DHCP/DNS options](https://openwrt.org/docs/guide-user/base-system/dhcp).

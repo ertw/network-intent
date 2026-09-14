@@ -16,7 +16,7 @@ import System
 %default total
 
 sample : String
-sample = "network-language 1.0\nnetwork test {\nvlan servers 20 {\nsubnet 10.0.20.0/24\ngateway +1\nhost nas +10\n}\nrouter gateway {\ndriver openwrt\nport lan1 { access servers }\n}\n}\n"
+sample = "network-language 2.0\nnetwork test {\nvlan servers 20 {\nsubnet 10.0.20.0/24\ngateway +1\nhost nas +10\n}\nrouter gateway {\ndriver openwrt\nport lan1 { access servers }\n}\n}\n"
 
 loadSample : Either (List Diagnostic) StableNetwork
 loadSample = parse "test.net" sample >>= elaborate
@@ -53,7 +53,7 @@ prefixTests = case parsePrefix at "10.0.20.0/23" of
     Left _ => False
     Right ip => showIPv4 ip == "10.0.21.44" && subnet.size == 512 && netmask subnet == "255.255.254.0"
 
-rejects : Network V1 -> Bool
+rejects : Network V2 -> Bool
 rejects n = case certify n of Left _ => True; Right _ => False
 
 modelTests : Bool

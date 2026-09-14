@@ -1,0 +1,35 @@
+flowchart LR
+  %% Desired physical topology; not observed connectivity
+  r0link0["lan1"]
+  r0link1["lan2"]
+  r0link2["lan3"]
+  r0link3["wan"]
+  r0link4["br-lan bridge"]
+  r0link5["bond-wan bond"]
+  r0link6["lo"]
+  r0link1 --> r0link4
+  r0link2 --> r0link4
+  r0link0 --> r0link5
+  r0link3 --> r0link5
+  r0iface0["loopback / static"]
+  r0link6 --> r0iface0
+  r0iface1["lan / static"]
+  r0link4 --> r0iface1
+  r0iface2["wan / dhcp"]
+  r0link5 --> r0iface2
+  r0iface3["wan6 / dhcpv6"]
+  r0link5 --> r0iface3
+  r0iface4["modem / static"]
+  r0link5 --> r0iface4
+  r0radio0["radio0"]
+  r0radio1["radio1"]
+  r0radio2["radio2"]
+  r0ap0["default_radio0 / OpenWrt (disabled)"]
+  r0radio0 --> r0ap0
+  r0ap0 --> r0iface1
+  r0ap1["default_radio1 / _iot"]
+  r0radio1 --> r0ap1
+  r0ap1 --> r0iface1
+  r0ap2["wifinet2 / _"]
+  r0radio2 --> r0ap2
+  r0ap2 --> r0iface1

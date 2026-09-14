@@ -1,6 +1,7 @@
 module NetDSL.Backend.Compile
 
 import NetDSL.Common
+import NetDSL.Router.Compile
 import NetDSL.Domain.Address
 import NetDSL.Domain.Model
 import NetDSL.Validate
@@ -24,9 +25,10 @@ ownedVlans : Network v -> Device -> List (Ref VLAN,Vlan)
 ownedVlans n d = map (\(i,v) => (Id i,v)) (filter (\(i,v) => carries d (Id i)) (indexed n.vlans))
 
 private
-capabilities : Network V1 -> Device -> Nat -> List Diagnostic
+capabilities : Network V2 -> Device -> Nat -> List Diagnostic
 capabilities n d limit =
-  (if d.isRouter && leaseCount > 65535 then [failure "backend.capability-mismatch" d.source "OpenWrt v1 profile supports at most 65535 dynamic DHCP leases"] else []) ++
+  (if isJust d.routing && d.driver /= OpenWrt then [failure "backend.capability-mismatch" d.source "Explicit routed interfaces and Wi-Fi require the OpenWrt profile"] else []) ++
+  (if d.isRouter && leaseCount > 65535 then [failure "backend.capability-mismatch" d.source "OpenWrt VLAN profile supports at most 65535 dynamic DHCP leases"] else []) ++
   concatMap (\p => case p.mode of
     Access _ => []
     Trunk vs => if length vs > min limit d.maxTagged then [failure "backend.capability-mismatch" p.source ("Target " ++ d.name ++ " port " ++ p.name ++ " permits at most " ++ show (min limit d.maxTagged) ++ " tagged VLANs; intent requires " ++ show (length vs))] else []) d.ports ++
@@ -54,7 +56,7 @@ capabilities n d limit =
       not (null rest) && all (\p => isJust (decimal p)) segments
 
 private
-uciNetwork : Network V1 -> Device -> Either Diagnostic UciPackage
+uciNetwork : Network V2 -> Device -> Either Diagnostic UciPackage
 uciNetwork n d = do
   bridge <- section d.source ["device " ++ d.name,"DSA bridge"] "device" "net_bridge"
     [("name","br-net"),("type","bridge"),("vlan_filtering","1")] (map (\p => ("ports",p.name)) d.ports)
@@ -84,7 +86,7 @@ uciNetwork n d = do
        ("gateway",showIPv4 r.nextHop.value),("metric",show r.metric)] []
 
 private
-uciDHCP : Network V1 -> Device -> Either Diagnostic UciPackage
+uciDHCP : Network V2 -> Device -> Either Diagnostic UciPackage
 uciDHCP n d = if not d.isRouter then Right (Package "dhcp" []) else do
   let leaseCount = sum (map (\v => maybe 0 (\r => r.last.value.number-r.first.value.number+1) v.dhcp) n.vlans)
   dns <- section d.source ["router DNS and DHCP profile"] "dnsmasq" "net_dns"
@@ -107,7 +109,7 @@ uciDHCP n d = if not d.isRouter then Right (Package "dhcp" []) else do
       Right (pool ++ hosts)
 
 private
-uciFirewall : Network V1 -> Device -> Either Diagnostic UciPackage
+uciFirewall : Network V2 -> Device -> Either Diagnostic UciPackage
 uciFirewall n d = if not d.isRouter then Right (Package "firewall" []) else do
   defaults <- section d.source ["stateful policy default profile"] "defaults" "net_defaults"
     [("input","DROP"),("output","ACCEPT"),("forward","DROP"),("synflood_protect","1")] []
@@ -149,7 +151,7 @@ uciFirewall n d = if not d.isRouter then Right (Package "firewall" []) else do
 
 
 private
-iosCompile : Network V1 -> Device -> Either Diagnostic TargetAST
+iosCompile : Network V2 -> Device -> Either Diagnostic TargetAST
 iosCompile n d = do
   native <- if any (\p => case p.mode of Trunk _ => True; _ => False) d.ports
     then pure <$> command d.source ["tagged-only trunk profile"] "vlan dot1q tag native" [] [] else Right []
@@ -187,18 +189,26 @@ compileTarget stable targetName limit =
       ds@(_ :: _) => Left ds
       [] => either (Left . pure) Right $ do
         ast <- case d.driver of
-          OpenWrt => do
-            network <- uciNetwork n d
-            dhcp <- uciDHCP n d
-            firewall <- uciFirewall n d
-            Right (UCI (if d.isRouter then [network,dhcp,firewall] else [network]))
+          OpenWrt => case d.routing of
+            Just config => compileRouter config
+            Nothing => do
+              network <- uciNetwork n d
+              dhcp <- uciDHCP n d
+              firewall <- uciFirewall n d
+              Right (UCI (if d.isRouter then [network,dhcp,firewall] else [network]))
           CiscoIOS => iosCompile n d
+        ast <- checkTargetAST ast
         let assumptions = case d.driver of
-              OpenWrt => ["OpenWrt DSA/netifd, firewall4 and dnsmasq profile; physical port labels match hardware",
+              OpenWrt => if isJust d.routing then
+                ["Matching OpenWrt netifd with native bonding, firewall4, dnsmasq, odhcpd and mac80211/wpad capabilities are required",
+                 "Owns network, dhcp, firewall and declared wireless configuration; other system settings are preserved separately",
+                 "Dynamic addresses, ISP prefix delegation, LACP peer state and radio operation are unknown",
+                 "Wireless credentials require external binding; templates must not be installed directly"]
+                else ["OpenWrt DSA/netifd, firewall4 and dnsmasq profile; physical port labels match hardware",
                           "Owns generated bridge/interfaces and, for the router, DHCP/firewall packages; deployment must reconcile existing conflicting configuration",
                           "IPv4 only; IPv6 behavior is outside this profile and must be disabled or separately governed"] ++
                          (if any ((==Internet) . destination) n.policies && d.isRouter then ["Existing external logical interface wan and an upstream route are required; NAT is not inferred"] else [])
               CiscoIOS => ["Catalyst IOS L2 profile supports native VLAN tagging and static trunk configuration",
                            "Owns configured VLAN/interface fields and global native-tagging mode; existing conflicting configuration must be reconciled",
                            "Routing, DHCP and stateful policy are realized by the network router; this target realizes its L2 projection"]
-        Right (Intended d.name (case d.driver of OpenWrt => "openwrt-dsa-fw4-ipv4-v1"; CiscoIOS => "cisco-ios-l2-v1") assumptions ast)
+        Right (Intended d.name (case d.driver of OpenWrt => if isJust d.routing then "openwrt-router-fw4-dualstack-v2" else "openwrt-dsa-fw4-ipv4-v2"; CiscoIOS => "cisco-ios-l2-v2") assumptions ast)

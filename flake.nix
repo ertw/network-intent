@@ -9,7 +9,7 @@
         let pkgs = import nixpkgs { inherit system; }; in
         pkgs.stdenv.mkDerivation {
           pname = "network-intent";
-          version = "0.1.0";
+          version = "0.2.0";
           src = pkgs.lib.cleanSource ./.;
           nativeBuildInputs = [ pkgs.idris2 pkgs.python3 pkgs.makeWrapper ];
           buildPhase = "make build";

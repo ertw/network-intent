@@ -1,7 +1,10 @@
 module NetDSL.Backend.AST
 
 import NetDSL.Common
+import NetDSL.AAA
+import NetDSL.Router.Options
 import Data.So
+import Data.List
 
 %default total
 
@@ -22,7 +25,7 @@ checkedText at s = case choose (safeLine s) of
   Right _ => Left (failure "backend.unsafe-value" at "Target value contains a control character or line separator")
 
 public export
-data UciField = Option String SafeText | ListEntry String SafeText
+data UciField = Option String SafeText | ListEntry String SafeText | SecretOption String (SecretRef WiFiCredential) Security
 
 public export
 record UciSection where
@@ -70,6 +73,8 @@ listEntry s k v = ListEntry k <$> checkedText s v
 public export
 section : SourceSpan -> List String -> String -> String -> List (String,String) -> List (String,String) -> Either Diagnostic UciSection
 section at chain kind name options lists = do
+  if name /= "" && all (\c => ord c < 128 && (isAlphaNum c || c == '_')) (unpack name)
+    then Right () else Left (failure "backend.capability-mismatch" at "UCI section identifiers require ASCII letters, digits, or underscores")
   opts <- traverse (\(k,v) => option at k v) options
   items <- traverse (\(k,v) => listEntry at k v) lists
   Right (Section kind name (opts ++ items) at chain)
@@ -79,3 +84,19 @@ command : SourceSpan -> List String -> String -> List String -> List IOSCommand 
 command at chain key args nested = do
   values <- traverse (checkedText at) args
   Right (Command key values nested at chain)
+
+public export
+checkTargetAST : TargetAST -> Either Diagnostic TargetAST
+checkTargetAST ast@(IOS _) = Right ast
+checkTargetAST ast@(UCI packages) = do
+  traverse_ checkPackage packages
+  Right ast
+  where
+    checkPackage : UciPackage -> Either Diagnostic ()
+    checkPackage p = go [] p.sections
+      where
+        go : List String -> List UciSection -> Either Diagnostic ()
+        go seen [] = Right ()
+        go seen (s :: rest) = if elem s.identifier seen then
+          Left (failure "backend.section-collision" s.origin ("Duplicate generated UCI section in " ++ p.name ++ ": " ++ s.identifier))
+          else go (s.identifier :: seen) rest

@@ -1,91 +1,99 @@
 # Implementation and verification report
 
-The implemented release is the handoff's §50 compiler MVP and §56 architectural
-acceptance criteria, plus small typed AAA/migration/state foundations. The
-handoff explicitly defers the full later milestones; those are listed in the
-README rather than represented as completed features.
+Language 2.0 adds explicit typed router intent to the VLAN/network compiler.
+The current baseline accepts only 2.0. The original release's backwards-source
+compatibility requirement has been removed; examples, tests, and schemas are
+migrated together.
 
-## Consolidated result
+## Verification coverage
 
-`make test` completed successfully on macOS arm64 with Idris 2 0.8.0 and Chez
-Scheme. It builds the compiler with totality checking, runs the public CLI suite,
-builds/runs typed core tests, executes compile-negative tests, checks release
-classification, and runs the independent semantic probes.
+The full `make test` run completed successfully on the implementation host.
 
-| Verification | Result |
+`make test` builds the compiler with Idris 2 totality checking, runs the public
+CLI tests, builds/runs core tests, checks migration typestate and release
+classification, and runs independent direct-API/compile-negative probes.
+
+| Verification | Coverage |
 | --- | --- |
-| Public CLI acceptance tests | 52 passed |
-| Exact reviewed backend artifact goldens | 4 passed: network, DHCP, firewall, IOS |
-| Direct semantic API assertions | 34 passed |
-| Independent graph decisions | 640/640 passed |
-| Independent graph certificates/directed cycle witnesses | 640/640 passed |
-| Additional exhaustive graph/core spike tests | 512 graph cases plus addressing, malformed-model rejection, migration and AAA groups passed |
-| Forged bounds/certificate/reference compile-negative fixtures | 9 rejected as expected |
-| Migration debt/evidence compile-negative fixtures | 3 rejected as expected |
-| Release classification tests | 6 passed |
-| Original source compatibility | Language 1.0 home example checks and compiles for both targets |
-| Trusted project source escape-hatch search | No `believe_me`, `assert_total`, or partial semantic defaults found |
+| Existing CLI acceptance suite | 52 tests, migrated to 2.0 |
+| Explicit router acceptance suite | 19 tests with boundary/negative subcases |
+| Backup parity | 188 source options across network, DHCP, firewall, wireless; firewall rule order preserved |
+| Reviewed target goldens | 4 VLAN/IOS artifacts plus 5 core-router artifacts |
+| Core-router public API probes | 22 assertions including synthetic credential quoting |
+| Existing public semantic API probes | 34 assertions |
+| Graph oracle and certificate/witness tests | 640 decision cases and 640 certificate/witness cases |
+| Additional graph/core foundations | 512 graph cases plus address, malformed-model, migration and AAA groups |
+| Compile-negative bounds/reference/certificate probes | 13 fixtures, including IPv6 and router/Wi-Fi reference kinds |
+| Migration debt/evidence compile-negative probes | 3 fixtures |
+| Release classification | 6 tests using the 2.0 schema baseline |
 
-Independent agents designed/tested the public acceptance cases, reviewed target
-contracts/security, and tested programmatic semantic APIs. The lead remained the
-sole production-source implementer. Test agents edited designated test paths
-only. All relevant reviews completed and findings were integrated.
+## Router acceptance evidence
 
-## Acceptance criteria (§56)
+The source example is `examples/core-router.net`. Its fixtures contain only the
+four networking packages from the supplied backup, with Wi-Fi passwords replaced
+by redaction markers. Private keys, password hashes, and management configuration
+are not copied into the repository.
 
-| Criterion | Evidence |
-| --- | --- |
-| Human-readable external home configuration | `examples/home.net`, original pinned 1.0 fixture |
-| Source-localized CIDR/VLAN/address/topology errors | JSON code/span/related-position assertions and negative fixtures |
-| No unresolved string references in normalized IR | Kind-indexed numeric `Ref`, `PortRef`, checked inventory bounds |
-| Global certificate-checked graph property | Exact-graph topological certificates; independent graph oracle/witness tests |
-| Shared model across OpenWrt/Cisco | Both receive `StableNetwork` through one compile boundary |
-| Renderers contain no generic network decisions | Generic UCI/IOS serialization in `Backend/Render.idr` |
-| Explicit capability mismatch | Port/VLAN limits, interface labels, role/driver and lease-capacity tests |
-| Provenance survives target compilation | Target JSON source maps with origin spans and expansion chains |
-| Deterministic output | Repeated compilation and four exact goldens |
-| Docs derive from the same model | Markdown/Mermaid generators take `StableNetwork` |
-| Explicit source language version | Parser/resolver header checks; unknown versions rejected |
-| Released-language compatibility fixtures | `tests/compatibility/1.0/home.net`, `docs/schema/1.0.json` |
-| No unchecked secret material in artifacts | Literal secret source syntax unsupported; opaque typed reference API tested |
-| No casual proof escape hatches | Total semantic modules; forged certificates rejected by Idris |
-| Proven versus assumed/observed distinction | CLI, generated docs, target assumption metadata and explicit state types |
+The independent UCI oracle in `tests/router_parity.py` compares every original
+option with actual CLI output. It normalizes anonymous section identities,
+option order, singleton list syntax, IPv4 address/netmask notation, and IPv6
+compression. The source modem netmask has its own report row mapping to the
+emitted address prefix. Firewall rule order is compared separately and retained.
 
-## Review issues resolved
+The only intended behavior change is LAN DHCP `limit 199` to `limit 100`, yielding
+`10.9.8.100–10.9.8.199`. Two Wi-Fi options require external credential binding.
+The [parity report](core-router-parity.md) records each mapping.
 
-- Malformed comma-only service lists can no longer become unrestricted allow rules.
-- Public certification now checks model invariants independently of the parser.
-- Prefix width and allocation size are tied by erased evidence.
-- Gateway and DHCP declarations require a routing owner carrying their VLANs.
-- Target name/interface restrictions and C1 control-character rejection are explicit.
-- DHCP's required gateway DHCP/DNS traffic is documented; contradictory policy fails.
-- Dnsmasq lease capacity covers the declared aggregate pools and respects a profile cap.
-- Graph inventories require unique vertices; cycle witnesses follow actual directed edges.
-- Out-of-inventory dependencies produce reference errors, not empty cycle diagnostics.
+Tests cover finite versus offset/count DHCP syntax in both explicit router and
+VLAN declarations, single-address and subnet-end boundaries, overflow, invalid
+counts, overlap, cross-octet pools, and lease capacity. They also exercise
+shared bond interfaces, missing/duplicate attachments, cycles, slave bindings,
+protocol/address conflicts, IPv6 syntax and prefix constraints, firewall
+protocol/family/port/type consistency, DHCP control traffic, and radio/security
+constraints.
+
+The source-kind and secret-kind probes test the public Idris boundary directly,
+so source-parser checks cannot mask a missing certification check. The core
+retains total definitions and checked bounds without `believe_me`, `assert_total`,
+or partial semantic defaults.
+
+## Secret artifacts
+
+The wireless AST has a distinct secret option constructor. Rendering creates
+`wireless.template` and `secret-bindings.json` with deterministic placeholders,
+references, security modes, installation destinations, and source-map entries.
+JSON readiness explicitly reports `requires-secret-binding`.
+
+Tests check manifest/template consistency, source maps, deterministic output,
+required/forbidden credentials, invalid-reference error redaction, secret-free
+wireless output, and generic UCI quoting with synthetic credentials and SSIDs.
+No retrieval, secret materialization, or deployment is implemented. See
+[the secrets methodology](secrets.md).
 
 ## Reproduction
 
 ```sh
 make test
-./netc check examples/home.net --format json
+./netc check examples/core-router.net --format json
+./netc compile examples/core-router.net --target gateway --format json
 ./netc compile examples/home.net --all --format json
-./netc release-check docs/schema/1.0.json docs/schema/1.0.json
+./netc release-check docs/schema/2.0.json docs/schema/2.0.json
 ```
 
-`examples/generated/` contains generated Markdown, Mermaid and intended-config
-JSON for convenient inspection. These are sample build outputs, not deployment
-state or operational snapshots.
+`examples/generated/` contains current Markdown, Mermaid, semantic JSON and
+intended output for inspection. These are compiler artifacts, not operational
+snapshots. Goldens intentionally exclude volatile timestamps and secret values.
 
-## Remaining risks and deferred work
+## Trust boundary and unverified integration
 
-No Nix installation was present, so the pinned flake has not been evaluated or
-built locally. No OpenWrt VM, Cisco emulator or physical device accepted these
-artifacts during verification. Firmware behavior and profile assumptions require
-integration testing on the intended hardware. Existing configuration reconciliation,
-WAN configuration, NAT and IPv6 governance remain external to these artifacts.
+Verification uses macOS arm64, Idris 2 0.8.0, and Chez Scheme. Nix is unavailable
+on this host, so the flake is not locally verified. No physical router, OpenWrt
+VM, or Cisco emulator has accepted these artifacts during this work.
 
-The core certifies implemented predicates, not the completeness of the networking
-specification or real-world service health. Idris, its totality checker, standard
-library and runtime are part of the trust boundary. Migration/AAA modules are
-foundation APIs: no full migration source planner, temporal orchestration,
-observation adapter, secret materialization or AAA target realization is claimed.
+Firmware compatibility, native bonding support, LACP peer state, ISP leases and
+prefix delegation, wireless capabilities/regulatory state, and operational
+service health remain target assumptions. Existing configuration reconciliation,
+external credential binding, and device application remain separate steps.
+The core certifies its implemented predicates, not the completeness of a router
+specification or real-world behavior. AAA/migration modules remain foundations,
+not full AAA realization, observation adapters, or temporal deployment planners.

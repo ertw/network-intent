@@ -1,6 +1,7 @@
 module NetDSL.Domain.Model
 
 import NetDSL.Common
+import public NetDSL.Router.Model
 import NetDSL.Domain.Address
 import Data.List
 
@@ -101,6 +102,7 @@ record Device where
   driver : Driver
   ports : List Port
   maxTagged : Nat
+  routing : Maybe RouterConfig
   source : SourceSpan
 
 public export
@@ -165,7 +167,7 @@ record Route where
   source : SourceSpan
 
 public export
-data SchemaVersion = V1
+data SchemaVersion = V2
 
 public export
 record Network (version : SchemaVersion) where

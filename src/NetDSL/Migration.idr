@@ -6,7 +6,7 @@ import NetDSL.Validate
 
 %default total
 
--- Foundation/spike API, not language-1.0 migration syntax or a deployment engine.
+-- Foundation/spike API, not language-2.0 migration syntax or a deployment engine.
 -- Only availability debt is representable here. Structural and security
 -- invariants cannot be waived, and candidates are recertified on finish.
 public export
@@ -37,7 +37,7 @@ introduce : (debt : Debt) -> MigrationState debts -> MigrationState (debt :: deb
 introduce debt state = Migrating state.candidate state.previous
 
 public export
-replaceCandidate : Network V1 -> MigrationState debts -> Either (List Diagnostic) (MigrationState debts)
+replaceCandidate : Network V2 -> MigrationState debts -> Either (List Diagnostic) (MigrationState debts)
 replaceCandidate n state = do
   certified <- certify n
   Right (Migrating certified state.previous)

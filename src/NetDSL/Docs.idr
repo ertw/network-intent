@@ -1,6 +1,7 @@
 module NetDSL.Docs
 
 import NetDSL.Common
+import NetDSL.Router.Docs
 import NetDSL.Domain.Address
 import NetDSL.Domain.Model
 import NetDSL.Validate
@@ -53,6 +54,7 @@ public export
 graph : StableNetwork -> String
 graph stable = let n = stable.model in
   "flowchart LR\n  %% Desired physical topology; not observed connectivity\n" ++
+  concatMap (\(i,d) => maybe "" (routerGraph ("r" ++ show i)) d.routing) (indexed n.devices) ++
   concatMap (\(r,p) => "  " ++ endpointId (DevicePort r) ++ "[\"" ++ deviceLabel n r.owner ++ "." ++ p.name ++ "\"]\n") (allPorts n) ++
   concatMap (\(i,(_,h)) => "  h" ++ show i ++ "[\"" ++ h.name ++ ".eth0\"]\n") (indexed (allHosts n)) ++
   concatMap (\(a,b) => "  " ++ a ++ " --- " ++ b ++ "\n") (nub (map canonical (mapMaybe edge (allPorts n))))
@@ -73,8 +75,9 @@ dependencyGraph stable = let n = stable.model in
 public export
 markdown : StableNetwork -> String
 markdown stable = let n = stable.model in
-  "# Network " ++ n.name ++ "\n\nLanguage 1.0. State: **Desired**. Domain: " ++ fromMaybe "unspecified" n.domain ++ ".\n\n" ++
+  "# Network " ++ n.name ++ "\n\nLanguage 2.0. State: **Desired**. Domain: " ++ fromMaybe "unspecified" n.domain ++ ".\n\n" ++
   "Model invariants and dependency ordering are certificate-checked by the Idris semantic core. Target realization is conditional on documented profiles. Applied state, physical connectivity, service health and observations are **Unknown**.\n\n" ++
+  concatMap (\d => maybe "" (routerMarkdown d.name) d.routing) n.devices ++
   "## VLANs and addressing\n\n" ++ table ["VLAN","ID","IPv4 prefix","Gateway","DHCP"]
     (map (\v => [v.name,show v.vid.number,showPrefix v.subnet.value,maybe "none" (showIPv4 . value) v.gateway,
       maybe "disabled" (\r => showIPv4 r.first.value ++ " .. " ++ showIPv4 r.last.value) v.dhcp]) n.vlans) ++
@@ -87,20 +90,20 @@ markdown stable = let n = stable.model in
       join ", " (map (\r => maybe "invalid" name (lookupAt r.value.index n.services)) s.dependencies)]) n.services) ++
   "## Static routes\n\n" ++ table ["Route","Destination","Next hop","Device","VLAN","Metric"]
     (map (\r => [r.name,showPrefix r.destination.value,showIPv4 r.nextHop.value,deviceLabel n r.device,vlanLabel n r.vlan,show r.metric]) n.routes) ++
-  "## Policy matrix\n\nIPv4 connection initiation; established/related return traffic is accepted. New input and forwarding default to deny. Rules use declaration order. Gateway means local input; other destinations mean forwarding. DHCP requires gateway UDP/67 and TCP+UDP/53; contradictory denials are rejected. NAT is not inferred. Existing flows are not revoked.\n\n" ++ table ["From","To","Action","Services"]
+  "## VLAN shorthand policy matrix\n\nFor VLAN shorthand: IPv4 connection initiation; established/related return traffic is accepted. New input and forwarding default to deny. Rules use declaration order. Gateway means local input; other destinations mean forwarding. DHCP requires gateway UDP/67 and TCP+UDP/53; contradictory denials are rejected. NAT is not inferred. Existing flows are not revoked.\n\n" ++ table ["From","To","Action","Services"]
     (map (\p => [vlanLabel n p.from,endpointLabel n p.destination,actionName p.action,
       if null p.services then "all IPv4 protocols" else join ", " (map (\r => maybe "invalid" name (lookupAt r.index n.services)) p.services)]) n.policies) ++
-  "## AAA and migration\n\nAAA realization and migration source syntax are deferred beyond language 1.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.\n\n" ++
+  "## AAA and migration\n\nAAA realization and migration source syntax are deferred beyond language 2.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.\n\n" ++
   "## Physical topology\n\n```mermaid\n" ++ graph stable ++ "```\n\n## Dependency graph\n\n```mermaid\n" ++ dependencyGraph stable ++ "```\n"
 
 public export
 semanticJSON : StableNetwork -> String
 semanticJSON stable = let n = stable.model in
-  "{\"exportVersion\":\"1.0\",\"languageVersion\":\"1.0\",\"state\":\"Desired\",\"name\":" ++ jsonString n.name ++
+  "{\"exportVersion\":\"2.0\",\"languageVersion\":\"2.0\",\"state\":\"Desired\",\"name\":" ++ jsonString n.name ++
   ",\"vlans\":" ++ jsonArray (map (\(i,v) => "{\"id\":" ++ show i ++ ",\"name\":" ++ jsonString v.name ++ ",\"vlanId\":" ++ show v.vid.number ++
     ",\"subnet\":" ++ jsonString (showPrefix v.subnet.value) ++ ",\"gateway\":" ++ maybe "null" (jsonString . showIPv4 . value) v.gateway ++
     ",\"source\":" ++ spanJSON v.source ++ "}") (indexed n.vlans)) ++
   ",\"hosts\":" ++ jsonArray (map (\(i,(v,h)) => "{\"id\":" ++ show i ++ ",\"name\":" ++ jsonString h.name ++ ",\"vlanRef\":" ++ show v.index ++ ",\"address\":" ++ jsonString (showIPv4 h.address.value) ++ "}") (indexed (allHosts n))) ++
   ",\"devices\":" ++ jsonArray (map (\(i,d) => "{\"id\":" ++ show i ++ ",\"name\":" ++ jsonString d.name ++ ",\"driver\":" ++ jsonString (driverName d.driver) ++
-    ",\"ports\":" ++ jsonArray (map (\p => "{\"name\":" ++ jsonString p.name ++ ",\"ownerRef\":" ++ show p.owner.index ++ ",\"vlanRefs\":" ++ jsonArray (map (show . index) (memberships p.mode)) ++ "}") d.ports) ++ "}") (indexed n.devices)) ++
+    ",\"ports\":" ++ jsonArray (map (\p => "{\"name\":" ++ jsonString p.name ++ ",\"ownerRef\":" ++ show p.owner.index ++ ",\"vlanRefs\":" ++ jsonArray (map (show . index) (memberships p.mode)) ++ "}") d.ports) ++ ",\"routing\":" ++ maybe "null" routerJSON d.routing ++ "}") (indexed n.devices)) ++
   ",\"certificates\":{\"serviceOrder\":" ++ jsonArray (map show stable.serviceCertificate.order) ++ ",\"routeOrder\":" ++ jsonArray (map show stable.routeCertificate.order) ++ "}}"

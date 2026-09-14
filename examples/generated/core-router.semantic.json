@@ -1,0 +1,778 @@
+{
+  "exportVersion": "2.0",
+  "languageVersion": "2.0",
+  "state": "Desired",
+  "name": "core-router",
+  "vlans": [],
+  "hosts": [],
+  "devices": [
+    {
+      "id": 0,
+      "name": "gateway",
+      "driver": "openwrt",
+      "ports": [],
+      "routing": {
+        "physicals": [
+          {
+            "id": 0,
+            "name": "lan1",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 9,
+              "column": 7,
+              "endLine": 9,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 1,
+            "name": "lan2",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 10,
+              "column": 7,
+              "endLine": 10,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 2,
+            "name": "lan3",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 11,
+              "column": 7,
+              "endLine": 11,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 3,
+            "name": "wan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 12,
+              "column": 7,
+              "endLine": 12,
+              "endColumn": 15
+            }
+          }
+        ],
+        "bridges": [
+          {
+            "id": 0,
+            "name": "br-lan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 23,
+              "column": 7,
+              "endLine": 23,
+              "endColumn": 13
+            },
+            "members": [
+              {
+                "kind": "physical",
+                "ref": 1
+              },
+              {
+                "kind": "physical",
+                "ref": 2
+              }
+            ]
+          }
+        ],
+        "bonds": [
+          {
+            "id": 0,
+            "name": "bond-wan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 52,
+              "column": 7,
+              "endLine": 52,
+              "endColumn": 11
+            },
+            "physicalRefs": [
+              0,
+              3
+            ],
+            "settings": {
+              "mtu": 1500,
+              "mac-address": "e8:9f:80:69:cb:51",
+              "policy": "802.3ad",
+              "hash-policy": "layer3+4",
+              "selection": "stable",
+              "lacp-rate": "fast",
+              "min-links": 1,
+              "monitor-interval": 100
+            }
+          }
+        ],
+        "interfaces": [
+          {
+            "id": 0,
+            "name": "loopback",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 13,
+              "column": 7,
+              "endLine": 13,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "loopback"
+            },
+            "addresses": [
+              "127.0.0.1/8"
+            ],
+            "addresses6": [],
+            "settings": {
+              "protocol": "static"
+            },
+            "dynamicAddressState": "NotApplicable"
+          },
+          {
+            "id": 1,
+            "name": "lan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 26,
+              "column": 7,
+              "endLine": 26,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bridge",
+              "ref": 0
+            },
+            "addresses": [
+              "10.9.8.1/24"
+            ],
+            "addresses6": [],
+            "settings": {
+              "protocol": "static",
+              "ipv6-assignment": 60,
+              "multipath": false
+            },
+            "dynamicAddressState": "NotApplicable"
+          },
+          {
+            "id": 2,
+            "name": "wan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 33,
+              "column": 7,
+              "endLine": 33,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bond",
+              "ref": 0
+            },
+            "addresses": [],
+            "addresses6": [],
+            "settings": {
+              "protocol": "dhcp",
+              "multipath": false
+            },
+            "dynamicAddressState": "Unknown"
+          },
+          {
+            "id": 3,
+            "name": "wan6",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 38,
+              "column": 7,
+              "endLine": 38,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bond",
+              "ref": 0
+            },
+            "addresses": [],
+            "addresses6": [],
+            "settings": {
+              "protocol": "dhcpv6",
+              "multipath": false,
+              "request-address": "try",
+              "request-prefix": "auto",
+              "no-release": true
+            },
+            "dynamicAddressState": "Unknown"
+          },
+          {
+            "id": 4,
+            "name": "modem",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 46,
+              "column": 7,
+              "endLine": 46,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bond",
+              "ref": 0
+            },
+            "addresses": [
+              "192.168.100.2/24"
+            ],
+            "addresses6": [],
+            "settings": {
+              "protocol": "static",
+              "multipath": false
+            },
+            "dynamicAddressState": "NotApplicable"
+          }
+        ],
+        "globals": {
+          "dhcp-default-duid": "0004ecf7fc0d101f44ab9683172b87cd03ad",
+          "ula-prefix": "fdbe:c414:cd71:0000:0000:0000:0000:0000/48",
+          "packet-steering": true
+        },
+        "dns": {
+          "domainneeded": true,
+          "boguspriv": true,
+          "filterwin2k": false,
+          "localise-queries": true,
+          "rebind-protection": true,
+          "rebind-localhost": true,
+          "expandhosts": true,
+          "nonegcache": false,
+          "authoritative": true,
+          "readethers": true,
+          "nonwildcard": true,
+          "localservice": true,
+          "filter-aaaa": false,
+          "filter-a": false,
+          "local": "/lan/",
+          "domain": "lan",
+          "leasefile": "/tmp/dhcp.leases",
+          "resolvfile": "/tmp/resolv.conf.d/resolv.conf.auto",
+          "cache-size": 1000,
+          "edns-packet-max": 1232
+        },
+        "dhcpServers": [
+          {
+            "id": 0,
+            "name": "lan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 85,
+              "column": 7,
+              "endLine": 85,
+              "endColumn": 18
+            },
+            "interfaceRef": 1,
+            "pool": {
+              "first": "10.9.8.100",
+              "last": "10.9.8.199",
+              "count": 100
+            },
+            "raFlags": [
+              "managed-config",
+              "other-config"
+            ],
+            "settings": {
+              "lease-time": "12h",
+              "ipv4": "server",
+              "ipv6": "server",
+              "ra": "server",
+              "ra-preference": "medium"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 95,
+              "column": 7,
+              "endLine": 95,
+              "endColumn": 18
+            },
+            "interfaceRef": 2,
+            "pool": null,
+            "raFlags": [],
+            "settings": {
+              "ignore": true
+            }
+          }
+        ],
+        "odhcp": {
+          "main-dhcp": false,
+          "leasefile": "/tmp/odhcpd.leases",
+          "lease-trigger": "/usr/sbin/odhcpd-update",
+          "log-level": 4,
+          "pio-directory": "/tmp/odhcpd-piodir",
+          "hosts-directory": "/tmp/hosts"
+        },
+        "firewallDefaults": {
+          "syn-flood": true,
+          "input": "REJECT",
+          "output": "ACCEPT",
+          "forward": "REJECT"
+        },
+        "zones": [
+          {
+            "id": 0,
+            "name": "lan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 113,
+              "column": 7,
+              "endLine": 113,
+              "endColumn": 11
+            },
+            "interfaceRefs": [
+              1
+            ],
+            "settings": {
+              "input": "ACCEPT",
+              "output": "ACCEPT",
+              "forward": "ACCEPT"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wan",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 119,
+              "column": 7,
+              "endLine": 119,
+              "endColumn": 11
+            },
+            "interfaceRefs": [
+              2,
+              3,
+              4
+            ],
+            "settings": {
+              "input": "REJECT",
+              "output": "ACCEPT",
+              "forward": "DROP",
+              "masquerade": true,
+              "mss-adjust": true
+            }
+          }
+        ],
+        "forwardings": [
+          {
+            "sourceZoneRef": 0,
+            "destinationZoneRef": 1,
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 127,
+              "column": 7,
+              "endLine": 127,
+              "endColumn": 14
+            }
+          }
+        ],
+        "rules": [
+          {
+            "id": 0,
+            "name": "Allow-DHCP-Renew",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 128,
+              "column": 7,
+              "endLine": 128,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv4",
+              "destination-port": 68,
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 1,
+            "name": "Allow-Ping",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 135,
+              "column": 7,
+              "endLine": 135,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request"
+            ],
+            "settings": {
+              "family": "ipv4",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 2,
+            "name": "Allow-IGMP",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 142,
+              "column": 7,
+              "endLine": 142,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "igmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv4",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 3,
+            "name": "Allow-DHCPv6",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 148,
+              "column": 7,
+              "endLine": 148,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv6",
+              "destination-port": 546,
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 4,
+            "name": "Allow-MLD",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 155,
+              "column": 7,
+              "endLine": 155,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": "fe80:0000:0000:0000:0000:0000:0000:0000/10",
+            "icmpTypes": [
+              "130/0",
+              "131/0",
+              "132/0",
+              "143/0"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 5,
+            "name": "Allow-ICMPv6-Input",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 163,
+              "column": 7,
+              "endLine": 163,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request",
+              "echo-reply",
+              "destination-unreachable",
+              "packet-too-big",
+              "time-exceeded",
+              "bad-header",
+              "unknown-header-type",
+              "router-solicitation",
+              "neighbour-solicitation",
+              "router-advertisement",
+              "neighbour-advertisement"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "limit": "1000/sec",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 6,
+            "name": "Allow-ICMPv6-Forward",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 171,
+              "column": 7,
+              "endLine": 171,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "any-zone"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request",
+              "echo-reply",
+              "destination-unreachable",
+              "packet-too-big",
+              "time-exceeded",
+              "bad-header",
+              "unknown-header-type"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "limit": "1000/sec",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 7,
+            "name": "Allow-IPSec-ESP",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 180,
+              "column": 7,
+              "endLine": 180,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "zone",
+              "ref": 0
+            },
+            "protocols": [
+              "esp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 8,
+            "name": "Allow-ISAKMP",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 186,
+              "column": 7,
+              "endLine": 186,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "zone",
+              "ref": 0
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "destination-port": 500,
+              "action": "ACCEPT"
+            }
+          }
+        ],
+        "radios": [
+          {
+            "id": 0,
+            "name": "radio0",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 193,
+              "column": 7,
+              "endLine": 193,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi",
+              "band": "5g",
+              "channel": 36,
+              "width": "HE80"
+            }
+          },
+          {
+            "id": 1,
+            "name": "radio1",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 208,
+              "column": 7,
+              "endLine": 208,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi+1",
+              "band": "2g",
+              "channel": 6,
+              "width": "HT20",
+              "country": "US",
+              "cell-density": 0
+            }
+          },
+          {
+            "id": 2,
+            "name": "radio2",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 225,
+              "column": 7,
+              "endLine": 225,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi+2",
+              "band": "5g",
+              "channel": 100,
+              "width": "HE80",
+              "country": "US",
+              "cell-density": 0
+            }
+          }
+        ],
+        "accessPoints": [
+          {
+            "id": 0,
+            "name": "default_radio0",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 200,
+              "column": 7,
+              "endLine": 200,
+              "endColumn": 19
+            },
+            "radioRef": 0,
+            "interfaceRef": 1,
+            "credentialRef": null,
+            "settings": {
+              "mode": "ap",
+              "ssid": "OpenWrt",
+              "security": "none",
+              "disabled": true
+            }
+          },
+          {
+            "id": 1,
+            "name": "default_radio1",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 217,
+              "column": 7,
+              "endLine": 217,
+              "endColumn": 19
+            },
+            "radioRef": 1,
+            "interfaceRef": 1,
+            "credentialRef": "secret://core-router/wifi/iot",
+            "settings": {
+              "mode": "ap",
+              "ssid": "_iot",
+              "security": "psk2"
+            }
+          },
+          {
+            "id": 2,
+            "name": "wifinet2",
+            "source": {
+              "file": "examples/core-router.net",
+              "line": 234,
+              "column": 7,
+              "endLine": 234,
+              "endColumn": 19
+            },
+            "radioRef": 2,
+            "interfaceRef": 1,
+            "credentialRef": "secret://core-router/wifi/main",
+            "settings": {
+              "mode": "ap",
+              "ssid": "_",
+              "security": "sae",
+              "ocv": false
+            }
+          }
+        ],
+        "attachmentEdges": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      }
+    }
+  ],
+  "certificates": {
+    "serviceOrder": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "routeOrder": []
+  }
+}

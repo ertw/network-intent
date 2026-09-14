@@ -38,8 +38,8 @@ record VlanId where
 public export
 data AddressFamily = IPv4Family | IPv6Family
 
--- IPv6 deliberately has its own future allocation semantics; IPv4 pools are
--- never generalized to it. No IPv6 source is silently interpreted as IPv4.
+-- Router.Address provides separate checked IPv6 types. IPv4 pool arithmetic
+-- is never generalized to IPv6 or used to invent delegated addresses.
 public export
 mkVlanId : SourceSpan -> String -> Either Diagnostic VlanId
 mkVlanId at s = case decimal s of

@@ -24,3 +24,10 @@ file in one package: the negative fixtures are intentionally ill-typed.
 The last isolated Idris 2 version 0.8.0 run passed all 34 direct assertions, all 640
 acyclicity decisions and witnesses/certificates, and all nine compile-negative
 fixtures. No trusted-core escape hatches are used in these probes.
+
+
+`RouterAPI.idr` elaborates the sanitized core-router example and mutates its
+public model before recertification. It checks references, attachment cycles,
+bond bounds/membership, DHCP/firewall constraints, radio and credential validation,
+and synthetic UCI quoting. `ForgedIPv6` and `ForgedPrefix6` must fail at compile
+time; `WrongRouterRef` and `WrongWiFiRef` reject reference-kind substitution.
