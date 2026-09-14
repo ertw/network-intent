@@ -1,0 +1,1550 @@
+{
+  "exportVersion": "3.0",
+  "languageVersion": "3.0",
+  "state": "Desired",
+  "name": "home-wds",
+  "enforcerRef": 0,
+  "wirelessLinks": [
+    {
+      "station": {
+        "deviceRef": 1,
+        "interfaceRef": 0
+      },
+      "accessPoint": {
+        "deviceRef": 0,
+        "interfaceRef": 1
+      },
+      "source": {
+        "file": "examples/wds-network.net",
+        "line": 478,
+        "column": 3,
+        "endLine": 478,
+        "endColumn": 16
+      }
+    }
+  ],
+  "vlans": [],
+  "hosts": [],
+  "devices": [
+    {
+      "id": 0,
+      "name": "gateway",
+      "driver": "openwrt",
+      "routingOwner": true,
+      "ports": [],
+      "routing": {
+        "physicals": [
+          {
+            "id": 0,
+            "name": "lan1",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 10,
+              "column": 7,
+              "endLine": 10,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 1,
+            "name": "lan2",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 11,
+              "column": 7,
+              "endLine": 11,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 2,
+            "name": "lan3",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 12,
+              "column": 7,
+              "endLine": 12,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 3,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 13,
+              "column": 7,
+              "endLine": 13,
+              "endColumn": 15
+            }
+          }
+        ],
+        "bridges": [
+          {
+            "id": 0,
+            "name": "br-lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 24,
+              "column": 7,
+              "endLine": 24,
+              "endColumn": 13
+            },
+            "members": [
+              {
+                "kind": "physical",
+                "ref": 1
+              },
+              {
+                "kind": "physical",
+                "ref": 2
+              }
+            ],
+            "stp": null
+          }
+        ],
+        "bonds": [
+          {
+            "id": 0,
+            "name": "bond-wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 53,
+              "column": 7,
+              "endLine": 53,
+              "endColumn": 11
+            },
+            "physicalRefs": [
+              0,
+              3
+            ],
+            "settings": {
+              "mtu": 1500,
+              "mac-address": "e8:9f:80:69:cb:51",
+              "policy": "802.3ad",
+              "hash-policy": "layer3+4",
+              "selection": "stable",
+              "lacp-rate": "fast",
+              "min-links": 1,
+              "monitor-interval": 100
+            }
+          }
+        ],
+        "interfaces": [
+          {
+            "id": 0,
+            "name": "loopback",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 14,
+              "column": 7,
+              "endLine": 14,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "loopback"
+            },
+            "addresses": [
+              "127.0.0.1/8"
+            ],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "static"
+            },
+            "dynamicAddressState": "NotApplicable"
+          },
+          {
+            "id": 1,
+            "name": "lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 27,
+              "column": 7,
+              "endLine": 27,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bridge",
+              "ref": 0
+            },
+            "addresses": [
+              "10.9.8.1/24"
+            ],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "static",
+              "ipv6-assignment": 60,
+              "multipath": false
+            },
+            "dynamicAddressState": "NotApplicable"
+          },
+          {
+            "id": 2,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 34,
+              "column": 7,
+              "endLine": 34,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bond",
+              "ref": 0
+            },
+            "addresses": [],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "dhcp",
+              "multipath": false
+            },
+            "dynamicAddressState": "Unknown"
+          },
+          {
+            "id": 3,
+            "name": "wan6",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 39,
+              "column": 7,
+              "endLine": 39,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bond",
+              "ref": 0
+            },
+            "addresses": [],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "dhcpv6",
+              "multipath": false,
+              "request-address": "try",
+              "request-prefix": "auto",
+              "no-release": true
+            },
+            "dynamicAddressState": "Unknown"
+          },
+          {
+            "id": 4,
+            "name": "modem",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 47,
+              "column": 7,
+              "endLine": 47,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bond",
+              "ref": 0
+            },
+            "addresses": [
+              "192.168.100.2/24"
+            ],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "static",
+              "multipath": false
+            },
+            "dynamicAddressState": "NotApplicable"
+          }
+        ],
+        "globals": {
+          "dhcp-default-duid": "0004ecf7fc0d101f44ab9683172b87cd03ad",
+          "ula-prefix": "fdbe:c414:cd71:0000:0000:0000:0000:0000/48",
+          "packet-steering": true
+        },
+        "dns": {
+          "domainneeded": true,
+          "boguspriv": true,
+          "filterwin2k": false,
+          "localise-queries": true,
+          "rebind-protection": true,
+          "rebind-localhost": true,
+          "expandhosts": true,
+          "nonegcache": false,
+          "authoritative": true,
+          "readethers": true,
+          "nonwildcard": true,
+          "localservice": true,
+          "filter-aaaa": false,
+          "filter-a": false,
+          "local": "/lan/",
+          "domain": "lan",
+          "leasefile": "/tmp/dhcp.leases",
+          "resolvfile": "/tmp/resolv.conf.d/resolv.conf.auto",
+          "cache-size": 1000,
+          "edns-packet-max": 1232
+        },
+        "dhcpServers": [
+          {
+            "id": 0,
+            "name": "lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 86,
+              "column": 7,
+              "endLine": 86,
+              "endColumn": 18
+            },
+            "interfaceRef": 1,
+            "pool": {
+              "first": "10.9.8.100",
+              "last": "10.9.8.199",
+              "count": 100,
+              "activeLeaseCount": 100
+            },
+            "raFlags": [
+              "managed-config",
+              "other-config"
+            ],
+            "settings": {
+              "lease-time": "12h",
+              "ipv4": "server",
+              "ipv6": "server",
+              "ra": "server",
+              "ra-preference": "medium"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 96,
+              "column": 7,
+              "endLine": 96,
+              "endColumn": 18
+            },
+            "interfaceRef": 2,
+            "pool": null,
+            "raFlags": [],
+            "settings": {
+              "ignore": true
+            }
+          }
+        ],
+        "odhcp": {
+          "main-dhcp": false,
+          "leasefile": "/tmp/odhcpd.leases",
+          "lease-trigger": "/usr/sbin/odhcpd-update",
+          "log-level": 4,
+          "pio-directory": "/tmp/odhcpd-piodir",
+          "hosts-directory": "/tmp/hosts"
+        },
+        "firewallDefaults": {
+          "syn-flood": true,
+          "input": "REJECT",
+          "output": "ACCEPT",
+          "forward": "REJECT"
+        },
+        "zones": [
+          {
+            "id": 0,
+            "name": "lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 114,
+              "column": 7,
+              "endLine": 114,
+              "endColumn": 11
+            },
+            "interfaceRefs": [
+              1
+            ],
+            "settings": {
+              "input": "ACCEPT",
+              "output": "ACCEPT",
+              "forward": "ACCEPT"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 120,
+              "column": 7,
+              "endLine": 120,
+              "endColumn": 11
+            },
+            "interfaceRefs": [
+              2,
+              3,
+              4
+            ],
+            "settings": {
+              "input": "REJECT",
+              "output": "ACCEPT",
+              "forward": "DROP",
+              "masquerade": true,
+              "mss-adjust": true
+            }
+          }
+        ],
+        "forwardings": [
+          {
+            "sourceZoneRef": 0,
+            "destinationZoneRef": 1,
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 128,
+              "column": 7,
+              "endLine": 128,
+              "endColumn": 14
+            }
+          }
+        ],
+        "rules": [
+          {
+            "id": 0,
+            "name": "Allow-DHCP-Renew",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 129,
+              "column": 7,
+              "endLine": 129,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv4",
+              "destination-port": 68,
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 1,
+            "name": "Allow-Ping",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 136,
+              "column": 7,
+              "endLine": 136,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request"
+            ],
+            "settings": {
+              "family": "ipv4",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 2,
+            "name": "Allow-IGMP",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 143,
+              "column": 7,
+              "endLine": 143,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "igmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv4",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 3,
+            "name": "Allow-DHCPv6",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 149,
+              "column": 7,
+              "endLine": 149,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv6",
+              "destination-port": 546,
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 4,
+            "name": "Allow-MLD",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 156,
+              "column": 7,
+              "endLine": 156,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": "fe80:0000:0000:0000:0000:0000:0000:0000/10",
+            "icmpTypes": [
+              "130/0",
+              "131/0",
+              "132/0",
+              "143/0"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 5,
+            "name": "Allow-ICMPv6-Input",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 164,
+              "column": 7,
+              "endLine": 164,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request",
+              "echo-reply",
+              "destination-unreachable",
+              "packet-too-big",
+              "time-exceeded",
+              "bad-header",
+              "unknown-header-type",
+              "router-solicitation",
+              "neighbour-solicitation",
+              "router-advertisement",
+              "neighbour-advertisement"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "limit": "1000/sec",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 6,
+            "name": "Allow-ICMPv6-Forward",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 172,
+              "column": 7,
+              "endLine": 172,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "any-zone"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request",
+              "echo-reply",
+              "destination-unreachable",
+              "packet-too-big",
+              "time-exceeded",
+              "bad-header",
+              "unknown-header-type"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "limit": "1000/sec",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 7,
+            "name": "Allow-IPSec-ESP",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 181,
+              "column": 7,
+              "endLine": 181,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "zone",
+              "ref": 0
+            },
+            "protocols": [
+              "esp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 8,
+            "name": "Allow-ISAKMP",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 187,
+              "column": 7,
+              "endLine": 187,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "zone",
+              "ref": 0
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "destination-port": 500,
+              "action": "ACCEPT"
+            }
+          }
+        ],
+        "radios": [
+          {
+            "id": 0,
+            "name": "radio0",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 194,
+              "column": 7,
+              "endLine": 194,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi",
+              "band": "5g",
+              "channel": 60,
+              "width": "HE80",
+              "country": "US",
+              "cell-density": 0
+            }
+          },
+          {
+            "id": 1,
+            "name": "radio1",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 203,
+              "column": 7,
+              "endLine": 203,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi+1",
+              "band": "2g",
+              "channel": 8,
+              "width": "HT20",
+              "country": "US",
+              "cell-density": 0
+            }
+          },
+          {
+            "id": 2,
+            "name": "radio2",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 220,
+              "column": 7,
+              "endLine": 220,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi+2",
+              "band": "5g",
+              "channel": 100,
+              "width": "HE80",
+              "country": "US",
+              "cell-density": 0
+            }
+          }
+        ],
+        "wifiInterfaces": [
+          {
+            "id": 0,
+            "name": "default_radio1",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 212,
+              "column": 7,
+              "endLine": 212,
+              "endColumn": 25
+            },
+            "radioRef": 1,
+            "interfaceRef": 1,
+            "credentialRef": "secret://home/wifi/iot",
+            "settings": {
+              "mode": "ap",
+              "ssid": "_iot",
+              "security": "psk2"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wifinet3",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 229,
+              "column": 7,
+              "endLine": 229,
+              "endColumn": 25
+            },
+            "radioRef": 2,
+            "interfaceRef": 1,
+            "credentialRef": "secret://home/wifi/backhaul",
+            "settings": {
+              "mode": "ap",
+              "ssid": "_backhaul",
+              "security": "sae",
+              "ocv": false,
+              "wds": true,
+              "hidden": true
+            }
+          },
+          {
+            "id": 2,
+            "name": "wifinet2",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 240,
+              "column": 7,
+              "endLine": 240,
+              "endColumn": 25
+            },
+            "radioRef": 0,
+            "interfaceRef": 1,
+            "credentialRef": "secret://home/wifi/main",
+            "settings": {
+              "mode": "ap",
+              "ssid": "_",
+              "security": "sae",
+              "ocv": false
+            }
+          }
+        ],
+        "attachmentEdges": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "name": "satellite",
+      "driver": "openwrt",
+      "routingOwner": false,
+      "ports": [],
+      "routing": {
+        "physicals": [
+          {
+            "id": 0,
+            "name": "lan1",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 255,
+              "column": 7,
+              "endLine": 255,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 1,
+            "name": "lan2",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 256,
+              "column": 7,
+              "endLine": 256,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 2,
+            "name": "lan3",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 257,
+              "column": 7,
+              "endLine": 257,
+              "endColumn": 15
+            }
+          },
+          {
+            "id": 3,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 258,
+              "column": 7,
+              "endLine": 258,
+              "endColumn": 15
+            }
+          }
+        ],
+        "bridges": [
+          {
+            "id": 0,
+            "name": "br-lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 268,
+              "column": 7,
+              "endLine": 268,
+              "endColumn": 13
+            },
+            "members": [
+              {
+                "kind": "physical",
+                "ref": 0
+              },
+              {
+                "kind": "physical",
+                "ref": 1
+              },
+              {
+                "kind": "physical",
+                "ref": 2
+              }
+            ],
+            "stp": true
+          }
+        ],
+        "bonds": [],
+        "interfaces": [
+          {
+            "id": 0,
+            "name": "loopback",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 259,
+              "column": 7,
+              "endLine": 259,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "loopback"
+            },
+            "addresses": [
+              "127.0.0.1/8"
+            ],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "static"
+            },
+            "dynamicAddressState": "NotApplicable"
+          },
+          {
+            "id": 1,
+            "name": "lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 272,
+              "column": 7,
+              "endLine": 272,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "bridge",
+              "ref": 0
+            },
+            "addresses": [
+              "10.9.8.2/24"
+            ],
+            "addresses6": [],
+            "gateway": "10.9.8.1",
+            "dnsServers": [
+              "10.8.8.1"
+            ],
+            "settings": {
+              "protocol": "static",
+              "ipv6-assignment": 60,
+              "multipath": false
+            },
+            "dynamicAddressState": "NotApplicable"
+          },
+          {
+            "id": 2,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 282,
+              "column": 7,
+              "endLine": 282,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "physical",
+              "ref": 3
+            },
+            "addresses": [],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "dhcp"
+            },
+            "dynamicAddressState": "Unknown"
+          },
+          {
+            "id": 3,
+            "name": "wan6",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 286,
+              "column": 7,
+              "endLine": 286,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "physical",
+              "ref": 3
+            },
+            "addresses": [],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "dhcpv6"
+            },
+            "dynamicAddressState": "Unknown"
+          },
+          {
+            "id": 4,
+            "name": "wwan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 290,
+              "column": 7,
+              "endLine": 290,
+              "endColumn": 16
+            },
+            "attachment": {
+              "kind": "unattached"
+            },
+            "addresses": [],
+            "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
+            "settings": {
+              "protocol": "dhcp"
+            },
+            "dynamicAddressState": "Unknown"
+          }
+        ],
+        "globals": {
+          "dhcp-default-duid": "00049a7712b65db148f5a84d0c32ac3e6838",
+          "ula-prefix": "fdf5:8061:b9d1:0000:0000:0000:0000:0000/48"
+        },
+        "dns": {
+          "domainneeded": true,
+          "boguspriv": true,
+          "filterwin2k": false,
+          "localise-queries": true,
+          "rebind-protection": true,
+          "rebind-localhost": true,
+          "expandhosts": true,
+          "nonegcache": false,
+          "authoritative": true,
+          "readethers": true,
+          "nonwildcard": true,
+          "localservice": true,
+          "filter-aaaa": false,
+          "filter-a": false,
+          "local": "/lan/",
+          "domain": "lan",
+          "leasefile": "/tmp/dhcp.leases",
+          "resolvfile": "/tmp/resolv.conf.d/resolv.conf.auto",
+          "cache-size": 1000,
+          "edns-packet-max": 1232
+        },
+        "dhcpServers": [
+          {
+            "id": 0,
+            "name": "lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 316,
+              "column": 7,
+              "endLine": 316,
+              "endColumn": 18
+            },
+            "interfaceRef": 1,
+            "pool": {
+              "first": "10.9.8.100",
+              "last": "10.9.8.249",
+              "count": 150,
+              "activeLeaseCount": 0
+            },
+            "raFlags": [],
+            "settings": {
+              "ignore": true,
+              "lease-time": "12h",
+              "ipv4": "disabled"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 323,
+              "column": 7,
+              "endLine": 323,
+              "endColumn": 18
+            },
+            "interfaceRef": 2,
+            "pool": null,
+            "raFlags": [],
+            "settings": {
+              "ignore": true
+            }
+          }
+        ],
+        "odhcp": {
+          "main-dhcp": false,
+          "leasefile": "/tmp/odhcpd.leases",
+          "lease-trigger": "/usr/sbin/odhcpd-update",
+          "log-level": 4,
+          "pio-directory": "/tmp/odhcpd-piodir",
+          "hosts-directory": "/tmp/hosts"
+        },
+        "firewallDefaults": {
+          "syn-flood": true,
+          "input": "REJECT",
+          "output": "ACCEPT",
+          "forward": "REJECT"
+        },
+        "zones": [
+          {
+            "id": 0,
+            "name": "lan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 341,
+              "column": 7,
+              "endLine": 341,
+              "endColumn": 11
+            },
+            "interfaceRefs": [
+              1,
+              4
+            ],
+            "settings": {
+              "input": "ACCEPT",
+              "output": "ACCEPT",
+              "forward": "ACCEPT"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wan",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 347,
+              "column": 7,
+              "endLine": 347,
+              "endColumn": 11
+            },
+            "interfaceRefs": [
+              2,
+              3
+            ],
+            "settings": {
+              "input": "REJECT",
+              "output": "ACCEPT",
+              "forward": "DROP",
+              "masquerade": true,
+              "mss-adjust": true
+            }
+          }
+        ],
+        "forwardings": [
+          {
+            "sourceZoneRef": 0,
+            "destinationZoneRef": 1,
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 355,
+              "column": 7,
+              "endLine": 355,
+              "endColumn": 14
+            }
+          }
+        ],
+        "rules": [
+          {
+            "id": 0,
+            "name": "Allow-DHCP-Renew",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 356,
+              "column": 7,
+              "endLine": 356,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv4",
+              "destination-port": 68,
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 1,
+            "name": "Allow-Ping",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 363,
+              "column": 7,
+              "endLine": 363,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request"
+            ],
+            "settings": {
+              "family": "ipv4",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 2,
+            "name": "Allow-IGMP",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 370,
+              "column": 7,
+              "endLine": 370,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "igmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv4",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 3,
+            "name": "Allow-DHCPv6",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 376,
+              "column": 7,
+              "endLine": 376,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "family": "ipv6",
+              "destination-port": 546,
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 4,
+            "name": "Allow-MLD",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 383,
+              "column": 7,
+              "endLine": 383,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": "fe80:0000:0000:0000:0000:0000:0000:0000/10",
+            "icmpTypes": [
+              "130/0",
+              "131/0",
+              "132/0",
+              "143/0"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 5,
+            "name": "Allow-ICMPv6-Input",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 391,
+              "column": 7,
+              "endLine": 391,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "local"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request",
+              "echo-reply",
+              "destination-unreachable",
+              "packet-too-big",
+              "time-exceeded",
+              "bad-header",
+              "unknown-header-type",
+              "router-solicitation",
+              "neighbour-solicitation",
+              "router-advertisement",
+              "neighbour-advertisement"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "limit": "1000/sec",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 6,
+            "name": "Allow-ICMPv6-Forward",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 399,
+              "column": 7,
+              "endLine": 399,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "any-zone"
+            },
+            "protocols": [
+              "icmp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [
+              "echo-request",
+              "echo-reply",
+              "destination-unreachable",
+              "packet-too-big",
+              "time-exceeded",
+              "bad-header",
+              "unknown-header-type"
+            ],
+            "settings": {
+              "family": "ipv6",
+              "limit": "1000/sec",
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 7,
+            "name": "Allow-IPSec-ESP",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 408,
+              "column": 7,
+              "endLine": 408,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "zone",
+              "ref": 0
+            },
+            "protocols": [
+              "esp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "action": "ACCEPT"
+            }
+          },
+          {
+            "id": 8,
+            "name": "Allow-ISAKMP",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 414,
+              "column": 7,
+              "endLine": 414,
+              "endColumn": 20
+            },
+            "sourceZoneRef": 1,
+            "destination": {
+              "kind": "zone",
+              "ref": 0
+            },
+            "protocols": [
+              "udp"
+            ],
+            "sourcePrefix": null,
+            "icmpTypes": [],
+            "settings": {
+              "destination-port": 500,
+              "action": "ACCEPT"
+            }
+          }
+        ],
+        "radios": [
+          {
+            "id": 0,
+            "name": "radio0",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 421,
+              "column": 7,
+              "endLine": 421,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi",
+              "band": "5g",
+              "channel": 36,
+              "width": "VHT80",
+              "country": "US",
+              "cell-density": 0
+            }
+          },
+          {
+            "id": 1,
+            "name": "radio1",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 430,
+              "column": 7,
+              "endLine": 430,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi+1",
+              "band": "2g",
+              "channel": 2,
+              "width": "HT20",
+              "cell-density": 0
+            }
+          },
+          {
+            "id": 2,
+            "name": "radio2",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 438,
+              "column": 7,
+              "endLine": 438,
+              "endColumn": 12
+            },
+            "settings": {
+              "driver": "mac80211",
+              "path": "platform/soc@0/c000000.wifi+2",
+              "band": "5g",
+              "channel": 100,
+              "width": "VHT80",
+              "country": "US",
+              "cell-density": 0
+            }
+          }
+        ],
+        "wifiInterfaces": [
+          {
+            "id": 0,
+            "name": "wifinet3",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 447,
+              "column": 7,
+              "endLine": 447,
+              "endColumn": 25
+            },
+            "radioRef": 2,
+            "interfaceRef": 1,
+            "credentialRef": "secret://home/wifi/backhaul",
+            "settings": {
+              "mode": "sta",
+              "ssid": "_backhaul",
+              "security": "sae",
+              "ocv": false,
+              "wds": true,
+              "bssid": "E8:9F:80:69:CB:54"
+            }
+          },
+          {
+            "id": 1,
+            "name": "wifinet1",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 458,
+              "column": 7,
+              "endLine": 458,
+              "endColumn": 25
+            },
+            "radioRef": 0,
+            "interfaceRef": 1,
+            "credentialRef": "secret://home/wifi/main",
+            "settings": {
+              "mode": "ap",
+              "ssid": "_",
+              "security": "sae",
+              "ocv": false
+            }
+          },
+          {
+            "id": 2,
+            "name": "wifinet2",
+            "source": {
+              "file": "examples/wds-network.net",
+              "line": 467,
+              "column": 7,
+              "endLine": 467,
+              "endColumn": 25
+            },
+            "radioRef": 1,
+            "interfaceRef": 1,
+            "credentialRef": "secret://home/wifi/iot",
+            "settings": {
+              "mode": "ap",
+              "ssid": "_iot",
+              "security": "psk2"
+            }
+          }
+        ],
+        "attachmentEdges": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      }
+    }
+  ],
+  "certificates": {
+    "serviceOrder": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "routeOrder": []
+  }
+}

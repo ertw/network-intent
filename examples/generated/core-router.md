@@ -1,30 +1,35 @@
 # Network core-router
 
-Language 2.0. State: **Desired**. Domain: unspecified.
+Language 3.0. State: **Desired**. Domain: unspecified.
 
 Model invariants and dependency ordering are certificate-checked by the Idris semantic core. Target realization is conditional on documented profiles. Applied state, physical connectivity, service health and observations are **Unknown**.
 
-## Router gateway
+Routing/policy owner: gateway.
+
+| Wireless station | Upstream AP |
+| --- | --- |
+
+## Device gateway
 
 Explicit dual-stack interface and zone intent. Dynamic addresses, delegated prefixes, link state, and radio operation are **Unknown**.
 
-| Link | Kind | Members |
-| --- | --- | --- |
-| br-lan | bridge | lan2, lan3 |
-| bond-wan | bond | lan1, wan |
-
-| Interface | Attachment | Protocol | IPv4 | IPv6 assignment |
-| --- | --- | --- | --- | --- |
-| loopback | lo | static | 127.0.0.1/8 | none |
-| lan | br-lan | static | 10.9.8.1/24 | /60 |
-| wan | bond-wan | dhcp |  | none |
-| wan6 | bond-wan | dhcpv6 |  | none |
-| modem | bond-wan | static | 192.168.100.2/24 | none |
-
-| DHCP interface | Pool | IPv6 server | Router advertisements |
+| Link | Kind | Members | STP |
 | --- | --- | --- | --- |
-| lan | 10.9.8.100 .. 10.9.8.199 | server | server |
-| wan | none | default | default |
+| br-lan | bridge | lan2, lan3 | default |
+| bond-wan | bond | lan1, wan | n/a |
+
+| Interface | Attachment | Protocol | IPv4 | IPv6 assignment | Gateway | DNS |
+| --- | --- | --- | --- | --- | --- | --- |
+| loopback | lo | static | 127.0.0.1/8 | none | none |  |
+| lan | br-lan | static | 10.9.8.1/24 | /60 | none |  |
+| wan | bond-wan | dhcp |  | none | none |  |
+| wan6 | bond-wan | dhcpv6 |  | none | none |  |
+| modem | bond-wan | static | 192.168.100.2/24 | none | none |  |
+
+| DHCP interface | Pool | Active leases | IPv6 server | Router advertisements |
+| --- | --- | --- | --- | --- |
+| lan | 10.9.8.100 .. 10.9.8.199 | 100 | server | server |
+| wan | none | 0 | default | default |
 
 | Zone | Interfaces | Input | Output | Forward | IPv4 NAT |
 | --- | --- | --- | --- | --- | --- |
@@ -45,11 +50,11 @@ Firewall rules retain declaration order.
 | Allow-IPSec-ESP | wan | lan | esp | ACCEPT |
 | Allow-ISAKMP | wan | lan | udp | ACCEPT |
 
-| AP | SSID | Radio | Interface | Security | Enabled | Credential reference |
-| --- | --- | --- | --- | --- | --- | --- |
-| default_radio0 | OpenWrt | radio0 | lan | none | no | none |
-| default_radio1 | _iot | radio1 | lan | psk2 | yes | secret://core-router/wifi/iot |
-| wifinet2 | _ | radio2 | lan | sae | yes | secret://core-router/wifi/main |
+| Wi-Fi interface | Mode | SSID | Radio | Interface | Security | Enabled | WDS | Hidden | BSSID | Credential reference |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| default_radio0 | ap | OpenWrt | radio0 | lan | none | no | default | default | unspecified | none |
+| default_radio1 | ap | _iot | radio1 | lan | psk2 | yes | default | default | unspecified | secret://core-router/wifi/iot |
+| wifinet2 | ap | _ | radio2 | lan | sae | yes | default | default | unspecified | secret://core-router/wifi/main |
 
 Secret references identify externally held credentials. Wireless templates require binding before installation; the compiler never resolves credentials.
 
@@ -94,7 +99,7 @@ For VLAN shorthand: IPv4 connection initiation; established/related return traff
 
 ## AAA and migration
 
-AAA realization and migration source syntax are deferred beyond language 2.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.
+AAA realization and migration source syntax are deferred beyond language 3.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.
 
 ## Physical topology
 

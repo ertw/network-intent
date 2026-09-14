@@ -270,15 +270,18 @@ showChannelWidth VHT80 = "VHT80"
 showChannelWidth VHT160 = "VHT160"
 
 public export
-data APMode = AccessPoint
+data WiFiMode = AccessPoint | Station
 
 public export
-Eq APMode where
+Eq WiFiMode where
   AccessPoint == AccessPoint = True
+  Station == Station = True
+  _ == _ = False
 
 public export
-showAPMode : APMode -> String
-showAPMode AccessPoint = "ap"
+showWiFiMode : WiFiMode -> String
+showWiFiMode AccessPoint = "ap"
+showWiFiMode Station = "sta"
 
 public export
 data Security = Open | WPA2 | WPA3
@@ -407,11 +410,15 @@ record RadioOptions where
   cellDensity : Maybe Nat
 
 public export
-record APOptions where
-  constructor MkAPOptions
-  mode : Maybe APMode
+record WiFiOptions where
+  constructor MkWiFiOptions
+  mode : Maybe WiFiMode
   ssid : Maybe String
   security : Maybe Security
   disabled : Maybe Bool
   ocv : Maybe Bool
+  wds : Maybe Bool
+  hidden : Maybe Bool
+  bssid : Maybe String
+  macAddress : Maybe String
 

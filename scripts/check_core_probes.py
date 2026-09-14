@@ -15,10 +15,11 @@ def main():
         for source in (ROOT / "scripts/core-probes").glob("*.idr"):
             shutil.copy(source, folder / source.name)
         shutil.copy(ROOT / "examples/core-router.net", folder / "core-router.net")
-        for name in ("CoreAPI", "GraphProperties", "RouterAPI"):
+        shutil.copy(ROOT / "examples/wds-network.net", folder / "wds-network.net")
+        for name in ("CoreAPI", "GraphProperties", "RouterAPI", "WirelessAPI"):
             result = subprocess.run(["idris2", "-o", name, f"{name}.idr"], cwd=folder,
                                     text=True, capture_output=True, timeout=180)
-            assert result.returncode == 0, result.stdout + result.stderr
+            assert result.returncode == 0 and (folder / "build/exec" / name).exists(), result.stdout + result.stderr
             result = subprocess.run([str(folder / "build/exec" / name)], cwd=folder,
                                     text=True, capture_output=True, timeout=60)
             assert result.returncode == 0, result.stdout + result.stderr

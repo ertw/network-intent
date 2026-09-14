@@ -74,7 +74,7 @@ The configuration artifacts and tests support confidence in the documented
 abstract profile, not a formal theorem of vendor firmware behavior.
 
 
-## OpenWrt explicit router: `openwrt-router-fw4-dualstack-v2`
+## OpenWrt explicit router: `openwrt-device-fw4-dualstack-v3`
 
 The `routing` model owns `network`, `dhcp`, `firewall`, and declared wireless
 configuration. Its typed bridge/bond/interface graph replaces the derived VLAN
@@ -113,3 +113,20 @@ References: [native netifd bonding](https://lxr.openwrt.org/source/netifd/bondin
 [firewall4 option handling](https://lxr.openwrt.org/source/firewall4/root/usr/share/ucode/fw4.uc),
 [UCI syntax and identifiers](https://openwrt.org/docs/guide-user/base-system/uci),
 [DHCP/DNS options](https://openwrt.org/docs/guide-user/base-system/dhcp).
+
+
+### Gateway and satellite extensions
+
+The 3.0 explicit device profile supports bridge STP, static IPv4 management
+gateways and DNS lists, explicitly unbound interfaces, and AP/station Wi-Fi
+interfaces with WDS, hidden SSIDs, BSSID selection, and local MAC declarations.
+An inactive DHCP pool is rendered faithfully but excluded from active lease
+capacity and control-policy requirements. Devices compile independently from
+one certified network; a failure on any requested target yields no partial
+`--all` output. Artifact paths and secret manifests are scoped to each target.
+
+The [WDS parity report](wds-network-parity.md) covers both supplied devices.
+The gateway DHCP correction is retained, the satellite DNS value is preserved,
+and all six credential fields use external bindings. No system, management,
+upgrade, SSH, or certificate packages are generated. WDS support, radio
+negotiation, actual BSSID identity, and external credentials remain assumptions.

@@ -123,11 +123,15 @@ fieldsRadioOptions o =
   maybe [] (\v => [("cell_density",show v)]) o.cellDensity
 
 public export
-fieldsAPOptions : APOptions -> List (String,String)
-fieldsAPOptions o =
-  maybe [] (\v => [("mode",showAPMode v)]) o.mode ++
+fieldsWiFiOptions : WiFiOptions -> List (String,String)
+fieldsWiFiOptions o =
+  maybe [] (\v => [("mode",showWiFiMode v)]) o.mode ++
   maybe [] (\v => [("ssid",v)]) o.ssid ++
   maybe [] (\v => [("encryption",showSecurity v)]) o.security ++
   maybe [] (\v => [("disabled",boolText v)]) o.disabled ++
-  maybe [] (\v => [("ocv",boolText v)]) o.ocv
+  maybe [] (\v => [("ocv",boolText v)]) o.ocv ++
+  maybe [] (\v => [("wds",boolText v)]) o.wds ++
+  maybe [] (\v => [("hidden",boolText v)]) o.hidden ++
+  maybe [] (\v => [("bssid",v)]) o.bssid ++
+  maybe [] (\v => [("macaddr",v)]) o.macAddress
 

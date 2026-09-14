@@ -17,7 +17,7 @@ import System.File
 %default total
 
 private
-rejects : Network V2 -> Bool
+rejects : Network V3 -> Bool
 rejects n = case certify n of Left _ => True; Right _ => False
 
 private
@@ -28,7 +28,7 @@ checks stable = case stable.model.devices of
     Just c =>
       let bad : RouterConfig -> Bool = \cfg => rejects ({devices := [{routing := Just cfg} d]} stable.model) in
       [("router-valid-certification",not (rejects stable.model)),
-       ("router-invalid-device-role",rejects ({devices := [{isRouter := False} d]} stable.model)),
+       ("device-independent-of-enforcer",not (rejects ({devices := [{isRouter := False} d], enforcer := Nothing} stable.model))),
        ("router-duplicate-interfaces",bad ({interfaces := c.interfaces ++ c.interfaces} c)),
        ("router-missing-default-policy",bad ({defaults := At c.defaults.span ({input := Nothing} c.defaults.value)} c)),
        ("router-invalid-duid",maybe False (\g => bad ({globals := Just (At g.span ({dhcpDefaultDuid := Just "not-hex"} g.value))} c)) c.globals)] ++
@@ -54,13 +54,13 @@ checks stable = case stable.model.devices of
         r :: rs => [("router-rule-port-bounds",bad ({rules := {settings := {destinationPort := Just 65536} r.settings} r :: rs} c)),
                     ("router-rule-family-mismatch",bad ({rules := {protocols := [ProtoIGMP], settings := {family := Just Family6} r.settings} r :: rs} c))]
         _ => [("router-rule-fixture",False)]) ++
-      (case c.accessPoints of
-        a :: rest => [("router-forged-radio-ref",bad ({accessPoints := {radio := At a.source (RRef 999)} a :: rest} c)),
-                      ("router-unsafe-ssid",bad ({accessPoints := {settings := {ssid := Just "bad\nssid"} a.settings} a :: rest} c)),
-                      ("router-secured-ap-missing-reference",bad ({accessPoints := {settings := {security := Just WPA3} a.settings, credential := Nothing} a :: rest} c)),
+      (case c.wifiInterfaces of
+        a :: rest => [("router-forged-radio-ref",bad ({wifiInterfaces := {radio := At a.source (RRef 999)} a :: rest} c)),
+                      ("router-unsafe-ssid",bad ({wifiInterfaces := {settings := {ssid := Just "bad\nssid"} a.settings} a :: rest} c)),
+                      ("router-secured-ap-missing-reference",bad ({wifiInterfaces := {settings := {security := Just WPA3} a.settings, credential := Nothing} a :: rest} c)),
                       ("router-invalid-reference-from-generic-api",case secretReference {kind=WiFiCredential} a.source "secret://../invalid" of
                         Left _ => False
-                        Right ref => bad ({accessPoints := {settings := {security := Just WPA3} a.settings, credential := Just ref} a :: rest} c))]
+                        Right ref => bad ({wifiInterfaces := {settings := {security := Just WPA3} a.settings, credential := Just ref} a :: rest} c))]
         _ => [("router-ap-fixture",False)])
   _ => [("router-device-fixture",False)]
 

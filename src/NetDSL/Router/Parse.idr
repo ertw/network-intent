@@ -28,7 +28,7 @@ refs names key s = values key s >>= traverse (\t => At t.source <$> ref names t)
 
 private
 attachment : List String -> List String -> List String -> Token -> Either Diagnostic Attachment
-attachment physicals bridges bonds t = if t.text == "lo" then Right Loopback else
+attachment physicals bridges bonds t = if t.text == "none" then Right Unattached else if t.text == "lo" then Right Loopback else
   case find ((==t.text) . snd) (indexed physicals) of
     Just (i,_) => Right (Physical (RRef i))
     Nothing => case find ((==t.text) . snd) (indexed bridges) of
@@ -58,9 +58,10 @@ private
 parseBridge : (Token -> Either Diagnostic Attachment) -> Statement -> Either Diagnostic Bridge
 parseBridge attach s = do
   namedBlock s
-  fields ["members"] s
+  fields ["members", "stp"] s
   members <- values "members" s >>= traverse (\t => At t.source <$> attach t)
-  Right (MkBridge (named s) members (stmtSpan s))
+  stp <- optional boolean "stp" s
+  Right (MkBridge (named s) members stp (stmtSpan s))
 
 private
 parseBond : List String -> Statement -> Either Diagnostic Bond
@@ -75,13 +76,15 @@ private
 parseInterface : (Token -> Either Diagnostic Attachment) -> Statement -> Either Diagnostic LogicalInterface
 parseInterface attach s = do
   namedBlock s
-  fields (["attach","address","address6"] ++ interfaceOptionsKeys) s
+  fields (["attach","address","address6","gateway","dns"] ++ interfaceOptionsKeys) s
   token <- required "attach" s
   device <- At token.source <$> attach token
   addresses <- values "address" s >>= traverse (\t => At t.source <$> parseAddress4 t)
   addresses6 <- values "address6" s >>= traverse (\t => At t.source <$> parseAddress6 t)
   opts <- parseInterfaceOptions s
-  Right (MkInterface (named s) device addresses addresses6 opts (stmtSpan s))
+  gateway <- optional (\t => At t.source <$> parseIPv4 t.source t.text) "gateway" s
+  dns <- values "dns" s >>= traverse (\t => At t.source <$> parseIPv4 t.source t.text)
+  Right (MkInterface (named s) device addresses addresses6 gateway dns opts (stmtSpan s))
 
 private
 parseDHCP : List LogicalInterface -> Statement -> Either Diagnostic DHCPServer
@@ -150,26 +153,26 @@ parseRadio s = do
   Right (MkRadio (named s) opts (stmtSpan s))
 
 private
-parseAP : List String -> List String -> Statement -> Either Diagnostic AccessPoint
-parseAP radios interfaces s = do
+parseWiFi : List String -> List String -> Statement -> Either Diagnostic WiFiInterface
+parseWiFi radios interfaces s = do
   namedBlock s
-  fields (["radio","interface","credential"] ++ apOptionsKeys) s
+  fields (["radio","interface","credential"] ++ wifiOptionsKeys) s
   r <- required "radio" s
   radio <- ref radios r
   i <- required "interface" s
   iface <- ref interfaces i
   credential <- optional (\t => wifiReference t.source t.text) "credential" s
-  opts <- parseAPOptions s
-  Right (MkAccessPoint (named s) (At r.source radio) (At i.source iface) credential opts (stmtSpan s))
+  opts <- parseWiFiOptions s
+  Right (MkWiFiInterface (named s) (At r.source radio) (At i.source iface) credential opts (stmtSpan s))
 
 private
 parseConfig : Statement -> Either Diagnostic RouterConfig
 parseConfig s = do
-  fields ["physical","bridge","bond","interface","globals","dns","dhcp-server","odhcp","firewall","zone","forward","firewall-rule","radio","access-point"] s
+  fields ["physical","bridge","bond","interface","globals","dns","dhcp-server","odhcp","firewall","zone","forward","firewall-rule","radio","wireless-interface"] s
   let p = statements "physical" s
   let b = statements "bridge" s
   let l = statements "bond" s
-  traverse_ (\kind => uniqueNames (map (\st => (named st,stmtSpan st)) (statements kind s))) ["physical","bridge","bond","interface","dhcp-server","zone","firewall-rule","radio","access-point"]
+  traverse_ (\kind => uniqueNames (map (\st => (named st,stmtSpan st)) (statements kind s))) ["physical","bridge","bond","interface","dhcp-server","zone","firewall-rule","radio","wireless-interface"]
   uniqueNames (map (\st => (named st,stmtSpan st)) (p ++ b ++ l))
   let attach = attachment (map named p) (map named b) (map named l)
   physicals <- traverse parsePhysical p
@@ -186,7 +189,7 @@ parseConfig s = do
   forwardings <- traverse (parseForward (map name zones)) (statements "forward" s)
   rules <- traverse (parseRule (map name zones)) (statements "firewall-rule" s)
   radios <- traverse parseRadio (statements "radio" s)
-  aps <- traverse (parseAP (map name radios) (map name interfaces)) (statements "access-point" s)
+  aps <- traverse (parseWiFi (map name radios) (map name interfaces)) (statements "wireless-interface" s)
   Right (MkRouterConfig physicals bridges bonds interfaces globals dns dhcp odhcp defaults zones forwardings rules radios aps (stmtSpan s))
 
 public export

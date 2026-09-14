@@ -128,7 +128,7 @@ resolvePeer devices hosts t = case splitOn '.' t.text of
       Just (j,_) => Right (DevicePort (PortId (Id i) j))
       Nothing => Left (failure "topology.unknown-port" t.source ("Unknown device port: " ++ t.text))
     Nothing => case find ((==device) . snd) (indexed hosts) of
-      Just (i,_) => if port == "eth0" then Right (HostPort (Id i)) else Left (failure "topology.unknown-port" t.source "Static hosts expose one implicit interface named eth0 in language 2.0")
+      Just (i,_) => if port == "eth0" then Right (HostPort (Id i)) else Left (failure "topology.unknown-port" t.source "Static hosts expose one implicit interface named eth0 in language 3.0")
       Nothing => Left (failure "topology.unknown-endpoint" t.source ("Unknown link endpoint: " ++ t.text))
   _ => Left (failure "topology.invalid-endpoint" t.source "Expected device.port or host.eth0")
 
@@ -252,18 +252,42 @@ parseRoute vlans devices names st = case (stmtTokens st,hasBlock st) of
     Right (MkRoute n.text (At d.source dst) (At h.source hop) v target metric deps (stmtSpan st))
   _ => err "syntax.route" st "Expected route NAME { ... }"
 
+private
+resolveWiFi : List Device -> Token -> Either Diagnostic WiFiRef
+resolveWiFi devices t = case splitOn '.' t.text of
+  [owner,iface] => case find (\(_,d) => (the Device d).name == owner) (indexed devices) of
+    Nothing => Left (failure "reference.unknown-wireless-device" t.source "Unknown wireless device")
+    Just (i,d) => case d.routing of
+      Nothing => Left (failure "reference.unknown-wireless-interface" t.source "Device has no explicit Wi-Fi configuration")
+      Just c => case find (\(_,a) => (the WiFiInterface a).name == iface) (indexed c.wifiInterfaces) of
+        Nothing => Left (failure "reference.unknown-wireless-interface" t.source "Unknown wireless interface")
+        Just (j,_) => Right (WiFiId (Id i) (RRef j))
+  _ => Left (failure "syntax.wireless-reference" t.source "Expected DEVICE.WIFI_INTERFACE")
+
+private
+parseWirelessLink : List Device -> Statement -> Either Diagnostic WirelessLink
+parseWirelessLink devices s = case (stmtTokens s,hasBlock s) of
+  ([_,a,arrow,b],False) => if arrow.text /= "->" then bad else do
+    station <- resolveWiFi devices a
+    ap <- resolveWiFi devices b
+    Right (MkWirelessLink (At a.source station) (At b.source ap) (stmtSpan s))
+  _ => bad
+  where
+    bad : Either Diagnostic WirelessLink
+    bad = err "syntax.wireless-link" s "Expected wireless-link STATION -> ACCESS_POINT"
+
 public export
-resolve : Document -> Either (List Diagnostic) (Network V2)
+resolve : Document -> Either (List Diagnostic) (Network V3)
 resolve doc = either (Left . pure) Right (run doc.statements)
   where
-    run : List Statement -> Either Diagnostic (Network V2)
+    run : List Statement -> Either Diagnostic (Network V3)
     run [version,network] = do
-      if stmtWords version == ["network-language","2.0"] && not (hasBlock version) then Right ()
-        else err "version.unsupported" version "Every document must begin with network-language 2.0; other versions are not reinterpreted"
+      if stmtWords version == ["network-language","3.0"] && not (hasBlock version) then Right ()
+        else err "version.unsupported" version "Every document must begin with network-language 3.0; other versions are not reinterpreted"
       case (stmtWords network,hasBlock network) of
         (["network",n],True) => checkName network n
         _ => err "syntax.network" network "Expected network NAME { ... }"
-      allowed ["domain","vlan","router","switch","device","service","policy","route"] network
+      allowed ["domain","vlan","router","switch","device","service","policy","route","wireless-link"] network
       domain <- field "domain" network
       case domain of
         Just t => if t.text /= "" && length t.text <= 253 && all (\c => ord c < 128 && (isAlphaNum c || c == '-' || c == '.')) (unpack t.text)
@@ -290,11 +314,12 @@ resolve doc = either (Left . pure) Right (run doc.statements)
       enforcer <- case routers of
         [] => Right Nothing
         [(i,_)] => Right (Just (Id i))
-        _ => err "policy.ambiguous-enforcer" network "Language 2.0 supports one routing/enforcement owner; multiple routers require explicit future ownership semantics"
+        _ => err "policy.ambiguous-enforcer" network "Language 3.0 supports one routing/enforcement owner; multiple routers require explicit future ownership semantics"
       let blocks = filter ((=="policy") . keyword) (children network)
       traverse_ (\s => if stmtWords s == ["policy"] && hasBlock s then Right () else err "syntax.policy" s "Expected policy { ... }") blocks
       policies <- traverse (parsePolicy vlans devices services enforcer) (concatMap children blocks)
       routes <- traverse (parseRoute vlans devices (map named routeStmts)) routeStmts
-      Right (MkNetwork (named network) (map text domain) vlans devices services routes policies enforcer (stmtSpan network))
-    run [] = Left (failure "version.missing" (MkSpan doc.sourceFile 1 1 1 1) "Missing network-language 2.0 header")
-    run (s :: _) = err "version.document-shape" s "Expected exactly a network-language 2.0 header and one network block"
+      links <- traverse (parseWirelessLink devices) (filter ((=="wireless-link") . keyword) (children network))
+      Right (MkNetwork (named network) (map text domain) vlans devices services routes policies enforcer links (stmtSpan network))
+    run [] = Left (failure "version.missing" (MkSpan doc.sourceFile 1 1 1 1) "Missing network-language 3.0 header")
+    run (s :: _) = err "version.document-shape" s "Expected exactly a network-language 3.0 header and one network block"

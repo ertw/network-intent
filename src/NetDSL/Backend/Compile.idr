@@ -25,7 +25,7 @@ ownedVlans : Network v -> Device -> List (Ref VLAN,Vlan)
 ownedVlans n d = map (\(i,v) => (Id i,v)) (filter (\(i,v) => carries d (Id i)) (indexed n.vlans))
 
 private
-capabilities : Network V2 -> Device -> Nat -> List Diagnostic
+capabilities : Network V3 -> Device -> Nat -> List Diagnostic
 capabilities n d limit =
   (if isJust d.routing && d.driver /= OpenWrt then [failure "backend.capability-mismatch" d.source "Explicit routed interfaces and Wi-Fi require the OpenWrt profile"] else []) ++
   (if d.isRouter && leaseCount > 65535 then [failure "backend.capability-mismatch" d.source "OpenWrt VLAN profile supports at most 65535 dynamic DHCP leases"] else []) ++
@@ -56,7 +56,7 @@ capabilities n d limit =
       not (null rest) && all (\p => isJust (decimal p)) segments
 
 private
-uciNetwork : Network V2 -> Device -> Either Diagnostic UciPackage
+uciNetwork : Network V3 -> Device -> Either Diagnostic UciPackage
 uciNetwork n d = do
   bridge <- section d.source ["device " ++ d.name,"DSA bridge"] "device" "net_bridge"
     [("name","br-net"),("type","bridge"),("vlan_filtering","1")] (map (\p => ("ports",p.name)) d.ports)
@@ -86,7 +86,7 @@ uciNetwork n d = do
        ("gateway",showIPv4 r.nextHop.value),("metric",show r.metric)] []
 
 private
-uciDHCP : Network V2 -> Device -> Either Diagnostic UciPackage
+uciDHCP : Network V3 -> Device -> Either Diagnostic UciPackage
 uciDHCP n d = if not d.isRouter then Right (Package "dhcp" []) else do
   let leaseCount = sum (map (\v => maybe 0 (\r => r.last.value.number-r.first.value.number+1) v.dhcp) n.vlans)
   dns <- section d.source ["router DNS and DHCP profile"] "dnsmasq" "net_dns"
@@ -109,7 +109,7 @@ uciDHCP n d = if not d.isRouter then Right (Package "dhcp" []) else do
       Right (pool ++ hosts)
 
 private
-uciFirewall : Network V2 -> Device -> Either Diagnostic UciPackage
+uciFirewall : Network V3 -> Device -> Either Diagnostic UciPackage
 uciFirewall n d = if not d.isRouter then Right (Package "firewall" []) else do
   defaults <- section d.source ["stateful policy default profile"] "defaults" "net_defaults"
     [("input","DROP"),("output","ACCEPT"),("forward","DROP"),("synflood_protect","1")] []
@@ -151,7 +151,7 @@ uciFirewall n d = if not d.isRouter then Right (Package "firewall" []) else do
 
 
 private
-iosCompile : Network V2 -> Device -> Either Diagnostic TargetAST
+iosCompile : Network V3 -> Device -> Either Diagnostic TargetAST
 iosCompile n d = do
   native <- if any (\p => case p.mode of Trunk _ => True; _ => False) d.ports
     then pure <$> command d.source ["tagged-only trunk profile"] "vlan dot1q tag native" [] [] else Right []
@@ -203,7 +203,8 @@ compileTarget stable targetName limit =
                 ["Matching OpenWrt netifd with native bonding, firewall4, dnsmasq, odhcpd and mac80211/wpad capabilities are required",
                  "Owns network, dhcp, firewall and declared wireless configuration; other system settings are preserved separately",
                  "Dynamic addresses, ISP prefix delegation, LACP peer state and radio operation are unknown",
-                 "Wireless credentials require external binding; templates must not be installed directly"]
+                 "Wireless credentials require external binding; templates must not be installed directly",
+                 "WDS four-address support and compatible radio negotiation are required; station BSSID identity is unknown unless an AP MAC is declared"]
                 else ["OpenWrt DSA/netifd, firewall4 and dnsmasq profile; physical port labels match hardware",
                           "Owns generated bridge/interfaces and, for the router, DHCP/firewall packages; deployment must reconcile existing conflicting configuration",
                           "IPv4 only; IPv6 behavior is outside this profile and must be disabled or separately governed"] ++
@@ -211,4 +212,4 @@ compileTarget stable targetName limit =
               CiscoIOS => ["Catalyst IOS L2 profile supports native VLAN tagging and static trunk configuration",
                            "Owns configured VLAN/interface fields and global native-tagging mode; existing conflicting configuration must be reconciled",
                            "Routing, DHCP and stateful policy are realized by the network router; this target realizes its L2 projection"]
-        Right (Intended d.name (case d.driver of OpenWrt => if isJust d.routing then "openwrt-router-fw4-dualstack-v2" else "openwrt-dsa-fw4-ipv4-v2"; CiscoIOS => "cisco-ios-l2-v2") assumptions ast)
+        Right (Intended d.name (case d.driver of OpenWrt => if isJust d.routing then "openwrt-device-fw4-dualstack-v3" else "openwrt-dsa-fw4-ipv4-v2"; CiscoIOS => "cisco-ios-l2-v2") assumptions ast)

@@ -1,7 +1,7 @@
 # Implementation and verification report
 
-Language 2.0 adds explicit typed router intent to the VLAN/network compiler.
-The current baseline accepts only 2.0. The original release's backwards-source
+Language 3.0 adds independent device configuration and linked AP/station intent.
+The current baseline accepts only 3.0. The original release's backwards-source
 compatibility requirement has been removed; examples, tests, and schemas are
 migrated together.
 
@@ -15,17 +15,19 @@ classification, and runs independent direct-API/compile-negative probes.
 
 | Verification | Coverage |
 | --- | --- |
-| Existing CLI acceptance suite | 52 tests, migrated to 2.0 |
+| Existing CLI acceptance suite | 52 tests, migrated to 3.0 |
+| Wireless satellite acceptance suite | 10 tests including both exports, mismatch checks, and transitive segment conflicts |
+| Wireless public API probes | 12 assertions for device-qualified references, gateways, attachments, and stations |
 | Explicit router acceptance suite | 19 tests with boundary/negative subcases |
-| Backup parity | 188 source options across network, DHCP, firewall, wireless; firewall rule order preserved |
+| Backup parity | Earlier 188-setting regression plus 193 gateway and 171 satellite settings; firewall rule order preserved |
 | Reviewed target goldens | 4 VLAN/IOS artifacts plus 5 core-router artifacts |
 | Core-router public API probes | 22 assertions including synthetic credential quoting |
 | Existing public semantic API probes | 34 assertions |
 | Graph oracle and certificate/witness tests | 640 decision cases and 640 certificate/witness cases |
 | Additional graph/core foundations | 512 graph cases plus address, malformed-model, migration and AAA groups |
-| Compile-negative bounds/reference/certificate probes | 13 fixtures, including IPv6 and router/Wi-Fi reference kinds |
+| Compile-negative bounds/reference/certificate probes | 14 fixtures, including IPv6 and router/Wi-Fi reference kinds |
 | Migration debt/evidence compile-negative probes | 3 fixtures |
-| Release classification | 6 tests using the 2.0 schema baseline |
+| Release classification | Historical classification tests plus the 2.0 → 3.0 release gate |
 
 ## Router acceptance evidence
 
@@ -77,7 +79,7 @@ make test
 ./netc check examples/core-router.net --format json
 ./netc compile examples/core-router.net --target gateway --format json
 ./netc compile examples/home.net --all --format json
-./netc release-check docs/schema/2.0.json docs/schema/2.0.json
+./netc release-check docs/schema/2.0.json docs/schema/3.0.json
 ```
 
 `examples/generated/` contains current Markdown, Mermaid, semantic JSON and

@@ -75,7 +75,7 @@ checkRadioOptions at o =
   maybe [] (\v => if v >= 0 && v <= 3 then [] else [failure "router.invalid-setting" at "Invalid cell-density"]) o.cellDensity
 
 public export
-checkAPOptions : SourceSpan -> APOptions -> List Diagnostic
-checkAPOptions at o =
+checkWiFiOptions : SourceSpan -> WiFiOptions -> List Diagnostic
+checkWiFiOptions at o =
   maybe [] (\v => if safeLine v && length v <= 1024 then [] else [failure "router.invalid-setting" at "Invalid ssid"]) o.ssid
 

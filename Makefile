@@ -4,6 +4,7 @@ build:
 test: build
 	python3 tests/run.py
 	python3 tests/router.py
+	python3 tests/wireless.py
 	idris2 --build core-tests.ipkg
 	./build/core-tests/exec/core-tests
 	python3 scripts/check_typestate.py

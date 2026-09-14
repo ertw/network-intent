@@ -2,6 +2,7 @@ module NetDSL.Validate
 
 import NetDSL.Common
 import NetDSL.Router.Validate
+import NetDSL.Wireless
 import NetDSL.Domain.Address
 import NetDSL.Domain.Model
 import NetDSL.Graph.DAG
@@ -163,7 +164,7 @@ routeDependencyChecks n route = concatMap check route.dependencies
     check d = if d.value.index < length n.routes then [] else [failure "reference.unknown-route" d.span "Dependency route reference is outside the inventory"]
 
 private
-structural : Network V2 -> List Diagnostic
+structural : Network V3 -> List Diagnostic
 structural n =
   checkNames ((n.name,n.source) :: map (\v => (v.name,v.source)) n.vlans ++ map (\d => (d.name,d.source)) n.devices ++
     map (\(_,h) => (h.name,h.source)) (allHosts n) ++ map (\s => (s.name,s.source)) n.services ++ map (\r => (r.name,r.source)) n.routes) ++
@@ -181,11 +182,11 @@ structural n =
   (case n.domain of Nothing => []; Just s => if s /= "" && length s <= 253 && all (\c => ord c < 128 && (isAlphaNum c || c == '-' || c == '.')) (unpack s) then [] else [failure "name.invalid-domain" n.source "Invalid DNS domain"])
 
 private
-ownership : Network V2 -> List Diagnostic
+ownership : Network V3 -> List Diagnostic
 ownership n =
   let routers : List (Ref DeviceKind) = map (\(i,_) => Id i) (filter (\pair => (snd pair).isRouter) (indexed n.devices))
       needsRouter = any (isJust . gateway) n.vlans || not (null n.policies) || not (null n.routes) in
-  (if length routers > 1 then [failure "policy.ambiguous-enforcer" n.source "Language 2.0 requires a single routing owner"] else []) ++
+  (if length routers > 1 then [failure "policy.ambiguous-enforcer" n.source "Language 3.0 requires a single routing owner"] else []) ++
   (if n.enforcer == head' routers then [] else [failure "policy.invalid-enforcer" n.source "Enforcer must be the declared routing owner"]) ++
   (if needsRouter && null routers then [failure "network.missing-routing-owner" n.source "Gateway, DHCP, routing and policy intent require a routing owner"] else []) ++
   (case n.enforcer >>= getDevice n of
@@ -193,12 +194,12 @@ ownership n =
     Just d => concatMap (\(i,v) => if isJust v.gateway && not (carries d (Id i)) then [failure "network.uncovered-gateway" v.source ("Routing owner does not carry gateway VLAN " ++ v.name)] else []) (indexed n.vlans))
 
 public export
-validate : Network V2 -> List Diagnostic
-validate n = structural n ++ ownership n ++
+validate : Network V3 -> List Diagnostic
+validate n = structural n ++ ownership n ++ validateWireless n ++
   concatMap (\d => case d.routing of
     Nothing => []
     Just r => validateRouter r ++
-      (if d.isRouter && null d.ports then [] else [failure "router.mixed-model" d.source "Explicit routing belongs to a router and cannot be combined with VLAN port declarations"])) n.devices ++ concatMap ipam n.vlans ++
+      (if null d.ports then [] else [failure "router.mixed-model" d.source "Explicit networking cannot be combined with VLAN port declarations"])) n.devices ++ concatMap ipam n.vlans ++
   pairs (\a,b => if overlaps a.subnet.value b.subnet.value then conflict "address.prefix-overlap" a.subnet.span b.subnet.span (showPrefix a.subnet.value ++ " overlaps " ++ showPrefix b.subnet.value) else []) n.vlans ++
   concatMap (portChecks n) (allPorts n) ++ degreeChecks n ++
   concatMap (routeChecks n) n.routes ++ concatMap (policyChecks n) n.policies
@@ -206,7 +207,7 @@ validate n = structural n ++ ownership n ++
 public export
 record StableNetwork where
   constructor Certified
-  model : Network V2
+  model : Network V3
   serviceCertificate : TopologicalCertificate (nodeIds model.services) (serviceEdges model)
   routeCertificate : TopologicalCertificate (nodeIds model.routes) (routeEdges model)
   0 invariants : So (null (validate model))
@@ -221,7 +222,7 @@ cycleDiagnostic code nodes fallback witness =
     (map (\(n,s) => (s,n)) selected)
 
 public export
-certify : (n : Network V2) -> Either (List Diagnostic) StableNetwork
+certify : (n : Network V3) -> Either (List Diagnostic) StableNetwork
 certify n = case choose (null (validate n)) of
   Right _ => Left (validate n)
   Left prf => do

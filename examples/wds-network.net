@@ -1,0 +1,479 @@
+network-language 3.0
+
+# Gateway and bridged satellite from the supplied exports.
+# Gateway DHCP is corrected to .100-.199; inactive satellite pool is preserved.
+# Credentials remain external; no live connectivity or BSSID observation is inferred.
+network home-wds {
+  router gateway {
+    driver openwrt
+    routing {
+      physical lan1
+      physical lan2
+      physical lan3
+      physical wan
+      interface loopback {
+        attach lo
+        protocol static
+        address 127.0.0.1/8
+      }
+      globals {
+        dhcp-default-duid "0004ecf7fc0d101f44ab9683172b87cd03ad"
+        ula-prefix fdbe:c414:cd71::/48
+        packet-steering true
+      }
+      bridge br-lan {
+        members lan2 lan3
+      }
+      interface lan {
+        attach br-lan
+        protocol static
+        ipv6-assignment 60
+        multipath false
+        address 10.9.8.1/24
+      }
+      interface wan {
+        attach bond-wan
+        protocol dhcp
+        multipath false
+      }
+      interface wan6 {
+        attach bond-wan
+        protocol dhcpv6
+        request-address try
+        request-prefix auto
+        no-release true
+        multipath false
+      }
+      interface modem {
+        attach bond-wan
+        protocol static
+        multipath false
+        address 192.168.100.2/24
+      }
+      bond bond-wan {
+        members lan1 wan
+        mtu 1500
+        mac-address "e8:9f:80:69:cb:51"
+        policy 802.3ad
+        hash-policy layer3+4
+        selection stable
+        lacp-rate fast
+        min-links 1
+        monitor-interval 100
+      }
+      dns {
+        domainneeded true
+        boguspriv true
+        filterwin2k false
+        localise-queries true
+        rebind-protection true
+        rebind-localhost true
+        local "/lan/"
+        domain "lan"
+        expandhosts true
+        nonegcache false
+        cache-size 1000
+        authoritative true
+        readethers true
+        leasefile "/tmp/dhcp.leases"
+        resolvfile "/tmp/resolv.conf.d/resolv.conf.auto"
+        nonwildcard true
+        localservice true
+        edns-packet-max 1232
+        filter-aaaa false
+        filter-a false
+      }
+      dhcp-server lan {
+        interface lan
+        dhcp start +100 max 100
+        lease-time "12h"
+        ipv4 server
+        ipv6 server
+        ra server
+        ra-preference medium
+        ra-flags managed-config other-config
+      }
+      dhcp-server wan {
+        interface wan
+        ignore true
+      }
+      odhcp {
+        main-dhcp false
+        leasefile "/tmp/odhcpd.leases"
+        lease-trigger "/usr/sbin/odhcpd-update"
+        log-level 4
+        pio-directory "/tmp/odhcpd-piodir"
+        hosts-directory "/tmp/hosts"
+      }
+      firewall {
+        syn-flood true
+        input REJECT
+        output ACCEPT
+        forward REJECT
+      }
+      zone lan {
+        interfaces lan
+        input ACCEPT
+        output ACCEPT
+        forward ACCEPT
+      }
+      zone wan {
+        interfaces wan wan6 modem
+        input REJECT
+        output ACCEPT
+        forward DROP
+        masquerade true
+        mss-adjust true
+      }
+      forward lan -> wan
+      firewall-rule Allow-DHCP-Renew {
+        source wan
+        protocols udp
+        destination-port 68
+        action ACCEPT
+        family ipv4
+      }
+      firewall-rule Allow-Ping {
+        source wan
+        protocols icmp
+        icmp-types echo-request
+        family ipv4
+        action ACCEPT
+      }
+      firewall-rule Allow-IGMP {
+        source wan
+        protocols igmp
+        family ipv4
+        action ACCEPT
+      }
+      firewall-rule Allow-DHCPv6 {
+        source wan
+        protocols udp
+        destination-port 546
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-MLD {
+        source wan
+        protocols icmp
+        source-prefix fe80::/10
+        icmp-types 130/0 131/0 132/0 143/0
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-ICMPv6-Input {
+        source wan
+        protocols icmp
+        icmp-types echo-request echo-reply destination-unreachable packet-too-big time-exceeded bad-header unknown-header-type router-solicitation neighbour-solicitation router-advertisement neighbour-advertisement
+        limit "1000/sec"
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-ICMPv6-Forward {
+        source wan
+        destination any
+        protocols icmp
+        icmp-types echo-request echo-reply destination-unreachable packet-too-big time-exceeded bad-header unknown-header-type
+        limit "1000/sec"
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-IPSec-ESP {
+        source wan
+        destination lan
+        protocols esp
+        action ACCEPT
+      }
+      firewall-rule Allow-ISAKMP {
+        source wan
+        destination lan
+        protocols udp
+        destination-port 500
+        action ACCEPT
+      }
+      radio radio0 {
+        driver mac80211
+        path "platform/soc@0/c000000.wifi"
+        band 5g
+        channel 60
+        width HE80
+        country "US"
+        cell-density 0
+      }
+      radio radio1 {
+        driver mac80211
+        path "platform/soc@0/c000000.wifi+1"
+        band 2g
+        channel 8
+        width HT20
+        country "US"
+        cell-density 0
+      }
+      wireless-interface default_radio1 {
+        radio radio1
+        interface lan
+        mode ap
+        ssid "_iot"
+        security psk2
+        credential secret://home/wifi/iot
+      }
+      radio radio2 {
+        driver mac80211
+        path "platform/soc@0/c000000.wifi+2"
+        band 5g
+        channel 100
+        width HE80
+        country "US"
+        cell-density 0
+      }
+      wireless-interface wifinet3 {
+        radio radio2
+        interface lan
+        mode ap
+        ssid "_backhaul"
+        security sae
+        credential secret://home/wifi/backhaul
+        wds true
+        ocv false
+        hidden true
+      }
+      wireless-interface wifinet2 {
+        radio radio0
+        interface lan
+        mode ap
+        ssid "_"
+        security sae
+        credential secret://home/wifi/main
+        ocv false
+      }
+    }
+  }
+
+  device satellite {
+    driver openwrt
+    routing {
+      physical lan1
+      physical lan2
+      physical lan3
+      physical wan
+      interface loopback {
+        attach lo
+        protocol static
+        address 127.0.0.1/8
+      }
+      globals {
+        dhcp-default-duid "00049a7712b65db148f5a84d0c32ac3e6838"
+        ula-prefix fdf5:8061:b9d1::/48
+      }
+      bridge br-lan {
+        members lan1 lan2 lan3
+        stp true
+      }
+      interface lan {
+        attach br-lan
+        protocol static
+        ipv6-assignment 60
+        multipath false
+        address 10.9.8.2/24
+        gateway 10.9.8.1
+        # Preserved from the supplied export; verify this resolver address.
+        dns 10.8.8.1
+      }
+      interface wan {
+        attach wan
+        protocol dhcp
+      }
+      interface wan6 {
+        attach wan
+        protocol dhcpv6
+      }
+      interface wwan {
+        attach none
+        protocol dhcp
+      }
+      dns {
+        domainneeded true
+        boguspriv true
+        filterwin2k false
+        localise-queries true
+        rebind-protection true
+        rebind-localhost true
+        local "/lan/"
+        domain "lan"
+        expandhosts true
+        nonegcache false
+        cache-size 1000
+        authoritative true
+        readethers true
+        leasefile "/tmp/dhcp.leases"
+        resolvfile "/tmp/resolv.conf.d/resolv.conf.auto"
+        nonwildcard true
+        localservice true
+        edns-packet-max 1232
+        filter-aaaa false
+        filter-a false
+      }
+      dhcp-server lan {
+        interface lan
+        dhcp start +100 max 150
+        lease-time "12h"
+        ipv4 disabled
+        ignore true
+      }
+      dhcp-server wan {
+        interface wan
+        ignore true
+      }
+      odhcp {
+        main-dhcp false
+        leasefile "/tmp/odhcpd.leases"
+        lease-trigger "/usr/sbin/odhcpd-update"
+        log-level 4
+        pio-directory "/tmp/odhcpd-piodir"
+        hosts-directory "/tmp/hosts"
+      }
+      firewall {
+        syn-flood true
+        input REJECT
+        output ACCEPT
+        forward REJECT
+      }
+      zone lan {
+        interfaces lan wwan
+        input ACCEPT
+        output ACCEPT
+        forward ACCEPT
+      }
+      zone wan {
+        interfaces wan wan6
+        input REJECT
+        output ACCEPT
+        forward DROP
+        masquerade true
+        mss-adjust true
+      }
+      forward lan -> wan
+      firewall-rule Allow-DHCP-Renew {
+        source wan
+        protocols udp
+        destination-port 68
+        action ACCEPT
+        family ipv4
+      }
+      firewall-rule Allow-Ping {
+        source wan
+        protocols icmp
+        icmp-types echo-request
+        family ipv4
+        action ACCEPT
+      }
+      firewall-rule Allow-IGMP {
+        source wan
+        protocols igmp
+        family ipv4
+        action ACCEPT
+      }
+      firewall-rule Allow-DHCPv6 {
+        source wan
+        protocols udp
+        destination-port 546
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-MLD {
+        source wan
+        protocols icmp
+        source-prefix fe80::/10
+        icmp-types 130/0 131/0 132/0 143/0
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-ICMPv6-Input {
+        source wan
+        protocols icmp
+        icmp-types echo-request echo-reply destination-unreachable packet-too-big time-exceeded bad-header unknown-header-type router-solicitation neighbour-solicitation router-advertisement neighbour-advertisement
+        limit "1000/sec"
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-ICMPv6-Forward {
+        source wan
+        destination any
+        protocols icmp
+        icmp-types echo-request echo-reply destination-unreachable packet-too-big time-exceeded bad-header unknown-header-type
+        limit "1000/sec"
+        family ipv6
+        action ACCEPT
+      }
+      firewall-rule Allow-IPSec-ESP {
+        source wan
+        destination lan
+        protocols esp
+        action ACCEPT
+      }
+      firewall-rule Allow-ISAKMP {
+        source wan
+        destination lan
+        protocols udp
+        destination-port 500
+        action ACCEPT
+      }
+      radio radio0 {
+        driver mac80211
+        path "platform/soc@0/c000000.wifi"
+        band 5g
+        channel 36
+        width VHT80
+        country "US"
+        cell-density 0
+      }
+      radio radio1 {
+        driver mac80211
+        path "platform/soc@0/c000000.wifi+1"
+        band 2g
+        channel 2
+        width HT20
+        cell-density 0
+      }
+      radio radio2 {
+        driver mac80211
+        path "platform/soc@0/c000000.wifi+2"
+        band 5g
+        channel 100
+        width VHT80
+        country "US"
+        cell-density 0
+      }
+      wireless-interface wifinet3 {
+        radio radio2
+        interface lan
+        mode sta
+        ssid "_backhaul"
+        security sae
+        credential secret://home/wifi/backhaul
+        bssid "E8:9F:80:69:CB:54"
+        wds true
+        ocv false
+      }
+      wireless-interface wifinet1 {
+        radio radio0
+        interface lan
+        mode ap
+        ssid "_"
+        security sae
+        credential secret://home/wifi/main
+        ocv false
+      }
+      wireless-interface wifinet2 {
+        radio radio1
+        interface lan
+        mode ap
+        ssid "_iot"
+        security psk2
+        credential secret://home/wifi/iot
+      }
+    }
+  }
+
+  wireless-link satellite.wifinet3 -> gateway.wifinet3
+}

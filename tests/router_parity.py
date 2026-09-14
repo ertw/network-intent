@@ -45,14 +45,14 @@ def normalized(package, section):
     return fields
 
 
-def compare(target):
+def compare(target, backup=BACKUP, correct_dhcp=True):
     artifacts = {f['path']: f['content'] for f in target['files']}
     manifest = json.loads(artifacts['secret-bindings.json'])
     bindings = {b['section']: b for b in manifest['bindings']}
     rows = []
     for package in ('network', 'dhcp', 'firewall', 'wireless'):
         path = '/etc/config/' + package + ('.template' if package == 'wireless' else '')
-        old = uci_sections((BACKUP / (package + '.uci')).read_text())
+        old = uci_sections((backup / (package + '.uci')).read_text())
         new = uci_sections(artifacts[path])
         raw_original = {identity(package, s): s for s in old}
         old_map = {identity(package, s): normalized(package, s) for s in old}
@@ -67,7 +67,7 @@ def compare(target):
             for key, value in original.items():
                 actual = generated[key]
                 status = 'Equivalent'
-                if (package, section, key) == ('dhcp', 'dhcp:lan', 'limit'):
+                if correct_dhcp and (package, section, key) == ('dhcp', 'dhcp:lan', 'limit'):
                     assert value == '199' and actual == '100'
                     status = 'Approved correction: 100 addresses'
                 elif package == 'wireless' and key == 'key':

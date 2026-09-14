@@ -1,7 +1,7 @@
 # Design and trusted boundary
 
 ```text
-source -> tokens/CST -> statements (raw AST) -> resolve -> Network V2
+source -> tokens/CST -> statements (raw AST) -> resolve -> Network V3
        -> validate + DAG certificates -> StableNetwork
        -> capability analysis -> UCI/IOS AST -> generic renderer
                                   |-> Markdown/Mermaid/JSON
@@ -10,7 +10,7 @@ source -> tokens/CST -> statements (raw AST) -> resolve -> Network V2
 The parser retains the source, tokens (including comments), source spans, raw
 statement fields and block structure. Resolution gives references distinct
 `Ref VLAN`, `Ref DeviceKind`, `Ref HostKind`, `Ref ServiceKind`, `Ref RouteKind`
-types. `PortRef` includes its owning device. Host `eth0` is an explicit language-2.0
+types. `PortRef` includes its owning device. Host `eth0` is an explicit language-3.0
 convention; no other implicit host interfaces resolve. References become numeric
 keys into immutable inventories, not unresolved names. Certification checks key
 bounds even for callers constructing a `Network` programmatically.
@@ -22,7 +22,7 @@ IPv4 allocation semantics do not purport to model IPv6. `Router/Address.idr` def
 canonical prefixes. IPv6 interface addresses may retain host bits; delegated
 addresses/prefixes are not fabricated during compilation.
 
-`StableNetwork` contains the immutable `Network V2`, service/route ordering
+`StableNetwork` contains the immutable `Network V3`, service/route ordering
 certificates tied to its exact vertices and edges, and erased `So` evidence that
 the complete implemented validation pass returns no diagnostics. The public
 `certify` entry point repeats all mandatory model checks, independently of the
@@ -72,13 +72,13 @@ No actual AAA commands are emitted. Applied and operational state have distinct
 types with timestamps/source labels and explicit `Unknown` evidence.
 
 Algorithmic limits suit home/small-lab networks: conflict and topology checks
-are quadratic in small inventories; deterministic graph traversal is O(V(V+E)).
+use bounded polynomial algorithms over small inventories; deterministic graph traversal is O(V(V+E)).
 No near-linear performance claim or incremental semantic engine is made.
 
 
 ## Explicit router model
 
-Language 2.0 is the only accepted source version. There is one current semantic
+Language 3.0 is the only accepted source version. There is one current semantic
 model, with VLAN shorthand and explicit routing as distinct capabilities, not
 version-specific paths. A router cannot mix their port-ownership models.
 
@@ -99,3 +99,20 @@ The backup parity oracle is intentionally outside production code. It parses
 sanitized UCI fixtures and independently compares every option and rule order
 with CLI output. It neither imports UCI into the semantic model nor implements
 any source-language semantics in Python. The compiler does not read the backup.
+
+
+## Gateway and satellite model (3.0)
+
+Device configuration and routing ownership are independent. Explicit networking
+can belong to a non-enforcing `device`; `router` remains the sole shorthand
+policy owner. `WiFiInterface` models AP and station roles. `WirelessLink` holds
+`WiFiRef` endpoints, each with a typed device reference and a `RouterRef WiFiEntity`.
+Cross-device checks are in `NetDSL/Wireless.idr` and run at public certification,
+including for programmatically constructed models.
+
+Finite connected-component expansion over declared wireless interface links
+allows segment-level address and active DHCP conflict checks across multiple
+hops. No certificate claims actual association or the completeness of physical
+connectivity. Unattached interfaces have a distinct `Unattached` constructor;
+they never alias loopback or invent a physical device. Inactive DHCP pools retain
+checked endpoints but contribute zero active leases to allocation and capacity.

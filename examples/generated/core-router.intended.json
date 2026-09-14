@@ -1,17 +1,18 @@
 {
   "ok": true,
-  "exportVersion": "2.0",
+  "exportVersion": "3.0",
   "targets": [
     {
       "target": "gateway",
-      "profile": "openwrt-router-fw4-dualstack-v2",
+      "profile": "openwrt-device-fw4-dualstack-v3",
       "state": "Intended",
       "realization": "conditional",
       "assumptions": [
         "Matching OpenWrt netifd with native bonding, firewall4, dnsmasq, odhcpd and mac80211/wpad capabilities are required",
         "Owns network, dhcp, firewall and declared wireless configuration; other system settings are preserved separately",
         "Dynamic addresses, ISP prefix delegation, LACP peer state and radio operation are unknown",
-        "Wireless credentials require external binding; templates must not be installed directly"
+        "Wireless credentials require external binding; templates must not be installed directly",
+        "WDS four-address support and compatible radio negotiation are required; station BSSID identity is unknown unless an AP MAC is declared"
       ],
       "readiness": "requires-secret-binding",
       "requiresSecretBinding": true,
@@ -409,7 +410,7 @@
             "line": 200,
             "column": 7,
             "endLine": 200,
-            "endColumn": 19
+            "endColumn": 25
           },
           "derivation": [
             "access point default_radio0"
@@ -422,7 +423,7 @@
             "line": 217,
             "column": 7,
             "endLine": 217,
-            "endColumn": 19
+            "endColumn": 25
           },
           "derivation": [
             "access point default_radio1"
@@ -435,7 +436,7 @@
             "line": 217,
             "column": 7,
             "endLine": 217,
-            "endColumn": 19
+            "endColumn": 25
           },
           "derivation": [
             "access point default_radio1",
@@ -449,7 +450,7 @@
             "line": 234,
             "column": 7,
             "endLine": 234,
-            "endColumn": 19
+            "endColumn": 25
           },
           "derivation": [
             "access point wifinet2"
@@ -462,7 +463,7 @@
             "line": 234,
             "column": 7,
             "endLine": 234,
-            "endColumn": 19
+            "endColumn": 25
           },
           "derivation": [
             "access point wifinet2",

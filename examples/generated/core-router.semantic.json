@@ -1,8 +1,10 @@
 {
-  "exportVersion": "2.0",
-  "languageVersion": "2.0",
+  "exportVersion": "3.0",
+  "languageVersion": "3.0",
   "state": "Desired",
   "name": "core-router",
+  "enforcerRef": 0,
+  "wirelessLinks": [],
   "vlans": [],
   "hosts": [],
   "devices": [
@@ -10,6 +12,7 @@
       "id": 0,
       "name": "gateway",
       "driver": "openwrt",
+      "routingOwner": true,
       "ports": [],
       "routing": {
         "physicals": [
@@ -78,7 +81,8 @@
                 "kind": "physical",
                 "ref": 2
               }
-            ]
+            ],
+            "stp": null
           }
         ],
         "bonds": [
@@ -126,6 +130,8 @@
               "127.0.0.1/8"
             ],
             "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
             "settings": {
               "protocol": "static"
             },
@@ -149,6 +155,8 @@
               "10.9.8.1/24"
             ],
             "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
             "settings": {
               "protocol": "static",
               "ipv6-assignment": 60,
@@ -172,6 +180,8 @@
             },
             "addresses": [],
             "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
             "settings": {
               "protocol": "dhcp",
               "multipath": false
@@ -194,6 +204,8 @@
             },
             "addresses": [],
             "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
             "settings": {
               "protocol": "dhcpv6",
               "multipath": false,
@@ -221,6 +233,8 @@
               "192.168.100.2/24"
             ],
             "addresses6": [],
+            "gateway": null,
+            "dnsServers": [],
             "settings": {
               "protocol": "static",
               "multipath": false
@@ -270,7 +284,8 @@
             "pool": {
               "first": "10.9.8.100",
               "last": "10.9.8.199",
-              "count": 100
+              "count": 100,
+              "activeLeaseCount": 100
             },
             "raFlags": [
               "managed-config",
@@ -683,7 +698,7 @@
             }
           }
         ],
-        "accessPoints": [
+        "wifiInterfaces": [
           {
             "id": 0,
             "name": "default_radio0",
@@ -692,7 +707,7 @@
               "line": 200,
               "column": 7,
               "endLine": 200,
-              "endColumn": 19
+              "endColumn": 25
             },
             "radioRef": 0,
             "interfaceRef": 1,
@@ -712,7 +727,7 @@
               "line": 217,
               "column": 7,
               "endLine": 217,
-              "endColumn": 19
+              "endColumn": 25
             },
             "radioRef": 1,
             "interfaceRef": 1,
@@ -731,7 +746,7 @@
               "line": 234,
               "column": 7,
               "endLine": 234,
-              "endColumn": 19
+              "endColumn": 25
             },
             "radioRef": 2,
             "interfaceRef": 1,

@@ -62,7 +62,7 @@ class RouterAcceptance(unittest.TestCase):
         self.assertEqual(report(target),(ROOT/'docs/core-router-parity.md').read_text())
 
     def test_version_1_is_rejected(self):
-        self.reject(CORE.replace('network-language 2.0','network-language 1.0'),'version.unsupported')
+        self.reject(CORE.replace('network-language 3.0','network-language 1.0'),'version.unsupported')
 
     def test_finite_and_count_pool_forms_are_identical(self):
         for pool in ('dhcp +100 .. +199','dhcp 10.9.8.100 .. 10.9.8.199'):
@@ -94,7 +94,7 @@ class RouterAcceptance(unittest.TestCase):
     def test_pool_crosses_octet_and_respects_prefix(self):
         source=CORE.replace('10.9.8.1/24','10.9.8.1/23').replace('dhcp start +100 max 100','dhcp start +250 max 20')
         pool=self.check(source)['model']['devices'][0]['routing']['dhcpServers'][0]['pool']
-        self.assertEqual(pool,{'first':'10.9.8.250','last':'10.9.9.13','count':20})
+        self.assertEqual(pool,{'first':'10.9.8.250','last':'10.9.9.13','count':20,'activeLeaseCount':20})
 
     def test_shared_bond_interfaces_and_no_vlan_invention(self):
         sections=uci_sections(self.files()['/etc/config/network'])
@@ -238,9 +238,9 @@ class RouterAcceptance(unittest.TestCase):
         self.assertEqual(len(model['interfaces']),5)
         self.assertEqual(len(model['rules']),9)
         self.assertEqual(len(model['radios']),3)
-        self.assertEqual(len(model['accessPoints']),3)
+        self.assertEqual(len(model['wifiInterfaces']),3)
         self.assertEqual(model['interfaces'][2]['dynamicAddressState'],'Unknown')
-        self.assertEqual(model['accessPoints'][1]['credentialRef'],'secret://core-router/wifi/iot')
+        self.assertEqual(model['wifiInterfaces'][1]['credentialRef'],'secret://core-router/wifi/iot')
         docs=self.invoke('docs');graph=self.invoke('graph');fmt=self.invoke('fmt')
         for result in (docs,graph,fmt):self.assertEqual(result.returncode,0,result.stderr)
         for word in ('bond-wan','br-lan','radio1','default_radio1'):
@@ -252,10 +252,10 @@ class RouterAcceptance(unittest.TestCase):
     def test_schema_catalog_contains_typed_router_contract(self):
         p=subprocess.run([str(NETC),'schema'],text=True,capture_output=True,check=True)
         schema=json.loads(p.stdout)
-        self.assertEqual(schema['languageVersion'],'2.0')
+        self.assertEqual(schema['languageVersion'],'3.0')
         self.assertEqual(schema['routingSchema']['blocks']['interface']['fields']['protocol']['values'],['static','dhcp','dhcpv6','none'])
         self.assertEqual(schema['routingSchema']['secrets']['resolution'],'external-only')
-        self.assertEqual(schema,json.loads((ROOT/'docs/schema/2.0.json').read_text()))
+        self.assertEqual(schema,json.loads((ROOT/'docs/schema/3.0.json').read_text()))
 
 
 if __name__=='__main__':

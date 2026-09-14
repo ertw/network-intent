@@ -2,6 +2,7 @@ module NetDSL.Docs
 
 import NetDSL.Common
 import NetDSL.Router.Docs
+import NetDSL.Wireless
 import NetDSL.Domain.Address
 import NetDSL.Domain.Model
 import NetDSL.Validate
@@ -30,6 +31,12 @@ deviceLabel : Network v -> Ref DeviceKind -> String
 deviceLabel n r = maybe "invalid" name (getDevice n r)
 
 private
+wifiLabel : Network v -> WiFiRef -> String
+wifiLabel n r = case getWiFi n r of
+  Just (_,a) => deviceLabel n r.owner ++ "." ++ a.name
+  Nothing => "invalid"
+
+private
 endpointLabel : Network v -> PolicyEndpoint -> String
 endpointLabel n (Zone r) = vlanLabel n r
 endpointLabel n Internet = "internet"
@@ -54,6 +61,7 @@ public export
 graph : StableNetwork -> String
 graph stable = let n = stable.model in
   "flowchart LR\n  %% Desired physical topology; not observed connectivity\n" ++
+  concatMap (\l => "  r" ++ show l.station.value.owner.index ++ "ap" ++ show l.station.value.iface.index ++ " -. WDS .-> r" ++ show l.accessPoint.value.owner.index ++ "ap" ++ show l.accessPoint.value.iface.index ++ "\n") n.wirelessLinks ++
   concatMap (\(i,d) => maybe "" (routerGraph ("r" ++ show i)) d.routing) (indexed n.devices) ++
   concatMap (\(r,p) => "  " ++ endpointId (DevicePort r) ++ "[\"" ++ deviceLabel n r.owner ++ "." ++ p.name ++ "\"]\n") (allPorts n) ++
   concatMap (\(i,(_,h)) => "  h" ++ show i ++ "[\"" ++ h.name ++ ".eth0\"]\n") (indexed (allHosts n)) ++
@@ -75,8 +83,11 @@ dependencyGraph stable = let n = stable.model in
 public export
 markdown : StableNetwork -> String
 markdown stable = let n = stable.model in
-  "# Network " ++ n.name ++ "\n\nLanguage 2.0. State: **Desired**. Domain: " ++ fromMaybe "unspecified" n.domain ++ ".\n\n" ++
+  "# Network " ++ n.name ++ "\n\nLanguage 3.0. State: **Desired**. Domain: " ++ fromMaybe "unspecified" n.domain ++ ".\n\n" ++
   "Model invariants and dependency ordering are certificate-checked by the Idris semantic core. Target realization is conditional on documented profiles. Applied state, physical connectivity, service health and observations are **Unknown**.\n\n" ++
+  "Routing/policy owner: " ++ maybe "none" (deviceLabel n) n.enforcer ++ ".\n\n" ++
+  table ["Wireless station","Upstream AP"] (map (\l =>
+    [wifiLabel n l.station.value,wifiLabel n l.accessPoint.value]) n.wirelessLinks) ++
   concatMap (\d => maybe "" (routerMarkdown d.name) d.routing) n.devices ++
   "## VLANs and addressing\n\n" ++ table ["VLAN","ID","IPv4 prefix","Gateway","DHCP"]
     (map (\v => [v.name,show v.vid.number,showPrefix v.subnet.value,maybe "none" (showIPv4 . value) v.gateway,
@@ -93,17 +104,20 @@ markdown stable = let n = stable.model in
   "## VLAN shorthand policy matrix\n\nFor VLAN shorthand: IPv4 connection initiation; established/related return traffic is accepted. New input and forwarding default to deny. Rules use declaration order. Gateway means local input; other destinations mean forwarding. DHCP requires gateway UDP/67 and TCP+UDP/53; contradictory denials are rejected. NAT is not inferred. Existing flows are not revoked.\n\n" ++ table ["From","To","Action","Services"]
     (map (\p => [vlanLabel n p.from,endpointLabel n p.destination,actionName p.action,
       if null p.services then "all IPv4 protocols" else join ", " (map (\r => maybe "invalid" name (lookupAt r.index n.services)) p.services)]) n.policies) ++
-  "## AAA and migration\n\nAAA realization and migration source syntax are deferred beyond language 2.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.\n\n" ++
+  "## AAA and migration\n\nAAA realization and migration source syntax are deferred beyond language 3.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.\n\n" ++
   "## Physical topology\n\n```mermaid\n" ++ graph stable ++ "```\n\n## Dependency graph\n\n```mermaid\n" ++ dependencyGraph stable ++ "```\n"
 
 public export
 semanticJSON : StableNetwork -> String
 semanticJSON stable = let n = stable.model in
-  "{\"exportVersion\":\"2.0\",\"languageVersion\":\"2.0\",\"state\":\"Desired\",\"name\":" ++ jsonString n.name ++
+  "{\"exportVersion\":\"3.0\",\"languageVersion\":\"3.0\",\"state\":\"Desired\",\"name\":" ++ jsonString n.name ++
+  ",\"enforcerRef\":" ++ maybe "null" (show . index) n.enforcer ++
+  ",\"wirelessLinks\":" ++ jsonArray (map (\l => "{\"station\":" ++ wifiRefJSON l.station.value ++ ",\"accessPoint\":" ++ wifiRefJSON l.accessPoint.value ++ ",\"source\":" ++ spanJSON l.source ++ "}") n.wirelessLinks) ++
   ",\"vlans\":" ++ jsonArray (map (\(i,v) => "{\"id\":" ++ show i ++ ",\"name\":" ++ jsonString v.name ++ ",\"vlanId\":" ++ show v.vid.number ++
     ",\"subnet\":" ++ jsonString (showPrefix v.subnet.value) ++ ",\"gateway\":" ++ maybe "null" (jsonString . showIPv4 . value) v.gateway ++
     ",\"source\":" ++ spanJSON v.source ++ "}") (indexed n.vlans)) ++
   ",\"hosts\":" ++ jsonArray (map (\(i,(v,h)) => "{\"id\":" ++ show i ++ ",\"name\":" ++ jsonString h.name ++ ",\"vlanRef\":" ++ show v.index ++ ",\"address\":" ++ jsonString (showIPv4 h.address.value) ++ "}") (indexed (allHosts n))) ++
   ",\"devices\":" ++ jsonArray (map (\(i,d) => "{\"id\":" ++ show i ++ ",\"name\":" ++ jsonString d.name ++ ",\"driver\":" ++ jsonString (driverName d.driver) ++
+    ",\"routingOwner\":" ++ (if d.isRouter then "true" else "false") ++
     ",\"ports\":" ++ jsonArray (map (\p => "{\"name\":" ++ jsonString p.name ++ ",\"ownerRef\":" ++ show p.owner.index ++ ",\"vlanRefs\":" ++ jsonArray (map (show . index) (memberships p.mode)) ++ "}") d.ports) ++ ",\"routing\":" ++ maybe "null" routerJSON d.routing ++ "}") (indexed n.devices)) ++
   ",\"certificates\":{\"serviceOrder\":" ++ jsonArray (map show stable.serviceCertificate.order) ++ ",\"routeOrder\":" ++ jsonArray (map show stable.routeCertificate.order) ++ "}}"

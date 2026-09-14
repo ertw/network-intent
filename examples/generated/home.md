@@ -1,8 +1,13 @@
 # Network home
 
-Language 2.0. State: **Desired**. Domain: home.arpa.
+Language 3.0. State: **Desired**. Domain: home.arpa.
 
 Model invariants and dependency ordering are certificate-checked by the Idris semantic core. Target realization is conditional on documented profiles. Applied state, physical connectivity, service health and observations are **Unknown**.
+
+Routing/policy owner: gateway.
+
+| Wireless station | Upstream AP |
+| --- | --- |
 
 ## VLANs and addressing
 
@@ -62,7 +67,7 @@ For VLAN shorthand: IPv4 connection initiation; established/related return traff
 
 ## AAA and migration
 
-AAA realization and migration source syntax are deferred beyond language 2.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.
+AAA realization and migration source syntax are deferred beyond language 3.0. No AAA assurance or operational observation is inferred. This document represents a stable model with no migration debt.
 
 ## Physical topology
 

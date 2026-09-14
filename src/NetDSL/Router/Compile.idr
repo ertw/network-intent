@@ -25,7 +25,7 @@ networkPackage : RouterConfig -> Either Diagnostic UciPackage
 networkPackage c = do
   globals <- traverse (\g => section g.span ["network globals"] "globals" "globals" (fieldsGlobalOptions g.value) []) (maybe [] pure c.globals)
   bridges <- traverse (\(i,b) => section b.source ["bridge " ++ b.name] "device" ("bridge_" ++ show i)
-    [("name",b.name),("type","bridge")] (map (\m => ("ports",attachmentName c m.value)) b.members)) (indexed c.bridges)
+    ([("name",b.name),("type","bridge")] ++ maybe [] (\v => [("stp",boolText v)]) b.stp) (map (\m => ("ports",attachmentName c m.value)) b.members)) (indexed c.bridges)
   bonds <- traverse (\(i,b) => section b.source ["bond " ++ b.name] "device" ("bond_" ++ show i)
     ([("name",b.name),("type","bonding")] ++ fieldsBondOptions b.settings)
     (map (\m => ("ports",maybe "invalid" name (lookupAt m.value.index c.physicals))) b.members)) (indexed c.bonds)
@@ -34,8 +34,9 @@ networkPackage c = do
   where
     iface : LogicalInterface -> Either Diagnostic UciSection
     iface i = section i.source ["logical interface " ++ i.name] "interface" i.name
-      (("device",attachmentName c i.attachment.value) :: map (\(k,v) => if k == "multipath" then (k,if v == "1" then "on" else "off") else (k,v)) (fieldsInterfaceOptions i.settings))
-      (map (\a => ("ipaddr",showIPv4 a.value.address ++ "/" ++ show a.value.subnet.width)) i.addresses ++
+      ((case i.attachment.value of Unattached => []; _ => [("device",attachmentName c i.attachment.value)]) ++
+       maybe [] (\g => [("gateway",showIPv4 g.value)]) i.gateway ++ map (\(k,v) => if k == "multipath" then (k,if v == "1" then "on" else "off") else (k,v)) (fieldsInterfaceOptions i.settings))
+      (map (\d => ("dns",showIPv4 d.value)) i.dnsServers ++ map (\a => ("ipaddr",showIPv4 a.value.address ++ "/" ++ show a.value.subnet.width)) i.addresses ++
        map (\a => ("ip6addr",showIPv6 a.value.address ++ "/" ++ show a.value.width)) i.addresses6)
 
 private
@@ -79,13 +80,13 @@ private
 wirelessPackage : RouterConfig -> Either Diagnostic UciPackage
 wirelessPackage c = do
   radios <- traverse (\r => section r.source ["radio " ++ r.name] "wifi-device" r.name (fieldsRadioOptions r.settings) []) c.radios
-  aps <- traverse ap c.accessPoints
+  aps <- traverse ap c.wifiInterfaces
   Right (Package "wireless" (radios ++ aps))
   where
-    ap : AccessPoint -> Either Diagnostic UciSection
+    ap : WiFiInterface -> Either Diagnostic UciSection
     ap a = do
       s <- section a.source ["access point " ++ a.name] "wifi-iface" a.name
-        ([("device",maybe "invalid" name (lookupAt a.radio.value.index c.radios)),("network",ifaceName c a.ifaceRef.value)] ++ fieldsAPOptions a.settings) []
+        ([("device",maybe "invalid" name (lookupAt a.radio.value.index c.radios)),("network",ifaceName c a.ifaceRef.value)] ++ fieldsWiFiOptions a.settings) []
       Right ({ fields := s.fields ++ maybe [] (\r => [SecretOption "key" r (fromMaybe Open a.settings.security)]) a.credential } s)
 
 public export

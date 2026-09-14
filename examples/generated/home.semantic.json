@@ -1,8 +1,10 @@
 {
-  "exportVersion": "2.0",
-  "languageVersion": "2.0",
+  "exportVersion": "3.0",
+  "languageVersion": "3.0",
   "state": "Desired",
   "name": "home",
+  "enforcerRef": 0,
+  "wirelessLinks": [],
   "vlans": [
     {
       "id": 0,
@@ -72,6 +74,7 @@
       "id": 0,
       "name": "gateway",
       "driver": "openwrt",
+      "routingOwner": true,
       "ports": [
         {
           "name": "lan1",
@@ -103,6 +106,7 @@
       "id": 1,
       "name": "core",
       "driver": "cisco-ios",
+      "routingOwner": false,
       "ports": [
         {
           "name": "Gi1/0/1",

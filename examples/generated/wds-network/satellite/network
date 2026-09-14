@@ -1,0 +1,37 @@
+config globals 'globals'
+	option dhcp_default_duid '00049a7712b65db148f5a84d0c32ac3e6838'
+	option ula_prefix 'fdf5:8061:b9d1:0000:0000:0000:0000:0000/48'
+
+config device 'bridge_0'
+	option name 'br-lan'
+	option type 'bridge'
+	option stp '1'
+	list ports 'lan1'
+	list ports 'lan2'
+	list ports 'lan3'
+
+config interface 'loopback'
+	option device 'lo'
+	option proto 'static'
+	list ipaddr '127.0.0.1/8'
+
+config interface 'lan'
+	option device 'br-lan'
+	option gateway '10.9.8.1'
+	option proto 'static'
+	option ip6assign '60'
+	option multipath 'off'
+	list dns '10.8.8.1'
+	list ipaddr '10.9.8.2/24'
+
+config interface 'wan'
+	option device 'wan'
+	option proto 'dhcp'
+
+config interface 'wan6'
+	option device 'wan'
+	option proto 'dhcpv6'
+
+config interface 'wwan'
+	option proto 'dhcp'
+

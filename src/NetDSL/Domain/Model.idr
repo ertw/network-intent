@@ -106,6 +106,23 @@ record Device where
   source : SourceSpan
 
 public export
+record WiFiRef where
+  constructor WiFiId
+  owner : Ref DeviceKind
+  iface : RouterRef WiFiEntity
+
+public export
+Eq WiFiRef where
+  a == b = a.owner == b.owner && a.iface == b.iface
+
+public export
+record WirelessLink where
+  constructor MkWirelessLink
+  station : Located WiFiRef
+  accessPoint : Located WiFiRef
+  source : SourceSpan
+
+public export
 data Transport = TCP | UDP
 
 public export
@@ -167,7 +184,7 @@ record Route where
   source : SourceSpan
 
 public export
-data SchemaVersion = V2
+data SchemaVersion = V3
 
 public export
 record Network (version : SchemaVersion) where
@@ -180,6 +197,7 @@ record Network (version : SchemaVersion) where
   routes : List Route
   policies : List Policy
   enforcer : Maybe (Ref DeviceKind)
+  wirelessLinks : List WirelessLink
   source : SourceSpan
 
 public export

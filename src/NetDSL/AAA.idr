@@ -6,7 +6,7 @@ import Data.List
 %default total
 
 -- A pure capability spike. Actual AAA source syntax and target commands are
--- deliberately unavailable in language 2.0.
+-- deliberately unavailable in language 3.0.
 public export
 data AuthenticationResult = Accepted | Rejected | Unavailable
 

@@ -1,4 +1,4 @@
-network-language 2.0
+network-language 3.0
 
 # Equivalent core router; Wi-Fi credentials are externally bound.
 # DHCP intentionally corrected to 100 addresses beginning at offset 100.
@@ -197,7 +197,7 @@ network core-router {
         channel 36
         width HE80
       }
-      access-point default_radio0 {
+      wireless-interface default_radio0 {
         radio radio0
         interface lan
         mode ap
@@ -214,7 +214,7 @@ network core-router {
         country "US"
         cell-density 0
       }
-      access-point default_radio1 {
+      wireless-interface default_radio1 {
         radio radio1
         interface lan
         mode ap
@@ -231,7 +231,7 @@ network core-router {
         cell-density 0
         country "US"
       }
-      access-point wifinet2 {
+      wireless-interface wifinet2 {
         radio radio2
         interface lan
         mode ap

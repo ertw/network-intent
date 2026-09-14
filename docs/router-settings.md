@@ -122,12 +122,39 @@ These fields occur inside `router NAME { routing { ... } }`. Boolean values use 
 | `country` | String | `country` |
 | `cell-density` | 0–3 | `cell_density` |
 
-## access-point
+## wireless-interface
 
 | DSL field | Type / range | OpenWrt field |
 | --- | --- | --- |
-| `mode` | `ap` | `mode` |
+| `mode` | `ap`, `sta` | `mode` |
 | `ssid` | String | `ssid` |
 | `security` | `none`, `psk2`, `sae` | `encryption` |
 | `disabled` | Bool | `disabled` |
 | `ocv` | Bool | `ocv` |
+
+
+## bridge
+
+| DSL field | Type | OpenWrt field |
+| --- | --- | --- |
+| `stp` | Bool | `stp` |
+
+## Additional interface fields
+
+| DSL field | Type | OpenWrt field |
+| --- | --- | --- |
+| `attach none` | Explicit unbound attachment | Omits `device` |
+| `gateway` | Checked on-link IPv4 next hop | `gateway` |
+| `dns` | List of IPv4 resolver addresses | `list dns` |
+
+## Additional wireless-interface fields
+
+| DSL field | Type | OpenWrt field |
+| --- | --- | --- |
+| `wds` | Bool; required true for bridged stations | `wds` |
+| `hidden` | Bool; AP only | `hidden` |
+| `bssid` | MAC address; station only | `bssid` |
+| `mac-address` | Local Wi-Fi MAC address | `macaddr` |
+
+`wireless-link DEVICE.STATION -> DEVICE.AP` is network-level intent. It checks
+the declared endpoints together and emits no extra UCI section.

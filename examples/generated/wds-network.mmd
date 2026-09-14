@@ -1,0 +1,66 @@
+flowchart LR
+  %% Desired physical topology; not observed connectivity
+  r1ap0 -. WDS .-> r0ap1
+  r0link0["lan1"]
+  r0link1["lan2"]
+  r0link2["lan3"]
+  r0link3["wan"]
+  r0link4["br-lan bridge"]
+  r0link5["bond-wan bond"]
+  r0link6["lo"]
+  r0link1 --> r0link4
+  r0link2 --> r0link4
+  r0link0 --> r0link5
+  r0link3 --> r0link5
+  r0iface0["loopback / static"]
+  r0link6 --> r0iface0
+  r0iface1["lan / static"]
+  r0link4 --> r0iface1
+  r0iface2["wan / dhcp"]
+  r0link5 --> r0iface2
+  r0iface3["wan6 / dhcpv6"]
+  r0link5 --> r0iface3
+  r0iface4["modem / static"]
+  r0link5 --> r0iface4
+  r0radio0["radio0"]
+  r0radio1["radio1"]
+  r0radio2["radio2"]
+  r0ap0["default_radio1 / _iot"]
+  r0radio1 --> r0ap0
+  r0ap0 --> r0iface1
+  r0ap1["wifinet3 / _backhaul"]
+  r0radio2 --> r0ap1
+  r0ap1 --> r0iface1
+  r0ap2["wifinet2 / _"]
+  r0radio0 --> r0ap2
+  r0ap2 --> r0iface1
+  r1link0["lan1"]
+  r1link1["lan2"]
+  r1link2["lan3"]
+  r1link3["wan"]
+  r1link4["br-lan bridge"]
+  r1link5["lo"]
+  r1link0 --> r1link4
+  r1link1 --> r1link4
+  r1link2 --> r1link4
+  r1iface0["loopback / static"]
+  r1link5 --> r1iface0
+  r1iface1["lan / static"]
+  r1link4 --> r1iface1
+  r1iface2["wan / dhcp"]
+  r1link3 --> r1iface2
+  r1iface3["wan6 / dhcpv6"]
+  r1link3 --> r1iface3
+  r1iface4["wwan / dhcp"]
+  r1radio0["radio0"]
+  r1radio1["radio1"]
+  r1radio2["radio2"]
+  r1ap0["wifinet3 / _backhaul"]
+  r1radio2 --> r1ap0
+  r1ap0 --> r1iface1
+  r1ap1["wifinet1 / _"]
+  r1radio0 --> r1ap1
+  r1ap1 --> r1iface1
+  r1ap2["wifinet2 / _iot"]
+  r1radio1 --> r1ap2
+  r1ap2 --> r1iface1

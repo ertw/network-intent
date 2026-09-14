@@ -7,7 +7,7 @@ The backup fixtures contain redaction markers; the example contains identifiers.
 ## Declare an opaque reference
 
 ```text
-access-point default_radio1 {
+wireless-interface default_radio1 {
   radio radio1
   interface lan
   mode ap

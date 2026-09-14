@@ -4,8 +4,8 @@ An offline, vendor-neutral network-intent compiler. Idris 2 owns parsing, name
 resolution, the typed semantic model, validation, graph certification, target
 compilation, and rendering. Python is used only for tests and release tooling.
 
-Language **2.0** and compiler **0.2.0** support VLAN switching and explicit router
-intent. Version 1.0 is no longer accepted; there is no compatibility adapter or
+Language **3.0** and compiler **0.3.0** support VLAN switching and explicit router
+intent. Versions 1.0 and 2.0 are no longer accepted; there is no compatibility adapter or
 automatic migration command.
 
 ## Build and use
@@ -33,10 +33,31 @@ The included flake pins Nixpkgs and provides `nix develop`, `nix build .#netc`,
 and `nix flake check`. Native macOS builds/tests are verified; Nix is not available
 on the development host and its build remains unverified.
 
+## Gateway and wireless satellite
+
+[The two-device example](examples/wds-network.net) represents the supplied
+`10.9.8.1` gateway and `10.9.8.2` bridged satellite in one network. `router`
+selects the gateway; `device` gives the satellite independent configuration.
+An explicit wireless link checks the WDS station against its upstream AP.
+
+```sh
+./netc check examples/wds-network.net
+./netc compile examples/wds-network.net --all --format json
+./netc docs examples/wds-network.net
+./netc graph examples/wds-network.net
+```
+
+It covers STP, management gateway/DNS, unbound `wwan`, inactive DHCP settings,
+and AP/station Wi-Fi. Segment validation detects address and DHCP conflicts
+across declared wireless hops. The [parity report](docs/wds-network-parity.md)
+accounts for both devices' networking settings. Gateway DHCP is corrected to
+`.100–.199`; satellite DNS `10.8.8.1` is preserved. Six credential fields share
+three external references. No live device access or installation is performed.
+
 ## Core-router example
 
-[The core-router source](examples/core-router.net) reproduces the supplied
-OpenWrt backup's network, DHCP/DNS, firewall, and radio configuration:
+[The core-router source](examples/core-router.net) retains parity with the earlier
+OpenWrt regression backup's network, DHCP/DNS, firewall, and radio configuration:
 
 - Untagged LAN bridge over `lan2`/`lan3`, with gateway `10.9.8.1/24`.
 - LACP WAN bond over `lan1`/`wan`, carrying DHCP, DHCPv6, and modem access.
@@ -97,11 +118,11 @@ deployment, and secret resolution remain outside this release.
 
 ```sh
 ./netc schema > current.json
-./netc schema diff docs/schema/2.0.json current.json
-./netc release-check docs/schema/2.0.json current.json
+./netc schema diff docs/schema/3.0.json current.json
+./netc release-check docs/schema/3.0.json current.json
 ```
 
 The catalog describes constructs, typed router fields, constraints, and semantics.
 Release comparison requires appropriate version bumps for declared changes; it
 is not a promise to accept older source versions. The current examples and tests
-all use 2.0. Structural comparison cannot discover undeclared changes in meaning.
+all use 3.0. Structural comparison cannot discover undeclared changes in meaning.

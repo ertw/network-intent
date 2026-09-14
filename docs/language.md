@@ -1,13 +1,13 @@
-# Network Intent language 2.0
+# Network Intent language 3.0
 
-Only language 2.0 is accepted. Version 1.0 has been retired; there is no compatibility adapter. Unknown versions and constructs
+Only language 3.0 is accepted. Versions 1.0 and 2.0 have been retired; there is no compatibility adapter. Unknown versions and constructs
 are errors. The authoritative grammar and meaning are implemented in Idris;
 there is no separate editor parser in this release.
 
 ## Lexical grammar and document
 
 ```text
-network-language 2.0
+network-language 3.0
 network NAME {
   domain example.home.arpa
   ... declarations ...
@@ -65,7 +65,7 @@ gateways must be unique and outside DHCP pools. `address.*` diagnostics identify
 the failed property and related collision/prefix declarations.
 
 Gateway/DHCP intent requires one router carrying every gateway VLAN. Multiple
-routers are rejected in 2.0 instead of selecting an owner implicitly. OpenWrt
+routers are rejected in 3.0 instead of selecting an owner implicitly. OpenWrt
 owns routed addresses and DHCP; Cisco's L2 profile owns only switching.
 
 ## Devices, ports and physical links
@@ -91,8 +91,9 @@ switch core {
 }
 ```
 
-`device` is also accepted and has the same L2 role as `switch`; `router` is the
-single routing/enforcement role. `driver` is required: `openwrt` or `cisco-ios`.
+`device` and `switch` do not select a network routing owner. They can declare
+L2 ports or explicit networking configuration; `router` selects the single
+routing/enforcement role. `driver` is required: `openwrt` or `cisco-ios`.
 An unsupported driver fails. `max-tagged-vlans` is an optional assumed target
 budget in 0–4094 (default 4094). `compile --max-tagged-vlans N` applies a lower
 test/profile limit. A mismatch fails with the device/port and source span.
@@ -207,7 +208,7 @@ are not accepted as authoritative compiler inputs. Re-elaborate source to obtain
 fresh certificates. `fmt` parses/resolves source and emits canonical layout.
 
 The compiler emits its public language catalog with `schema`. Release tools
-compare catalogs and declared semantic changes. The current 2.0 examples and schema are the baseline. Older source versions are
+compare catalogs and declared semantic changes. The current examples use 3.0. The historical 2.0 schema is retained for release comparison. Older source versions are
 rejected; release comparison does not establish a backwards-compatibility promise.
 
 
@@ -217,7 +218,7 @@ The complete [core-router example](../examples/core-router.net) covers all four
 networking packages from the backup. Declare this model inside one router:
 
 ```text
-network-language 2.0
+network-language 3.0
 network sample {
   router gateway {
     driver openwrt
@@ -284,7 +285,17 @@ A logical interface attaches to a master or an independent link, never a slave.
 Multiple logical interfaces can share the same attachment, as the WAN DHCP,
 DHCPv6, and static modem interfaces do in the example.
 
-Interfaces require `attach` and `protocol`. Protocols are `static`, `dhcp`,
+Interfaces require `attach` and `protocol`. `attach none` explicitly preserves an
+unbound dynamic or unnumbered interface and emits no UCI `device` option. It is
+not permitted as a bridge member or static interface attachment. A bridge may
+declare `stp true` or `stp false`; omission preserves the target default.
+
+A static interface may declare one IPv4 `gateway`, which must be usable and
+on-link, distinct from its own addresses. `dns ADDRESS...` declares a list of
+IPv4 resolver addresses; duplicate values are rejected. Resolver reachability
+is not inferred.
+
+Protocols are `static`, `dhcp`,
 `dhcpv6`, and `none`. Static interfaces require at least one `address` or
 `address6`; dynamic/unnumbered interfaces cannot declare static addresses.
 IPv4 interface addresses use host/prefix notation, while subnet declarations
@@ -332,7 +343,11 @@ network-relative `start` and address-count `limit`.
 IPv4 DHCP serving requires exactly one static IPv4 subnet, a valid pool, DNS
 configuration, and permitted IPv4 router input for UDP/67 and TCP+UDP/53. Pools
 cannot include interface addresses or network/broadcast addresses. One DHCP
-section is permitted per interface. Ignored interfaces cannot enable servers.
+section is permitted per interface. Ignored interfaces cannot enable servers. A checked pool may be retained when
+`ignore true` and `ipv4 disabled` are both explicit. It emits `start` and `limit`
+but has zero active leases, requires no DHCP control policy, and consumes no
+lease capacity. Its endpoints must still fit the declared subnet; static
+addresses may fall inside an inactive pool.
 An explicit lease capacity must cover all pools; if omitted, the backend adds
 capacity only when the aggregate exceeds the profile's default of 150. The
 profile permits at most 65,535 leases.
@@ -394,12 +409,50 @@ conditional ACCEPT rules cannot establish that permission for every client.
 constraints are checked; device capabilities, regulatory availability, DFS,
 and actual radio state remain target assumptions.
 
-`access-point NAME` requires a `radio`, bridged logical `interface`, `mode ap`,
+`wireless-interface NAME` requires a `radio`, bridged logical `interface`, `mode ap` or `mode sta`,
 `ssid`, and `security`. SSIDs contain 1..32 UTF-8 bytes. Supported security modes
 are `none`, `psk2`, and `sae`. `disabled true` preserves a disabled AP; it does
-not discard its configuration. Multiple radios and APs may share one bridge.
+not discard its configuration. Multiple radios and Wi-Fi interfaces may share one bridge. Stations require
+`wds true` because this profile bridges their traffic. `hidden` is AP-only;
+`bssid` is station-only. `mac-address` optionally declares the local Wi-Fi MAC.
+MAC strings are checked for six hexadecimal octets.
 
 Secured APs require `credential secret://...`; open APs forbid credentials.
 Literal passwords are rejected. The [secrets methodology](secrets.md) defines
 identifier syntax, template artifacts, the binding manifest, and the external
 consumer contract. The compiler never retrieves or materializes credentials.
+
+
+### Device roles and wireless links (3.0)
+
+Explicit `routing { ... }` configuration is permitted on `device`, `switch`,
+and `router` declarations. `router` selects the single network routing/policy
+owner; a configured satellite uses `device` and does not acquire that role.
+Every device still has its own interface, radio, zone, and Wi-Fi namespaces.
+Explicit networking and VLAN port shorthand cannot be mixed on one device.
+
+```text
+wireless-link satellite.wifinet3 -> gateway.wifinet3
+```
+
+This network-level declaration resolves to device-qualified typed Wi-Fi references.
+The source must be a station, destination an AP, on different devices. Both
+must be enabled and use WDS. SSID, security, credential reference, band, and
+configured channel must match. A station can have only one declared upstream;
+an AP can serve multiple stations. An unlinked station may target an external
+AP, with no cross-device assurance.
+
+Different PHY generations and widths are not equated: HE80 and VHT80 can be
+used by the supplied endpoints. Actual negotiation remains unknown. A pinned
+station BSSID is compared case-insensitively with the upstream `mac-address`
+when declared. Hardware paths and the WAN bond MAC do not determine an AP's
+BSSID; without an explicit AP MAC it remains an external assumption.
+
+Connected logical interfaces form a declared wireless bridge segment. Across
+that segment, including multiple wireless hops, certification rejects duplicate
+static IPv4/IPv6 addresses, static IPv4 addresses within active DHCP pools, and
+overlapping active DHCP pools. The same subnet on different devices is allowed.
+These checks cover declared wireless relations, not unmodeled Ethernet cables,
+RF connectivity, STP convergence, IPv6 RA coordination, or arbitrary routing.
+
+See `examples/wds-network.net` and the [two-device parity report](wds-network-parity.md).

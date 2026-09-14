@@ -23,7 +23,7 @@ unique xs = either pure (const []) (uniqueNames xs)
 
 private
 netdevName : String -> Bool
-netdevName s = validName s && length s <= 15 && s /= "lo"
+netdevName s = validName s && length s <= 15 && s /= "lo" && s /= "none"
 
 private
 refOK : List a -> RouterRef k -> Bool
@@ -35,6 +35,7 @@ attachmentId c (Physical r) = r.index
 attachmentId c (BridgeDevice r) = length c.physicals + r.index
 attachmentId c (BondDevice r) = length c.physicals + length c.bridges + r.index
 attachmentId c Loopback = length c.physicals + length c.bridges + length c.bonds
+attachmentId c Unattached = S (length c.physicals + length c.bridges + length c.bonds)
 
 public export
 attachmentOK : RouterConfig -> Attachment -> Bool
@@ -42,6 +43,7 @@ attachmentOK c (Physical r) = refOK c.physicals r
 attachmentOK c (BridgeDevice r) = refOK c.bridges r
 attachmentOK c (BondDevice r) = refOK c.bonds r
 attachmentOK c Loopback = True
+attachmentOK c Unattached = True
 
 public export
 attachmentName : RouterConfig -> Attachment -> String
@@ -49,6 +51,7 @@ attachmentName c (Physical r) = maybe "invalid" name (lookupAt r.index c.physica
 attachmentName c (BridgeDevice r) = maybe "invalid" name (lookupAt r.index c.bridges)
 attachmentName c (BondDevice r) = maybe "invalid" name (lookupAt r.index c.bonds)
 attachmentName c Loopback = "lo"
+attachmentName c Unattached = "none"
 
 public export
 linkEdges : RouterConfig -> List (Nat,Nat)
@@ -105,6 +108,11 @@ checkInterface c i = checkInterfaceOptions i.source i.settings ++
     (i.settings.protocol == Just DHCPv6Client || all not [isJust i.settings.requestAddress,isJust i.settings.requestPrefix,isJust i.settings.noRelease])
     "DHCPv6 client options require protocol dhcpv6" ++
   ensure "router.ipv6-assignment" i.source (not (isJust i.settings.ipv6Assignment) || i.settings.protocol == Just Static) "IPv6 assignment requires a static downstream interface" ++
+  ensure "router.unattached-protocol" i.source (case i.attachment.value of Unattached => elem i.settings.protocol [Just DHCPClient,Just DHCPv6Client,Just Unnumbered]; _ => True) "Unattached interfaces require a dynamic or unnumbered protocol" ++
+  maybe [] (\g => ensure "routing.gateway-unreachable" g.span
+    (i.settings.protocol == Just Static && all (\a => g.value.number /= a.value.address.number) i.addresses && any (\a => usable4 (OnSubnet4 g.value a.value.subnet)) i.addresses)
+    "Gateway must be a usable on-link address distinct from this interface address") i.gateway ++
+  ensure "router.duplicate-dns" i.source (let ds = map (number . value) i.dnsServers in length ds == length (nub ds)) "Duplicate interface DNS server" ++
   concatMap (\a => ensure "address.outside-prefix" a.span (usable4 a.value) "Interface address must be usable in its subnet") i.addresses
 
 private
@@ -114,12 +122,12 @@ checkPool c d = checkDHCPOptions d.source d.settings ++
   ensure "dhcp.invalid-lease" d.source (maybe True timeValue d.settings.leaseTime) "Invalid DHCP lease duration" ++
   ensure "dhcp.duplicate-ra-flag" d.source (length (nub d.flags) == length d.flags && (not (elem NoFlags d.flags) || d.flags == [NoFlags])) "Invalid or duplicate RA flags" ++
   ensure "dhcp.ra-flags" d.source (null d.flags || d.settings.ra == Just Server) "RA flags require an RA server" ++
-  ensure "dhcp.ignored-server" d.source (d.settings.ignore /= Just True || (isNothing d.pool && d.settings.ipv4 /= Just Server && d.settings.ipv6 /= Just Server && d.settings.ra /= Just Server)) "Ignored DHCP interface cannot enable servers" ++
+  ensure "dhcp.ignored-server" d.source (d.settings.ignore /= Just True || (d.settings.ipv4 /= Just Server && d.settings.ipv6 /= Just Server && d.settings.ra /= Just Server)) "Ignored DHCP interface cannot enable servers" ++
   ensure "dhcp.pool-required" d.source (d.settings.ipv4 /= Just Server || isJust d.pool) "IPv4 DHCP server requires a pool" ++
   (case d.pool of
     Nothing => []
     Just (first,last) =>
-      ensure "dhcp.pool-mode" d.source (d.settings.ignore /= Just True && d.settings.ipv4 == Just Server) "DHCP pool requires an enabled IPv4 server" ++
+      ensure "dhcp.pool-mode" d.source ((d.settings.ignore /= Just True && d.settings.ipv4 == Just Server) || (d.settings.ignore == Just True && d.settings.ipv4 == Just Disabled)) "DHCP pool requires an enabled IPv4 server or explicit ignore true and ipv4 disabled" ++
       (case lookupAt d.ifaceRef.value.index c.interfaces of
         Just i => case i.addresses of
           [a] =>
@@ -127,7 +135,7 @@ checkPool c d = checkDHCPOptions d.source d.settings ++
               (i.settings.protocol == Just Static && a.value.subnet.width < 31 && first.value.number <= last.value.number &&
                usable4 (OnSubnet4 first.value a.value.subnet) && usable4 (OnSubnet4 last.value a.value.subnet)) "DHCP endpoints must be ordered usable addresses within the static interface subnet" ++
             concatMap (\addr => ensure "address.static-dhcp-overlap" first.span
-              (addr.value.address.number < first.value.number || addr.value.address.number > last.value.number) "DHCP pool overlaps a static interface address") (concatMap addresses c.interfaces)
+              (d.settings.ignore == Just True || addr.value.address.number < first.value.number || addr.value.address.number > last.value.number) "DHCP pool overlaps a static interface address") (concatMap addresses c.interfaces)
           _ => [failure "address.dhcp-subnet" d.source "DHCP requires exactly one static IPv4 interface subnet"]
         Nothing => [])) ++
   (if d.settings.ipv6 == Just Server || d.settings.ra == Just Server then
@@ -171,8 +179,8 @@ checkRadio r = checkRadioOptions r.source r.settings ++
   ensure "wireless.band-channel" r.source (r.settings.band /= Just Band2 || maybe False (<=14) r.settings.channel) "2.4 GHz channel must be 1..14"
 
 private
-checkAP : RouterConfig -> AccessPoint -> List Diagnostic
-checkAP c a = checkAPOptions a.source a.settings ++
+checkWiFi : RouterConfig -> WiFiInterface -> List Diagnostic
+checkWiFi c a = checkWiFiOptions a.source a.settings ++
   ensure "reference.unknown-radio" a.radio.span (refOK c.radios a.radio.value) "AP radio does not exist" ++
   ensure "reference.unknown-interface" a.ifaceRef.span (refOK c.interfaces a.ifaceRef.value) "AP interface does not exist" ++
   ensure "wireless.required-setting" a.source (isJust a.settings.mode && isJust a.settings.ssid && isJust a.settings.security) "Access point requires mode, SSID, and security" ++
@@ -182,13 +190,18 @@ checkAP c a = checkAPOptions a.source a.settings ++
     Just _ => isJust a.credential
     Nothing => False) "Secured APs require an opaque credential reference; open APs cannot have credentials" ++
   ensure "secret.invalid-reference" a.source (maybe True (validWiFiReference . secretURI) a.credential) "Invalid Wi-Fi credential reference" ++
+  ensure "wireless.bssid" a.source (maybe True macValid a.settings.bssid) "Invalid station BSSID" ++
+  ensure "wireless.mac-address" a.source (maybe True macValid a.settings.macAddress) "Invalid wireless MAC address" ++
+  ensure "wireless.station-fields" a.source (isNothing a.settings.bssid || a.settings.mode == Just Station) "BSSID selection requires station mode" ++
+  ensure "wireless.hidden-mode" a.source (isNothing a.settings.hidden || a.settings.mode == Just AccessPoint) "Hidden SSID requires AP mode" ++
+  ensure "wireless.station-bridge" a.source (a.settings.mode /= Just Station || a.settings.wds == Just True) "Bridged stations require WDS four-address operation" ++
   ensure "wireless.bridge-required" a.source (case lookupAt a.ifaceRef.value.index c.interfaces of
     Just i => case i.attachment.value of BridgeDevice _ => True; _ => False
     Nothing => True) "AP must attach to a bridged logical interface"
 
 public export
 leaseCount : DHCPServer -> Integer
-leaseCount d = case d.pool of
+leaseCount d = if d.settings.ignore == Just True || d.settings.ipv4 /= Just Server then 0 else case d.pool of
   Nothing => 0
   Just (a,b) => b.value.number - a.value.number + 1
 
@@ -223,7 +236,7 @@ controlVerdict c zone proto port = fromMaybe Drop (go c.rules)
 
 private
 checkControl : RouterConfig -> DHCPServer -> List Diagnostic
-checkControl c d = if isNothing d.pool then [] else
+checkControl c d = if leaseCount d == 0 then [] else
   case find (\(_,z) => elem d.ifaceRef.value.index (map (index . value) z.interfaces)) (indexed c.zones) of
     Nothing => [failure "policy.dhcp-zone" d.source "DHCP-serving interface requires a firewall zone"]
     Just (i,z) => ensure "policy.dhcp-control-conflict" d.source
@@ -234,9 +247,9 @@ public export
 validateRouter : RouterConfig -> List Diagnostic
 validateRouter c =
   unique (map (\p => (p.name,p.source)) c.physicals ++ map (\b => (b.name,b.source)) c.bridges ++ map (\b => (b.name,b.source)) c.bonds) ++
-  concat [unique (map (\i => (i.name,i.source)) c.interfaces), unique (map (\z => (z.name,z.source)) c.zones), unique (map (\r => (r.name,r.source)) c.rules), unique (map (\r => (r.name,r.source)) c.radios), unique (map (\a => (a.name,a.source)) c.accessPoints), unique (map (\d => (d.name,d.source)) c.dhcpServers)] ++
+  concat [unique (map (\i => (i.name,i.source)) c.interfaces), unique (map (\z => (z.name,z.source)) c.zones), unique (map (\r => (r.name,r.source)) c.rules), unique (map (\r => (r.name,r.source)) c.radios), unique (map (\a => (a.name,a.source)) c.wifiInterfaces), unique (map (\d => (d.name,d.source)) c.dhcpServers)] ++
   concatMap (\(n,at) => ensure "name.invalid" at (validName n) "Invalid router entity name")
-    (map (\i => (i.name,i.source)) c.interfaces ++ map (\z => (z.name,z.source)) c.zones ++ map (\r => (r.name,r.source)) c.rules ++ map (\r => (r.name,r.source)) c.radios ++ map (\a => (a.name,a.source)) c.accessPoints ++ map (\d => (d.name,d.source)) c.dhcpServers) ++
+    (map (\i => (i.name,i.source)) c.interfaces ++ map (\z => (z.name,z.source)) c.zones ++ map (\r => (r.name,r.source)) c.rules ++ map (\r => (r.name,r.source)) c.radios ++ map (\a => (a.name,a.source)) c.wifiInterfaces ++ map (\d => (d.name,d.source)) c.dhcpServers) ++
   concatMap (\(n,at) => ensure "backend.capability-mismatch" at (netdevName n) "Link name must be at most 15 ASCII identifier characters and cannot be lo")
     (map (\p => (p.name,p.source)) c.physicals ++ map (\b => (b.name,b.source)) c.bridges ++ map (\b => (b.name,b.source)) c.bonds) ++
   concatMap (\b => ensure "topology.empty-bridge" b.source (not (null b.members)) "Bridge requires members" ++
@@ -260,7 +273,7 @@ validateRouter c =
     ensure "router.duid" g.span (maybe True (\s => length s >= 4 && length s <= 260 && mod (the Integer (cast (length s))) 2 == 0 && hexString s) g.value.dhcpDefaultDuid) "DUID must be an even-length hexadecimal value") c.globals ++
   maybe [] (\d => checkDNSOptions d.span d.value ++
     ensure "dhcp.lease-capacity" d.span (maybe True (\n => cast n >= sum (map leaseCount c.dhcpServers)) d.value.leaseMax) "DNS lease capacity is smaller than the declared DHCP pools") c.dns ++
-  ensure "dhcp.dns-required" c.source (not (any (isJust . pool) c.dhcpServers) || isJust c.dns) "IPv4 DHCP serving requires DNS daemon configuration" ++
+  ensure "dhcp.dns-required" c.source (not (any ((>0) . leaseCount) c.dhcpServers) || isJust c.dns) "IPv4 DHCP serving requires DNS daemon configuration" ++
   ensure "dhcp.odhcp-required" c.source (not (any (\d => d.settings.ipv6 == Just Server || d.settings.ra == Just Server) c.dhcpServers) || isJust c.odhcp) "IPv6 serving requires odhcp configuration" ++
   concatMap (checkPool c) c.dhcpServers ++
   concatMap (checkControl c) c.dhcpServers ++
@@ -278,4 +291,4 @@ validateRouter c =
     ensure "policy.same-zone" f.source (f.from.value /= f.destination.value) "Forwarding requires distinct zones") c.forwardings ++
   concatMap (checkRule c) c.rules ++
   concatMap checkRadio c.radios ++
-  concatMap (checkAP c) c.accessPoints
+  concatMap (checkWiFi c) c.wifiInterfaces

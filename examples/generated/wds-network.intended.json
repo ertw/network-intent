@@ -1,0 +1,961 @@
+{
+  "ok": true,
+  "exportVersion": "3.0",
+  "targets": [
+    {
+      "target": "gateway",
+      "profile": "openwrt-device-fw4-dualstack-v3",
+      "state": "Intended",
+      "realization": "conditional",
+      "assumptions": [
+        "Matching OpenWrt netifd with native bonding, firewall4, dnsmasq, odhcpd and mac80211/wpad capabilities are required",
+        "Owns network, dhcp, firewall and declared wireless configuration; other system settings are preserved separately",
+        "Dynamic addresses, ISP prefix delegation, LACP peer state and radio operation are unknown",
+        "Wireless credentials require external binding; templates must not be installed directly",
+        "WDS four-address support and compatible radio negotiation are required; station BSSID identity is unknown unless an AP MAC is declared"
+      ],
+      "readiness": "requires-secret-binding",
+      "requiresSecretBinding": true,
+      "files": [
+        {
+          "path": "/etc/config/network",
+          "content": "config globals 'globals'\n\toption dhcp_default_duid '0004ecf7fc0d101f44ab9683172b87cd03ad'\n\toption ula_prefix 'fdbe:c414:cd71:0000:0000:0000:0000:0000/48'\n\toption packet_steering '1'\n\nconfig device 'bridge_0'\n\toption name 'br-lan'\n\toption type 'bridge'\n\tlist ports 'lan2'\n\tlist ports 'lan3'\n\nconfig device 'bond_0'\n\toption name 'bond-wan'\n\toption type 'bonding'\n\toption mtu '1500'\n\toption macaddr 'e8:9f:80:69:cb:51'\n\toption policy '802.3ad'\n\toption xmit_hash_policy 'layer3+4'\n\toption ad_select 'stable'\n\toption lacp_rate 'fast'\n\toption min_links '1'\n\toption monitor_interval '100'\n\tlist ports 'lan1'\n\tlist ports 'wan'\n\nconfig interface 'loopback'\n\toption device 'lo'\n\toption proto 'static'\n\tlist ipaddr '127.0.0.1/8'\n\nconfig interface 'lan'\n\toption device 'br-lan'\n\toption proto 'static'\n\toption ip6assign '60'\n\toption multipath 'off'\n\tlist ipaddr '10.9.8.1/24'\n\nconfig interface 'wan'\n\toption device 'bond-wan'\n\toption proto 'dhcp'\n\toption multipath 'off'\n\nconfig interface 'wan6'\n\toption device 'bond-wan'\n\toption proto 'dhcpv6'\n\toption multipath 'off'\n\toption reqaddress 'try'\n\toption reqprefix 'auto'\n\toption norelease '1'\n\nconfig interface 'modem'\n\toption device 'bond-wan'\n\toption proto 'static'\n\toption multipath 'off'\n\tlist ipaddr '192.168.100.2/24'\n\n"
+        },
+        {
+          "path": "/etc/config/dhcp",
+          "content": "config dnsmasq 'dns'\n\toption domainneeded '1'\n\toption boguspriv '1'\n\toption filterwin2k '0'\n\toption localise_queries '1'\n\toption rebind_protection '1'\n\toption rebind_localhost '1'\n\toption expandhosts '1'\n\toption nonegcache '0'\n\toption authoritative '1'\n\toption readethers '1'\n\toption nonwildcard '1'\n\toption localservice '1'\n\toption filter_aaaa '0'\n\toption filter_a '0'\n\toption local '/lan/'\n\toption domain 'lan'\n\toption leasefile '/tmp/dhcp.leases'\n\toption resolvfile '/tmp/resolv.conf.d/resolv.conf.auto'\n\toption cachesize '1000'\n\toption ednspacket_max '1232'\n\nconfig dhcp 'lan'\n\toption interface 'lan'\n\toption start '100'\n\toption limit '100'\n\toption leasetime '12h'\n\toption dhcpv4 'server'\n\toption dhcpv6 'server'\n\toption ra 'server'\n\toption ra_preference 'medium'\n\tlist ra_flags 'managed-config'\n\tlist ra_flags 'other-config'\n\nconfig dhcp 'wan'\n\toption interface 'wan'\n\toption ignore '1'\n\nconfig odhcpd 'odhcpd'\n\toption maindhcp '0'\n\toption leasefile '/tmp/odhcpd.leases'\n\toption leasetrigger '/usr/sbin/odhcpd-update'\n\toption loglevel '4'\n\toption piodir '/tmp/odhcpd-piodir'\n\toption hostsdir '/tmp/hosts'\n\n"
+        },
+        {
+          "path": "/etc/config/firewall",
+          "content": "config defaults 'defaults'\n\toption syn_flood '1'\n\toption input 'REJECT'\n\toption output 'ACCEPT'\n\toption forward 'REJECT'\n\nconfig zone 'zone_0'\n\toption name 'lan'\n\toption input 'ACCEPT'\n\toption output 'ACCEPT'\n\toption forward 'ACCEPT'\n\tlist network 'lan'\n\nconfig zone 'zone_1'\n\toption name 'wan'\n\toption input 'REJECT'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\toption masq '1'\n\toption mtu_fix '1'\n\tlist network 'wan'\n\tlist network 'wan6'\n\tlist network 'modem'\n\nconfig forwarding 'forward_0'\n\toption src 'lan'\n\toption dest 'wan'\n\nconfig rule 'rule_0'\n\toption name 'Allow-DHCP-Renew'\n\toption src 'wan'\n\toption proto 'udp'\n\toption family 'ipv4'\n\toption dest_port '68'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_1'\n\toption name 'Allow-Ping'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\tlist icmp_type 'echo-request'\n\nconfig rule 'rule_2'\n\toption name 'Allow-IGMP'\n\toption src 'wan'\n\toption proto 'igmp'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_3'\n\toption name 'Allow-DHCPv6'\n\toption src 'wan'\n\toption proto 'udp'\n\toption family 'ipv6'\n\toption dest_port '546'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_4'\n\toption name 'Allow-MLD'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption src_ip 'fe80:0000:0000:0000:0000:0000:0000:0000/10'\n\toption family 'ipv6'\n\toption target 'ACCEPT'\n\tlist icmp_type '130/0'\n\tlist icmp_type '131/0'\n\tlist icmp_type '132/0'\n\tlist icmp_type '143/0'\n\nconfig rule 'rule_5'\n\toption name 'Allow-ICMPv6-Input'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption family 'ipv6'\n\toption limit '1000/sec'\n\toption target 'ACCEPT'\n\tlist icmp_type 'echo-request'\n\tlist icmp_type 'echo-reply'\n\tlist icmp_type 'destination-unreachable'\n\tlist icmp_type 'packet-too-big'\n\tlist icmp_type 'time-exceeded'\n\tlist icmp_type 'bad-header'\n\tlist icmp_type 'unknown-header-type'\n\tlist icmp_type 'router-solicitation'\n\tlist icmp_type 'neighbour-solicitation'\n\tlist icmp_type 'router-advertisement'\n\tlist icmp_type 'neighbour-advertisement'\n\nconfig rule 'rule_6'\n\toption name 'Allow-ICMPv6-Forward'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption dest '*'\n\toption family 'ipv6'\n\toption limit '1000/sec'\n\toption target 'ACCEPT'\n\tlist icmp_type 'echo-request'\n\tlist icmp_type 'echo-reply'\n\tlist icmp_type 'destination-unreachable'\n\tlist icmp_type 'packet-too-big'\n\tlist icmp_type 'time-exceeded'\n\tlist icmp_type 'bad-header'\n\tlist icmp_type 'unknown-header-type'\n\nconfig rule 'rule_7'\n\toption name 'Allow-IPSec-ESP'\n\toption src 'wan'\n\toption proto 'esp'\n\toption dest 'lan'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_8'\n\toption name 'Allow-ISAKMP'\n\toption src 'wan'\n\toption proto 'udp'\n\toption dest 'lan'\n\toption dest_port '500'\n\toption target 'ACCEPT'\n\n"
+        },
+        {
+          "path": "/etc/config/wireless.template",
+          "content": "# TEMPLATE: requires external secret binding; do not install directly\nconfig wifi-device 'radio0'\n\toption type 'mac80211'\n\toption path 'platform/soc@0/c000000.wifi'\n\toption band '5g'\n\toption channel '60'\n\toption htmode 'HE80'\n\toption country 'US'\n\toption cell_density '0'\n\nconfig wifi-device 'radio1'\n\toption type 'mac80211'\n\toption path 'platform/soc@0/c000000.wifi+1'\n\toption band '2g'\n\toption channel '8'\n\toption htmode 'HT20'\n\toption country 'US'\n\toption cell_density '0'\n\nconfig wifi-device 'radio2'\n\toption type 'mac80211'\n\toption path 'platform/soc@0/c000000.wifi+2'\n\toption band '5g'\n\toption channel '100'\n\toption htmode 'HE80'\n\toption country 'US'\n\toption cell_density '0'\n\nconfig wifi-iface 'default_radio1'\n\toption device 'radio1'\n\toption network 'lan'\n\toption mode 'ap'\n\toption ssid '_iot'\n\toption encryption 'psk2'\n\toption key '__NETC_SECRET_default_radio1_key__'\n\nconfig wifi-iface 'wifinet3'\n\toption device 'radio2'\n\toption network 'lan'\n\toption mode 'ap'\n\toption ssid '_backhaul'\n\toption encryption 'sae'\n\toption ocv '0'\n\toption wds '1'\n\toption hidden '1'\n\toption key '__NETC_SECRET_wifinet3_key__'\n\nconfig wifi-iface 'wifinet2'\n\toption device 'radio0'\n\toption network 'lan'\n\toption mode 'ap'\n\toption ssid '_'\n\toption encryption 'sae'\n\toption ocv '0'\n\toption key '__NETC_SECRET_wifinet2_key__'\n\n"
+        },
+        {
+          "path": "secret-bindings.json",
+          "content": "{\"manifestVersion\":1,\"status\":\"requires-secret-binding\",\"bindings\":[{\"reference\":\"secret://home/wifi/iot\",\"kind\":\"wifi-credential\",\"security\":\"psk2\",\"templateArtifact\":\"/etc/config/wireless.template\",\"installationPath\":\"/etc/config/wireless\",\"section\":\"default_radio1\",\"option\":\"key\",\"placeholder\":\"__NETC_SECRET_default_radio1_key__\"},{\"reference\":\"secret://home/wifi/backhaul\",\"kind\":\"wifi-credential\",\"security\":\"sae\",\"templateArtifact\":\"/etc/config/wireless.template\",\"installationPath\":\"/etc/config/wireless\",\"section\":\"wifinet3\",\"option\":\"key\",\"placeholder\":\"__NETC_SECRET_wifinet3_key__\"},{\"reference\":\"secret://home/wifi/main\",\"kind\":\"wifi-credential\",\"security\":\"sae\",\"templateArtifact\":\"/etc/config/wireless.template\",\"installationPath\":\"/etc/config/wireless\",\"section\":\"wifinet2\",\"option\":\"key\",\"placeholder\":\"__NETC_SECRET_wifinet2_key__\"}]}\n"
+        }
+      ],
+      "sourceMap": [
+        {
+          "generated": "/etc/config/network#globals",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 19,
+            "column": 7,
+            "endLine": 19,
+            "endColumn": 14
+          },
+          "derivation": [
+            "network globals"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#bridge_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 24,
+            "column": 7,
+            "endLine": 24,
+            "endColumn": 13
+          },
+          "derivation": [
+            "bridge br-lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#bond_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 53,
+            "column": 7,
+            "endLine": 53,
+            "endColumn": 11
+          },
+          "derivation": [
+            "bond bond-wan"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#loopback",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 14,
+            "column": 7,
+            "endLine": 14,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface loopback"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#lan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 27,
+            "column": 7,
+            "endLine": 27,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#wan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 34,
+            "column": 7,
+            "endLine": 34,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface wan"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#wan6",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 39,
+            "column": 7,
+            "endLine": 39,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface wan6"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#modem",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 47,
+            "column": 7,
+            "endLine": 47,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface modem"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#dns",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 64,
+            "column": 7,
+            "endLine": 64,
+            "endColumn": 10
+          },
+          "derivation": [
+            "DNS resolver settings"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#lan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 86,
+            "column": 7,
+            "endLine": 86,
+            "endColumn": 18
+          },
+          "derivation": [
+            "DHCP and RA on lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#wan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 96,
+            "column": 7,
+            "endLine": 96,
+            "endColumn": 18
+          },
+          "derivation": [
+            "DHCP and RA on wan"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#odhcpd",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 100,
+            "column": 7,
+            "endLine": 100,
+            "endColumn": 12
+          },
+          "derivation": [
+            "IPv6 DHCP daemon"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#defaults",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 108,
+            "column": 7,
+            "endLine": 108,
+            "endColumn": 15
+          },
+          "derivation": [
+            "explicit firewall defaults"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#zone_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 114,
+            "column": 7,
+            "endLine": 114,
+            "endColumn": 11
+          },
+          "derivation": [
+            "zone lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#zone_1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 120,
+            "column": 7,
+            "endLine": 120,
+            "endColumn": 11
+          },
+          "derivation": [
+            "zone wan"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#forward_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 128,
+            "column": 7,
+            "endLine": 128,
+            "endColumn": 14
+          },
+          "derivation": [
+            "zone forwarding"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 129,
+            "column": 7,
+            "endLine": 129,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-DHCP-Renew"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 136,
+            "column": 7,
+            "endLine": 136,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-Ping"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_2",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 143,
+            "column": 7,
+            "endLine": 143,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-IGMP"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_3",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 149,
+            "column": 7,
+            "endLine": 149,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-DHCPv6"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_4",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 156,
+            "column": 7,
+            "endLine": 156,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-MLD"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_5",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 164,
+            "column": 7,
+            "endLine": 164,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-ICMPv6-Input"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_6",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 172,
+            "column": 7,
+            "endLine": 172,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-ICMPv6-Forward"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_7",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 181,
+            "column": 7,
+            "endLine": 181,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-IPSec-ESP"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_8",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 187,
+            "column": 7,
+            "endLine": 187,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-ISAKMP"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#radio0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 194,
+            "column": 7,
+            "endLine": 194,
+            "endColumn": 12
+          },
+          "derivation": [
+            "radio radio0"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#radio1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 203,
+            "column": 7,
+            "endLine": 203,
+            "endColumn": 12
+          },
+          "derivation": [
+            "radio radio1"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#radio2",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 220,
+            "column": 7,
+            "endLine": 220,
+            "endColumn": 12
+          },
+          "derivation": [
+            "radio radio2"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#default_radio1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 212,
+            "column": 7,
+            "endLine": 212,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point default_radio1"
+          ]
+        },
+        {
+          "generated": "secret-bindings.json#__NETC_SECRET_default_radio1_key__",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 212,
+            "column": 7,
+            "endLine": 212,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point default_radio1",
+            "external credential binding"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#wifinet3",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 229,
+            "column": 7,
+            "endLine": 229,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet3"
+          ]
+        },
+        {
+          "generated": "secret-bindings.json#__NETC_SECRET_wifinet3_key__",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 229,
+            "column": 7,
+            "endLine": 229,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet3",
+            "external credential binding"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#wifinet2",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 240,
+            "column": 7,
+            "endLine": 240,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet2"
+          ]
+        },
+        {
+          "generated": "secret-bindings.json#__NETC_SECRET_wifinet2_key__",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 240,
+            "column": 7,
+            "endLine": 240,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet2",
+            "external credential binding"
+          ]
+        }
+      ]
+    },
+    {
+      "target": "satellite",
+      "profile": "openwrt-device-fw4-dualstack-v3",
+      "state": "Intended",
+      "realization": "conditional",
+      "assumptions": [
+        "Matching OpenWrt netifd with native bonding, firewall4, dnsmasq, odhcpd and mac80211/wpad capabilities are required",
+        "Owns network, dhcp, firewall and declared wireless configuration; other system settings are preserved separately",
+        "Dynamic addresses, ISP prefix delegation, LACP peer state and radio operation are unknown",
+        "Wireless credentials require external binding; templates must not be installed directly",
+        "WDS four-address support and compatible radio negotiation are required; station BSSID identity is unknown unless an AP MAC is declared"
+      ],
+      "readiness": "requires-secret-binding",
+      "requiresSecretBinding": true,
+      "files": [
+        {
+          "path": "/etc/config/network",
+          "content": "config globals 'globals'\n\toption dhcp_default_duid '00049a7712b65db148f5a84d0c32ac3e6838'\n\toption ula_prefix 'fdf5:8061:b9d1:0000:0000:0000:0000:0000/48'\n\nconfig device 'bridge_0'\n\toption name 'br-lan'\n\toption type 'bridge'\n\toption stp '1'\n\tlist ports 'lan1'\n\tlist ports 'lan2'\n\tlist ports 'lan3'\n\nconfig interface 'loopback'\n\toption device 'lo'\n\toption proto 'static'\n\tlist ipaddr '127.0.0.1/8'\n\nconfig interface 'lan'\n\toption device 'br-lan'\n\toption gateway '10.9.8.1'\n\toption proto 'static'\n\toption ip6assign '60'\n\toption multipath 'off'\n\tlist dns '10.8.8.1'\n\tlist ipaddr '10.9.8.2/24'\n\nconfig interface 'wan'\n\toption device 'wan'\n\toption proto 'dhcp'\n\nconfig interface 'wan6'\n\toption device 'wan'\n\toption proto 'dhcpv6'\n\nconfig interface 'wwan'\n\toption proto 'dhcp'\n\n"
+        },
+        {
+          "path": "/etc/config/dhcp",
+          "content": "config dnsmasq 'dns'\n\toption domainneeded '1'\n\toption boguspriv '1'\n\toption filterwin2k '0'\n\toption localise_queries '1'\n\toption rebind_protection '1'\n\toption rebind_localhost '1'\n\toption expandhosts '1'\n\toption nonegcache '0'\n\toption authoritative '1'\n\toption readethers '1'\n\toption nonwildcard '1'\n\toption localservice '1'\n\toption filter_aaaa '0'\n\toption filter_a '0'\n\toption local '/lan/'\n\toption domain 'lan'\n\toption leasefile '/tmp/dhcp.leases'\n\toption resolvfile '/tmp/resolv.conf.d/resolv.conf.auto'\n\toption cachesize '1000'\n\toption ednspacket_max '1232'\n\nconfig dhcp 'lan'\n\toption interface 'lan'\n\toption start '100'\n\toption limit '150'\n\toption ignore '1'\n\toption leasetime '12h'\n\toption dhcpv4 'disabled'\n\nconfig dhcp 'wan'\n\toption interface 'wan'\n\toption ignore '1'\n\nconfig odhcpd 'odhcpd'\n\toption maindhcp '0'\n\toption leasefile '/tmp/odhcpd.leases'\n\toption leasetrigger '/usr/sbin/odhcpd-update'\n\toption loglevel '4'\n\toption piodir '/tmp/odhcpd-piodir'\n\toption hostsdir '/tmp/hosts'\n\n"
+        },
+        {
+          "path": "/etc/config/firewall",
+          "content": "config defaults 'defaults'\n\toption syn_flood '1'\n\toption input 'REJECT'\n\toption output 'ACCEPT'\n\toption forward 'REJECT'\n\nconfig zone 'zone_0'\n\toption name 'lan'\n\toption input 'ACCEPT'\n\toption output 'ACCEPT'\n\toption forward 'ACCEPT'\n\tlist network 'lan'\n\tlist network 'wwan'\n\nconfig zone 'zone_1'\n\toption name 'wan'\n\toption input 'REJECT'\n\toption output 'ACCEPT'\n\toption forward 'DROP'\n\toption masq '1'\n\toption mtu_fix '1'\n\tlist network 'wan'\n\tlist network 'wan6'\n\nconfig forwarding 'forward_0'\n\toption src 'lan'\n\toption dest 'wan'\n\nconfig rule 'rule_0'\n\toption name 'Allow-DHCP-Renew'\n\toption src 'wan'\n\toption proto 'udp'\n\toption family 'ipv4'\n\toption dest_port '68'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_1'\n\toption name 'Allow-Ping'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\tlist icmp_type 'echo-request'\n\nconfig rule 'rule_2'\n\toption name 'Allow-IGMP'\n\toption src 'wan'\n\toption proto 'igmp'\n\toption family 'ipv4'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_3'\n\toption name 'Allow-DHCPv6'\n\toption src 'wan'\n\toption proto 'udp'\n\toption family 'ipv6'\n\toption dest_port '546'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_4'\n\toption name 'Allow-MLD'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption src_ip 'fe80:0000:0000:0000:0000:0000:0000:0000/10'\n\toption family 'ipv6'\n\toption target 'ACCEPT'\n\tlist icmp_type '130/0'\n\tlist icmp_type '131/0'\n\tlist icmp_type '132/0'\n\tlist icmp_type '143/0'\n\nconfig rule 'rule_5'\n\toption name 'Allow-ICMPv6-Input'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption family 'ipv6'\n\toption limit '1000/sec'\n\toption target 'ACCEPT'\n\tlist icmp_type 'echo-request'\n\tlist icmp_type 'echo-reply'\n\tlist icmp_type 'destination-unreachable'\n\tlist icmp_type 'packet-too-big'\n\tlist icmp_type 'time-exceeded'\n\tlist icmp_type 'bad-header'\n\tlist icmp_type 'unknown-header-type'\n\tlist icmp_type 'router-solicitation'\n\tlist icmp_type 'neighbour-solicitation'\n\tlist icmp_type 'router-advertisement'\n\tlist icmp_type 'neighbour-advertisement'\n\nconfig rule 'rule_6'\n\toption name 'Allow-ICMPv6-Forward'\n\toption src 'wan'\n\toption proto 'icmp'\n\toption dest '*'\n\toption family 'ipv6'\n\toption limit '1000/sec'\n\toption target 'ACCEPT'\n\tlist icmp_type 'echo-request'\n\tlist icmp_type 'echo-reply'\n\tlist icmp_type 'destination-unreachable'\n\tlist icmp_type 'packet-too-big'\n\tlist icmp_type 'time-exceeded'\n\tlist icmp_type 'bad-header'\n\tlist icmp_type 'unknown-header-type'\n\nconfig rule 'rule_7'\n\toption name 'Allow-IPSec-ESP'\n\toption src 'wan'\n\toption proto 'esp'\n\toption dest 'lan'\n\toption target 'ACCEPT'\n\nconfig rule 'rule_8'\n\toption name 'Allow-ISAKMP'\n\toption src 'wan'\n\toption proto 'udp'\n\toption dest 'lan'\n\toption dest_port '500'\n\toption target 'ACCEPT'\n\n"
+        },
+        {
+          "path": "/etc/config/wireless.template",
+          "content": "# TEMPLATE: requires external secret binding; do not install directly\nconfig wifi-device 'radio0'\n\toption type 'mac80211'\n\toption path 'platform/soc@0/c000000.wifi'\n\toption band '5g'\n\toption channel '36'\n\toption htmode 'VHT80'\n\toption country 'US'\n\toption cell_density '0'\n\nconfig wifi-device 'radio1'\n\toption type 'mac80211'\n\toption path 'platform/soc@0/c000000.wifi+1'\n\toption band '2g'\n\toption channel '2'\n\toption htmode 'HT20'\n\toption cell_density '0'\n\nconfig wifi-device 'radio2'\n\toption type 'mac80211'\n\toption path 'platform/soc@0/c000000.wifi+2'\n\toption band '5g'\n\toption channel '100'\n\toption htmode 'VHT80'\n\toption country 'US'\n\toption cell_density '0'\n\nconfig wifi-iface 'wifinet3'\n\toption device 'radio2'\n\toption network 'lan'\n\toption mode 'sta'\n\toption ssid '_backhaul'\n\toption encryption 'sae'\n\toption ocv '0'\n\toption wds '1'\n\toption bssid 'E8:9F:80:69:CB:54'\n\toption key '__NETC_SECRET_wifinet3_key__'\n\nconfig wifi-iface 'wifinet1'\n\toption device 'radio0'\n\toption network 'lan'\n\toption mode 'ap'\n\toption ssid '_'\n\toption encryption 'sae'\n\toption ocv '0'\n\toption key '__NETC_SECRET_wifinet1_key__'\n\nconfig wifi-iface 'wifinet2'\n\toption device 'radio1'\n\toption network 'lan'\n\toption mode 'ap'\n\toption ssid '_iot'\n\toption encryption 'psk2'\n\toption key '__NETC_SECRET_wifinet2_key__'\n\n"
+        },
+        {
+          "path": "secret-bindings.json",
+          "content": "{\"manifestVersion\":1,\"status\":\"requires-secret-binding\",\"bindings\":[{\"reference\":\"secret://home/wifi/backhaul\",\"kind\":\"wifi-credential\",\"security\":\"sae\",\"templateArtifact\":\"/etc/config/wireless.template\",\"installationPath\":\"/etc/config/wireless\",\"section\":\"wifinet3\",\"option\":\"key\",\"placeholder\":\"__NETC_SECRET_wifinet3_key__\"},{\"reference\":\"secret://home/wifi/main\",\"kind\":\"wifi-credential\",\"security\":\"sae\",\"templateArtifact\":\"/etc/config/wireless.template\",\"installationPath\":\"/etc/config/wireless\",\"section\":\"wifinet1\",\"option\":\"key\",\"placeholder\":\"__NETC_SECRET_wifinet1_key__\"},{\"reference\":\"secret://home/wifi/iot\",\"kind\":\"wifi-credential\",\"security\":\"psk2\",\"templateArtifact\":\"/etc/config/wireless.template\",\"installationPath\":\"/etc/config/wireless\",\"section\":\"wifinet2\",\"option\":\"key\",\"placeholder\":\"__NETC_SECRET_wifinet2_key__\"}]}\n"
+        }
+      ],
+      "sourceMap": [
+        {
+          "generated": "/etc/config/network#globals",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 264,
+            "column": 7,
+            "endLine": 264,
+            "endColumn": 14
+          },
+          "derivation": [
+            "network globals"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#bridge_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 268,
+            "column": 7,
+            "endLine": 268,
+            "endColumn": 13
+          },
+          "derivation": [
+            "bridge br-lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#loopback",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 259,
+            "column": 7,
+            "endLine": 259,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface loopback"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#lan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 272,
+            "column": 7,
+            "endLine": 272,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#wan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 282,
+            "column": 7,
+            "endLine": 282,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface wan"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#wan6",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 286,
+            "column": 7,
+            "endLine": 286,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface wan6"
+          ]
+        },
+        {
+          "generated": "/etc/config/network#wwan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 290,
+            "column": 7,
+            "endLine": 290,
+            "endColumn": 16
+          },
+          "derivation": [
+            "logical interface wwan"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#dns",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 294,
+            "column": 7,
+            "endLine": 294,
+            "endColumn": 10
+          },
+          "derivation": [
+            "DNS resolver settings"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#lan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 316,
+            "column": 7,
+            "endLine": 316,
+            "endColumn": 18
+          },
+          "derivation": [
+            "DHCP and RA on lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#wan",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 323,
+            "column": 7,
+            "endLine": 323,
+            "endColumn": 18
+          },
+          "derivation": [
+            "DHCP and RA on wan"
+          ]
+        },
+        {
+          "generated": "/etc/config/dhcp#odhcpd",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 327,
+            "column": 7,
+            "endLine": 327,
+            "endColumn": 12
+          },
+          "derivation": [
+            "IPv6 DHCP daemon"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#defaults",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 335,
+            "column": 7,
+            "endLine": 335,
+            "endColumn": 15
+          },
+          "derivation": [
+            "explicit firewall defaults"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#zone_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 341,
+            "column": 7,
+            "endLine": 341,
+            "endColumn": 11
+          },
+          "derivation": [
+            "zone lan"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#zone_1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 347,
+            "column": 7,
+            "endLine": 347,
+            "endColumn": 11
+          },
+          "derivation": [
+            "zone wan"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#forward_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 355,
+            "column": 7,
+            "endLine": 355,
+            "endColumn": 14
+          },
+          "derivation": [
+            "zone forwarding"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 356,
+            "column": 7,
+            "endLine": 356,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-DHCP-Renew"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 363,
+            "column": 7,
+            "endLine": 363,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-Ping"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_2",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 370,
+            "column": 7,
+            "endLine": 370,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-IGMP"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_3",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 376,
+            "column": 7,
+            "endLine": 376,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-DHCPv6"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_4",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 383,
+            "column": 7,
+            "endLine": 383,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-MLD"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_5",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 391,
+            "column": 7,
+            "endLine": 391,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-ICMPv6-Input"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_6",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 399,
+            "column": 7,
+            "endLine": 399,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-ICMPv6-Forward"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_7",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 408,
+            "column": 7,
+            "endLine": 408,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-IPSec-ESP"
+          ]
+        },
+        {
+          "generated": "/etc/config/firewall#rule_8",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 414,
+            "column": 7,
+            "endLine": 414,
+            "endColumn": 20
+          },
+          "derivation": [
+            "ordered firewall rule Allow-ISAKMP"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#radio0",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 421,
+            "column": 7,
+            "endLine": 421,
+            "endColumn": 12
+          },
+          "derivation": [
+            "radio radio0"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#radio1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 430,
+            "column": 7,
+            "endLine": 430,
+            "endColumn": 12
+          },
+          "derivation": [
+            "radio radio1"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#radio2",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 438,
+            "column": 7,
+            "endLine": 438,
+            "endColumn": 12
+          },
+          "derivation": [
+            "radio radio2"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#wifinet3",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 447,
+            "column": 7,
+            "endLine": 447,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet3"
+          ]
+        },
+        {
+          "generated": "secret-bindings.json#__NETC_SECRET_wifinet3_key__",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 447,
+            "column": 7,
+            "endLine": 447,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet3",
+            "external credential binding"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#wifinet1",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 458,
+            "column": 7,
+            "endLine": 458,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet1"
+          ]
+        },
+        {
+          "generated": "secret-bindings.json#__NETC_SECRET_wifinet1_key__",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 458,
+            "column": 7,
+            "endLine": 458,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet1",
+            "external credential binding"
+          ]
+        },
+        {
+          "generated": "/etc/config/wireless.template#wifinet2",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 467,
+            "column": 7,
+            "endLine": 467,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet2"
+          ]
+        },
+        {
+          "generated": "secret-bindings.json#__NETC_SECRET_wifinet2_key__",
+          "source": {
+            "file": "examples/wds-network.net",
+            "line": 467,
+            "column": 7,
+            "endLine": 467,
+            "endColumn": 25
+          },
+          "derivation": [
+            "access point wifinet2",
+            "external credential binding"
+          ]
+        }
+      ]
+    }
+  ]
+}

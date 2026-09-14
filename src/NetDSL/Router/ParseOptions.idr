@@ -169,16 +169,20 @@ parseRadioOptions s = do
   Right (MkRadioOptions driver path band channel width country cellDensity)
 
 public export
-apOptionsKeys : List String
-apOptionsKeys = ["mode", "ssid", "security", "disabled", "ocv"]
+wifiOptionsKeys : List String
+wifiOptionsKeys = ["mode", "ssid", "security", "disabled", "ocv", "wds", "hidden", "bssid", "mac-address"]
 
 public export
-parseAPOptions : Statement -> Either Diagnostic APOptions
-parseAPOptions s = do
-  mode <- optional (choice [("ap",AccessPoint)]) "mode" s
+parseWiFiOptions : Statement -> Either Diagnostic WiFiOptions
+parseWiFiOptions s = do
+  mode <- optional (choice [("ap",AccessPoint), ("sta",Station)]) "mode" s
   ssid <- optional safeString "ssid" s
   security <- optional (choice [("none",Open), ("psk2",WPA2), ("sae",WPA3)]) "security" s
   disabled <- optional boolean "disabled" s
   ocv <- optional boolean "ocv" s
-  Right (MkAPOptions mode ssid security disabled ocv)
+  wds <- optional boolean "wds" s
+  hidden <- optional boolean "hidden" s
+  bssid <- optional safeString "bssid" s
+  macAddress <- optional safeString "mac-address" s
+  Right (MkWiFiOptions mode ssid security disabled ocv wds hidden bssid macAddress)
 

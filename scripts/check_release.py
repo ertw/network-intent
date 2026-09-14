@@ -15,6 +15,12 @@ class ReleaseChecks(unittest.TestCase):
         self.old = json.loads((ROOT / "docs/schema/2.0.json").read_text())
         self.new = copy.deepcopy(self.old)
 
+    def test_current_major_release_gate(self):
+        current = json.loads((ROOT / "docs/schema/3.0.json").read_text())
+        result = compare(self.old, current)
+        self.assertTrue(result["accepted"], result)
+        self.assertEqual(result["minimumBump"], "major")
+
     def test_unchanged_compatible(self):
         self.assertTrue(compare(self.old, self.new)["accepted"])
 

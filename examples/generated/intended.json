@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "exportVersion": "2.0",
+  "exportVersion": "3.0",
   "targets": [
     {
       "target": "gateway",

@@ -123,11 +123,15 @@ jsonRadioOptions o = "{" ++ join "," (
   maybe [] (\v => ["\"cell-density\":" ++ show v]) o.cellDensity) ++ "}"
 
 public export
-jsonAPOptions : APOptions -> String
-jsonAPOptions o = "{" ++ join "," (
-  maybe [] (\v => ["\"mode\":" ++ jsonString (showAPMode v)]) o.mode ++
+jsonWiFiOptions : WiFiOptions -> String
+jsonWiFiOptions o = "{" ++ join "," (
+  maybe [] (\v => ["\"mode\":" ++ jsonString (showWiFiMode v)]) o.mode ++
   maybe [] (\v => ["\"ssid\":" ++ jsonString v]) o.ssid ++
   maybe [] (\v => ["\"security\":" ++ jsonString (showSecurity v)]) o.security ++
   maybe [] (\v => ["\"disabled\":" ++ boolJSON v]) o.disabled ++
-  maybe [] (\v => ["\"ocv\":" ++ boolJSON v]) o.ocv) ++ "}"
+  maybe [] (\v => ["\"ocv\":" ++ boolJSON v]) o.ocv ++
+  maybe [] (\v => ["\"wds\":" ++ boolJSON v]) o.wds ++
+  maybe [] (\v => ["\"hidden\":" ++ boolJSON v]) o.hidden ++
+  maybe [] (\v => ["\"bssid\":" ++ jsonString v]) o.bssid ++
+  maybe [] (\v => ["\"mac-address\":" ++ jsonString v]) o.macAddress) ++ "}"
 

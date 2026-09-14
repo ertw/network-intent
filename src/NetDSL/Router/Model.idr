@@ -9,7 +9,7 @@ import NetDSL.AAA
 %default total
 
 public export
-data RouterEntity = PhysicalEntity | BridgeEntity | BondEntity | InterfaceEntity | ZoneEntity | RadioEntity
+data RouterEntity = PhysicalEntity | BridgeEntity | BondEntity | InterfaceEntity | ZoneEntity | RadioEntity | WiFiEntity
 
 public export
 record RouterRef (kind : RouterEntity) where
@@ -21,7 +21,7 @@ Eq (RouterRef k) where
   a == b = a.index == b.index
 
 public export
-data Attachment = Physical (RouterRef PhysicalEntity) | BridgeDevice (RouterRef BridgeEntity) | BondDevice (RouterRef BondEntity) | Loopback
+data Attachment = Physical (RouterRef PhysicalEntity) | BridgeDevice (RouterRef BridgeEntity) | BondDevice (RouterRef BondEntity) | Loopback | Unattached
 
 public export
 record PhysicalPort where
@@ -34,6 +34,7 @@ record Bridge where
   constructor MkBridge
   name : String
   members : List (Located Attachment)
+  stp : Maybe Bool
   source : SourceSpan
 
 public export
@@ -51,6 +52,8 @@ record LogicalInterface where
   attachment : Located Attachment
   addresses : List (Located Address4)
   addresses6 : List (Located Address6)
+  gateway : Maybe (Located IPv4)
+  dnsServers : List (Located IPv4)
   settings : InterfaceOptions
   source : SourceSpan
 
@@ -105,13 +108,13 @@ record Radio where
   source : SourceSpan
 
 public export
-record AccessPoint where
-  constructor MkAccessPoint
+record WiFiInterface where
+  constructor MkWiFiInterface
   name : String
   radio : Located (RouterRef RadioEntity)
   ifaceRef : Located (RouterRef InterfaceEntity)
   credential : Maybe (SecretRef WiFiCredential)
-  settings : APOptions
+  settings : WiFiOptions
   source : SourceSpan
 
 public export
@@ -130,5 +133,5 @@ record RouterConfig where
   forwardings : List Forwarding
   rules : List FirewallRule
   radios : List Radio
-  accessPoints : List AccessPoint
+  wifiInterfaces : List WiFiInterface
   source : SourceSpan

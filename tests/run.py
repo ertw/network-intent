@@ -129,11 +129,11 @@ class NetcAcceptance(unittest.TestCase):
 
     def test_json_export_has_typed_references_and_assurance(self):
         body = self.check_json(HOME, valid=True)
-        self.assertEqual(body["languageVersion"], "2.0")
+        self.assertEqual(body["languageVersion"], "3.0")
         self.assertEqual(body["observed"], "unknown")
         model = body["model"]
         self.assertEqual(model["state"], "Desired")
-        self.assertEqual(model["exportVersion"], "2.0")
+        self.assertEqual(model["exportVersion"], "3.0")
         vlan_ids = {vlan["id"] for vlan in model["vlans"]}
         for host in model["hosts"]:
             self.assertIs(type(host["vlanRef"]), int)
@@ -158,8 +158,8 @@ class NetcAcceptance(unittest.TestCase):
                 self.assertIn("10.0.20.10", output)
 
     def test_explicit_supported_version_required(self):
-        self.reject(MINIMAL.replace("network-language 2.0\n", ""))
-        self.reject(MINIMAL.replace("network-language 2.0", "network-language 99.0"))
+        self.reject(MINIMAL.replace("network-language 3.0\n", ""))
+        self.reject(MINIMAL.replace("network-language 3.0", "network-language 99.0"))
 
     def test_unknown_syntax_is_rejected(self):
         self.reject(MINIMAL.replace("domain home.arpa", "mysterious unsafe-setting"))
@@ -272,7 +272,7 @@ class NetcAcceptance(unittest.TestCase):
         self.check_json(source, valid=True)
 
     def test_physical_cycles_are_valid(self):
-        source = """network-language 2.0
+        source = """network-language 3.0
 network ring {
   vlan servers 20 { subnet 10.0.20.0/24 }
   switch a {
@@ -429,7 +429,7 @@ network ring {
 
     def test_compile_json_provenance_and_intended_state(self):
         body = json.loads(self.succeed("compile", HOME, "--all", "--format", "json"))
-        self.assertEqual(body["exportVersion"], "2.0")
+        self.assertEqual(body["exportVersion"], "3.0")
         self.assertEqual({target["target"] for target in body["targets"]}, {"core", "gateway"})
         for target in body["targets"]:
             self.assertEqual(target["state"], "Intended")
