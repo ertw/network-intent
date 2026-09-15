@@ -1,0 +1,24 @@
+[package]
+name = "intent-identity"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+intent-protocol.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+ring = "0.17.14"
+base64 = "0.22"
+rusqlite = { version = "0.32", features = ["bundled"] }
+rcgen = { version = "0.14", features = ["x509-parser"] }
+x509-parser = { version = "0.18", features = ["verify"] }
+time = "=0.3.36"
+rustls-pki-types = "1.13"
+rustls = "0.23"
+rustls-webpki = "0.103"
+
+[dev-dependencies]
+tempfile.workspace = true

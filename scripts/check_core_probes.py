@@ -16,7 +16,7 @@ def main():
             shutil.copy(source, folder / source.name)
         shutil.copy(ROOT / "examples/core-router.net", folder / "core-router.net")
         shutil.copy(ROOT / "examples/wds-network.net", folder / "wds-network.net")
-        for name in ("CoreAPI", "GraphProperties", "RouterAPI", "WirelessAPI"):
+        for name in ("CoreAPI", "GraphProperties", "RouterAPI", "WirelessAPI", "WitnessAPI"):
             result = subprocess.run(["idris2", "-o", name, f"{name}.idr"], cwd=folder,
                                     text=True, capture_output=True, timeout=180)
             assert result.returncode == 0 and (folder / "build/exec" / name).exists(), result.stdout + result.stderr

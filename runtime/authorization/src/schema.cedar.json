@@ -1,0 +1,17 @@
+{
+  "": {
+  "actions": {
+    "AssignWitness": { "appliesTo": { "principalTypes": ["Agent"], "resourceTypes": ["Device"] } },
+    "SubmitEvidence": { "appliesTo": { "principalTypes": ["Agent"], "resourceTypes": ["Device"] } },
+    "AssignApply": { "appliesTo": { "principalTypes": ["Agent"], "resourceTypes": ["Device"] } },
+    "SubmitApplyReceipt": { "appliesTo": { "principalTypes": ["Agent"], "resourceTypes": ["Device"] } },
+    "ReadState": { "appliesTo": { "principalTypes": ["Agent"], "resourceTypes": ["Device"] } },
+    "EnrollAgent": { "appliesTo": { "principalTypes": ["Agent"], "resourceTypes": ["Device"] } },
+    "RevokeAgent": { "appliesTo": { "principalTypes": ["Agent"], "resourceTypes": ["Device"] } }
+  },
+  "entityTypes": {
+    "Agent": { "shape": { "type": "Record", "attributes": { "role": { "type": "String" }, "trust_domain": { "type": "String" }, "device_id": { "type": "String" } } } },
+    "Device": { "shape": { "type": "Record", "attributes": { "device_id": { "type": "String" }, "profile_digest": { "type": "String" }, "fencing_generation": { "type": "Long" } } } }
+  }
+  }
+}

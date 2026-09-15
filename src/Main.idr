@@ -10,6 +10,8 @@ import NetDSL.Backend.Render
 import NetDSL.Backend.AST
 import NetDSL.Docs
 import NetDSL.Version
+import NetDSL.Assurance.Witness
+import NetDSL.Compiler
 import Data.List
 import Data.String
 import Data.Maybe
@@ -46,7 +48,7 @@ help : String
 help = "netc 0.3.0 — Network Intent DSL 3.0\n\n" ++
   "Usage:\n  netc check FILE [--format json]\n  netc fmt FILE\n" ++
   "  netc compile FILE (--target NAME | --all) [--format json] [--max-tagged-vlans N]\n" ++
-  "  netc docs FILE\n  netc graph FILE [--dependencies]\n  netc export FILE\n  netc schema\n  netc explain CODE\n\n" ++
+  "  netc docs FILE\n  netc graph FILE [--dependencies]\n  netc export FILE\n  netc assurance FILE\n  netc evaluate FILE\n  netc schema\n  netc explain CODE\n\n" ++
   "Compiler-only: no device access, deployment, secret resolution, or observation.\n"
 
 covering
@@ -68,7 +70,7 @@ execute cmd file opts = do
   result <- readFile file
   case result of
     Left e => report opts.json [failure "io.read" (MkSpan file 1 1 1 1) (show e)]
-    Right input => case parse file input of
+    Right input => if cmd == "evaluate" then putStrLn (evaluateSource file input) else case parse file input of
       Left ds => report opts.json ds
       Right document => if cmd == "fmt" then case resolve document of
         Left ds => report opts.json ds
@@ -81,6 +83,13 @@ execute cmd file opts = do
             "docs" => putStr (markdown stable)
             "graph" => putStr (if opts.dependencies then dependencyGraph stable else graph stable)
             "export" => putStrLn (semanticJSON stable)
+            "assurance" => case traverse (\t => do
+                output <- compileTarget stable t 4094
+                witness <- makeWitness stable t
+                checkWitness stable output witness
+                Right witness) (map name stable.model.devices) of
+              Left ds => report True ds
+              Right witnesses => putStrLn ("{\"ok\":true,\"version\":1,\"admission\":\"requires-complete-assurance-plan\",\"witnesses\":" ++ jsonArray (map witnessJSON witnesses) ++ "}")
             "compile" => do
               let targets = if opts.allTargets then map name stable.model.devices else maybe [] pure opts.target
               if null targets then die "compile requires --target NAME or --all and at least one target" else
@@ -98,7 +107,7 @@ run ["schema"] = putStrLn manifest
 run ["explain",code] = case explain code of
   Just help => putStrLn (code ++ "\n\n" ++ help)
   Nothing => die ("Unknown diagnostic family: " ++ code)
-run (cmd :: file :: flags) = if not (elem cmd ["check","fmt","compile","docs","graph","export"]) then die ("Unsupported command: " ++ cmd ++ "\n" ++ help) else
+run (cmd :: file :: flags) = if not (elem cmd ["check","fmt","compile","docs","graph","export","assurance","evaluate"]) then die ("Unsupported command: " ++ cmd ++ "\n" ++ help) else
   case options [] flags (Opts False Nothing False 4094 False) of
     Left msg => die msg
     Right opts => if cmd /= "compile" && (opts.allTargets || isJust opts.target || opts.maxTagged /= 4094) then die "Target options apply only to compile"

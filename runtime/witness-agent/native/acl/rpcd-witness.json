@@ -1,0 +1,15 @@
+{
+  "intent-witness": {
+    "description": "Read-only Network Intent witness",
+    "read": {
+      "ubus": {
+        "session": [ "access" ],
+        "uci": [ "get", "changes" ],
+        "network.interface": [ "dump" ],
+        "network.device": [ "status" ],
+        "network.wireless": [ "status" ]
+      },
+      "uci": [ "network", "dhcp", "firewall", "wireless" ]
+    }
+  }
+}

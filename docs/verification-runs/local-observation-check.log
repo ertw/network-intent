@@ -1,0 +1,61 @@
+   Compiling libc v0.2.189
+    Checking errno v0.3.14
+    Checking zerotrie v0.2.3
+    Checking tinystr v0.8.2
+    Checking icu_collections v2.1.1
+    Checking asn1-rs v0.7.2
+    Checking ahash v0.8.12
+    Checking getrandom v0.2.17
+    Checking intent-protocol v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/protocol)
+    Checking subtle v2.6.1
+    Checking signal-hook-registry v1.4.8
+    Checking rustix v1.1.4
+    Checking hashbrown v0.14.5
+    Checking tokio v1.49.0
+    Checking icu_locale_core v2.1.1
+   Compiling jobserver v0.1.35
+    Checking hashlink v0.9.1
+   Compiling cc v1.4.6
+    Checking icu_provider v2.1.1
+    Checking der-parser v10.0.0
+    Checking oid-registry v0.8.1
+    Checking tempfile v3.27.0
+    Checking icu_normalizer v2.1.1
+    Checking icu_properties v2.1.2
+    Checking native-tls v0.2.14
+   Compiling cmake v0.1.58
+   Compiling ring v0.17.14
+   Compiling libsqlite3-sys v0.30.1
+   Compiling intent-witness-agent v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/witness-agent)
+    Checking idna_adapter v1.2.1
+   Compiling aws-lc-sys v0.45.0
+    Checking idna v1.1.0
+    Checking url v2.5.8
+    Checking tokio-util v0.7.18
+    Checking tower v0.5.3
+    Checking tokio-native-tls v0.3.1
+    Checking hickory-proto v0.25.2
+    Checking tower-http v0.6.8
+    Checking h2 v0.4.13
+    Checking hyper v1.8.1
+    Checking x509-parser v0.18.1
+    Checking hyper-util v0.1.19
+    Checking rcgen v0.14.10
+    Checking rusqlite v0.32.1
+    Checking hyper-tls v0.6.0
+    Checking reqwest v0.12.28
+   Compiling aws-lc-rs v1.18.1
+   Compiling rustls v0.23.36
+    Checking rustls-webpki v0.103.8
+    Checking intent-identity v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/identity)
+    Checking intent-controller v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/controller)
+warning: unused import: `HealthStatus`
+ --> runtime/controller/src/monitor.rs:8:40
+  |
+8 |     health::{HealthError, HealthState, HealthStatus, HealthTransition},
+  |                                        ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: `intent-controller` (lib) generated 1 warning (run `cargo fix --lib -p intent-controller` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 11.36s

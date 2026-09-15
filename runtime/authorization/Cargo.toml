@@ -1,0 +1,13 @@
+[package]
+name = "intent-authorization"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+# Exact pin: the 4.9 API is the version validated against this runtime.
+cedar-policy = "=4.9.1"
+intent-identity = { path = "../identity" }
+intent-protocol.workspace = true
+thiserror.workspace = true

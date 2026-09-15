@@ -1,0 +1,21 @@
+[package]
+name = "intent-controller"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+intent-protocol.workspace = true
+intent-identity = { path = "../identity" }
+intent-authorization = { path = "../authorization" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+rusqlite = { version = "0.32", features = ["bundled", "backup"] }
+tokio = { version = "1.49", features = ["process", "time", "rt", "macros", "io-util"] }
+tempfile.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,205 @@
+idris2 --build network-intent.ipkg
+Now compiling the executable: netc
+python3 tests/run.py
+test_absolute_assignment_membership (__main__.NetcAcceptance.test_absolute_assignment_membership) ... ok
+test_c1_control_characters_are_rejected (__main__.NetcAcceptance.test_c1_control_characters_are_rejected) ... ok
+test_capability_failure_is_explicit (__main__.NetcAcceptance.test_capability_failure_is_explicit) ... ok
+test_compilation_errors_do_not_emit_partial_config (__main__.NetcAcceptance.test_compilation_errors_do_not_emit_partial_config) ... ok
+test_compile_json_provenance_and_intended_state (__main__.NetcAcceptance.test_compile_json_provenance_and_intended_state) ... ok
+test_conflicting_port_modes (__main__.NetcAcceptance.test_conflicting_port_modes) ... ok
+test_dhcp_aggregate_capacity_is_declared_and_checked (__main__.NetcAcceptance.test_dhcp_aggregate_capacity_is_declared_and_checked) ... ok
+test_dhcp_declaration_rejects_gateway_control_denial (__main__.NetcAcceptance.test_dhcp_declaration_rejects_gateway_control_denial) ... ok
+test_dhcp_ranges (__main__.NetcAcceptance.test_dhcp_ranges) ... ok
+test_docs_and_graph_come_from_current_source (__main__.NetcAcceptance.test_docs_and_graph_come_from_current_source) ... ok
+test_duplicate_device_port_and_host_names (__main__.NetcAcceptance.test_duplicate_device_port_and_host_names) ... ok
+test_duplicate_vlan_name_or_id (__main__.NetcAcceptance.test_duplicate_vlan_name_or_id) ... ok
+test_explicit_supported_version_required (__main__.NetcAcceptance.test_explicit_supported_version_required) ... ok
+test_formatter_is_idempotent_and_preserves_comments (__main__.NetcAcceptance.test_formatter_is_idempotent_and_preserves_comments) ... ok
+test_gateway_collision (__main__.NetcAcceptance.test_gateway_collision) ... ok
+test_gateway_requires_a_routing_owner (__main__.NetcAcceptance.test_gateway_requires_a_routing_owner) ... ok
+test_generated_config_is_deterministic (__main__.NetcAcceptance.test_generated_config_is_deterministic) ... ok
+test_home_language_2_0 (__main__.NetcAcceptance.test_home_language_2_0) ... ok
+test_invalid_ipv4_and_prefix (__main__.NetcAcceptance.test_invalid_ipv4_and_prefix) ... ok
+test_ios_concrete_vlan_and_port_realization (__main__.NetcAcceptance.test_ios_concrete_vlan_and_port_realization) ... ok
+test_json_export_has_typed_references_and_assurance (__main__.NetcAcceptance.test_json_export_has_typed_references_and_assurance) ... ok
+test_large_invalid_input_is_bounded (__main__.NetcAcceptance.test_large_invalid_input_is_bounded) ... ok
+test_minimal_vertical_slice (__main__.NetcAcceptance.test_minimal_vertical_slice) ... ok
+test_missing_port_self_link_and_incompatible_link (__main__.NetcAcceptance.test_missing_port_self_link_and_incompatible_link) ... ok
+test_missing_required_subnet (__main__.NetcAcceptance.test_missing_required_subnet) ... ok
+test_multiple_peers_rejected (__main__.NetcAcceptance.test_multiple_peers_rejected) ... ok
+test_openwrt_network_dhcp_and_firewall (__main__.NetcAcceptance.test_openwrt_network_dhcp_and_firewall) ... ok
+test_openwrt_policy_control_plane_and_forwarding_semantics (__main__.NetcAcceptance.test_openwrt_policy_control_plane_and_forwarding_semantics) ... ok
+test_overlapping_prefixes_have_related_declaration (__main__.NetcAcceptance.test_overlapping_prefixes_have_related_declaration) ... ok
+test_oversized_input_has_structured_limit_diagnostic (__main__.NetcAcceptance.test_oversized_input_has_structured_limit_diagnostic) ... ok
+test_persistent_negative_fixtures (__main__.NetcAcceptance.test_persistent_negative_fixtures) ... ok
+test_physical_cycles_are_valid (__main__.NetcAcceptance.test_physical_cycles_are_valid) ... ok
+test_policy_service_lists_require_commas (__main__.NetcAcceptance.test_policy_service_lists_require_commas) ... ok
+test_reciprocal_physical_links_normalize (__main__.NetcAcceptance.test_reciprocal_physical_links_normalize) ... ok
+test_relative_address_crosses_octet (__main__.NetcAcceptance.test_relative_address_crosses_octet) ... ok
+test_relative_address_outside_subnet (__main__.NetcAcceptance.test_relative_address_outside_subnet) ... ok
+test_relative_address_uses_network_base_for_varied_prefixes (__main__.NetcAcceptance.test_relative_address_uses_network_base_for_varied_prefixes) ... ok
+test_reserved_network_and_broadcast_addresses (__main__.NetcAcceptance.test_reserved_network_and_broadcast_addresses) ... ok
+test_reviewed_backend_goldens (__main__.NetcAcceptance.test_reviewed_backend_goldens) ... ok
+test_route_dependency_cycle_has_witness (__main__.NetcAcceptance.test_route_dependency_cycle_has_witness) ... ok
+test_routes_and_service_dependencies (__main__.NetcAcceptance.test_routes_and_service_dependencies) ... ok
+test_service_dependency_cycle_has_witness (__main__.NetcAcceptance.test_service_dependency_cycle_has_witness) ... ok
+test_service_transport_port_bounds (__main__.NetcAcceptance.test_service_transport_port_bounds) ... ok
+test_static_collision_has_related_declaration (__main__.NetcAcceptance.test_static_collision_has_related_declaration) ... ok
+test_target_specific_name_and_interface_constraints (__main__.NetcAcceptance.test_target_specific_name_and_interface_constraints) ... ok
+test_unknown_dependency_and_off_link_next_hop (__main__.NetcAcceptance.test_unknown_dependency_and_off_link_next_hop) ... ok
+test_unknown_driver_is_not_silently_accepted (__main__.NetcAcceptance.test_unknown_driver_is_not_silently_accepted) ... ok
+test_unknown_policy_endpoint_and_service (__main__.NetcAcceptance.test_unknown_policy_endpoint_and_service) ... ok
+test_unknown_syntax_is_rejected (__main__.NetcAcceptance.test_unknown_syntax_is_rejected) ... ok
+test_unknown_vlan_reference (__main__.NetcAcceptance.test_unknown_vlan_reference) ... ok
+test_unterminated_and_adversarial_strings (__main__.NetcAcceptance.test_unterminated_and_adversarial_strings) ... ok
+test_vlan_boundaries (__main__.NetcAcceptance.test_vlan_boundaries) ... ok
+
+----------------------------------------------------------------------
+Ran 52 tests in 6.120s
+
+OK
+python3 tests/router.py
+test_all_backup_options_and_order_have_parity (__main__.RouterAcceptance.test_all_backup_options_and_order_have_parity) ... ok
+test_dhcp_control_conflicts (__main__.RouterAcceptance.test_dhcp_control_conflicts) ... ok
+test_docs_export_graph_and_format_include_router_entities (__main__.RouterAcceptance.test_docs_export_graph_and_format_include_router_entities) ... ok
+test_finite_and_count_pool_forms_are_identical (__main__.RouterAcceptance.test_finite_and_count_pool_forms_are_identical) ... ok
+test_firewall_rule_constraints (__main__.RouterAcceptance.test_firewall_rule_constraints) ... ok
+test_invalid_link_references_membership_and_cycles (__main__.RouterAcceptance.test_invalid_link_references_membership_and_cycles) ... ok
+test_invalid_protocol_and_address_combinations (__main__.RouterAcceptance.test_invalid_protocol_and_address_combinations) ... ok
+test_ipv6_checked_addresses_and_prefixes (__main__.RouterAcceptance.test_ipv6_checked_addresses_and_prefixes) ... ok
+test_pool_count_boundaries_and_capacity (__main__.RouterAcceptance.test_pool_count_boundaries_and_capacity) ... ok
+test_pool_crosses_octet_and_respects_prefix (__main__.RouterAcceptance.test_pool_crosses_octet_and_respects_prefix) ... ok
+test_reviewed_goldens_and_parity_report (__main__.RouterAcceptance.test_reviewed_goldens_and_parity_report) ... ok
+test_schema_catalog_contains_typed_router_contract (__main__.RouterAcceptance.test_schema_catalog_contains_typed_router_contract) ... ok
+test_secret_free_wireless_is_a_config_not_a_template (__main__.RouterAcceptance.test_secret_free_wireless_is_a_config_not_a_template) ... ok
+test_shared_bond_interfaces_and_no_vlan_invention (__main__.RouterAcceptance.test_shared_bond_interfaces_and_no_vlan_invention) ... ok
+test_target_constraints_and_no_partial_output (__main__.RouterAcceptance.test_target_constraints_and_no_partial_output) ... ok
+test_templates_and_binding_manifest_are_consistent (__main__.RouterAcceptance.test_templates_and_binding_manifest_are_consistent) ... ok
+test_uci_identifiers_unique_and_quoting_roundtrip (__main__.RouterAcceptance.test_uci_identifiers_unique_and_quoting_roundtrip) ... ok
+test_version_1_is_rejected (__main__.RouterAcceptance.test_version_1_is_rejected) ... ok
+test_wireless_validation_and_secret_redaction (__main__.RouterAcceptance.test_wireless_validation_and_secret_redaction) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 4.983s
+
+OK
+python3 tests/wireless.py
+test_determinism_secrets_and_no_partial_compile (__main__.WirelessAcceptance.test_determinism_secrets_and_no_partial_compile) ... ok
+test_docs_and_formatter_keep_wireless_link (__main__.WirelessAcceptance.test_docs_and_formatter_keep_wireless_link) ... ok
+test_gateway_dns_and_unattached_validation (__main__.WirelessAcceptance.test_gateway_dns_and_unattached_validation) ... ok
+test_inactive_pool_does_not_require_serving_dependencies (__main__.WirelessAcceptance.test_inactive_pool_does_not_require_serving_dependencies) ... ok
+test_link_mismatch_checks (__main__.WirelessAcceptance.test_link_mismatch_checks) ... ok
+test_roles_and_typed_link_export (__main__.WirelessAcceptance.test_roles_and_typed_link_export) ... ok
+test_segment_address_and_active_pool_conflicts (__main__.WirelessAcceptance.test_segment_address_and_active_pool_conflicts) ... ok
+test_station_and_mac_constraints (__main__.WirelessAcceptance.test_station_and_mac_constraints) ... ok
+test_supplied_exports_have_parity (__main__.WirelessAcceptance.test_supplied_exports_have_parity) ... ok
+test_transitive_wireless_segment_conflicts (__main__.WirelessAcceptance.test_transitive_wireless_segment_conflicts) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 2.205s
+
+OK
+idris2 --build core-tests.ipkg
+Now compiling the executable: core-tests
+./build/core-tests/exec/core-tests
+PASS 512 directed-graph cases
+PASS prefix arithmetic
+PASS public certification rejects malformed models
+PASS migration obligation introduction/discharge
+PASS AAA fallback, exact roles, accounting and secret references
+python3 scripts/check_typestate.py
+PASS compile-negative DebtCannotFinish
+PASS compile-negative DebtCannotCompile
+PASS compile-negative ObservationCannotUseRepair
+python3 scripts/check_release.py
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK
+python3 scripts/check_core_probes.py
+PASS valid-core-model
+PASS duplicate-vlan-name
+PASS invalid-network-name
+PASS invalid-interface-name
+PASS owner-mismatch
+PASS vlan-ref-out-of-range
+PASS empty-trunk
+PASS duplicate-memberships
+PASS device-peer-out-of-range
+PASS host-peer-out-of-range
+PASS enforcer-out-of-range
+PASS gateway-outside-prefix
+PASS gateway-network-address
+PASS invalid-service-port
+PASS empty-service
+PASS missing-service-dependency
+PASS missing-policy-service
+PASS missing-policy-zone
+PASS missing-policy-gateway
+PASS route-valid
+PASS route-missing-vlan
+PASS route-missing-device
+PASS route-missing-dependency
+PASS route-negative-metric
+PASS route-self-next-hop
+PASS dag-valid
+PASS dag-missing-endpoint-rejected
+PASS dag-duplicate-inventory-invalid
+PASS dag-empty-graph-valid
+PASS dag-repeated-edge-valid
+PASS dag-order-missing-vertex-rejected
+PASS dag-order-backward-edge-rejected
+PASS dag-duplicate-inventory-rejected
+PASS dag-cycle-witness-directed
+Graph decision cases passed: 640/640
+Certificate/witness cases passed: 640/640
+PASS synthetic-credential-uci-quoting
+PASS router-valid-certification
+PASS device-independent-of-enforcer
+PASS router-duplicate-interfaces
+PASS router-missing-default-policy
+PASS router-invalid-duid
+PASS router-forged-attachment
+PASS router-cycle-at-certification
+PASS router-empty-bridge
+PASS router-bond-invalid-min-links
+PASS router-bond-invalid-mtu
+PASS router-bond-duplicate-members
+PASS router-dhcp-unknown-interface
+PASS router-dhcp-ignored-pool
+PASS router-zone-unknown-interface
+PASS router-dhcp-control-policy
+PASS router-rule-port-bounds
+PASS router-rule-family-mismatch
+PASS router-forged-radio-ref
+PASS router-unsafe-ssid
+PASS router-secured-ap-missing-reference
+PASS router-invalid-reference-from-generic-api
+PASS wireless-valid-certification
+PASS wireless-forged-owner
+PASS wireless-forged-interface
+PASS wireless-reversed-endpoints
+PASS wireless-duplicate-uplink
+PASS wireless-station-without-wds
+PASS wireless-forged-bssid
+PASS wireless-cross-device-credential
+PASS wireless-station-interface-kind
+PASS wireless-forged-gateway
+PASS wireless-unattached-static
+PASS wireless-duplicate-dns
+PASS independent realization witness, forgery, missing bindings and unsupported admission
+PASS compile-negative ForgedGraphDuplicateInventory
+PASS compile-negative ForgedGraphMissing
+PASS compile-negative ForgedGraphReverse
+PASS compile-negative ForgedIPv4
+PASS compile-negative ForgedIPv6
+PASS compile-negative ForgedPrefix6
+PASS compile-negative ForgedPrefixCanonical
+PASS compile-negative ForgedPrefixSize
+PASS compile-negative ForgedPrefixWidth
+PASS compile-negative ForgedVlan
+PASS compile-negative WrongRefKind
+PASS compile-negative WrongRouterRef
+PASS compile-negative WrongWiFiRef
+PASS compile-negative WrongWirelessEndpoint

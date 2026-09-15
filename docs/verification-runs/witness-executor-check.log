@@ -1,0 +1,7 @@
+    Checking rusqlite v0.32.1
+    Checking intent-protocol v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/protocol)
+    Checking hickory-proto v0.25.2
+    Checking reqwest v0.12.28
+   Compiling intent-witness-agent v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/witness-agent)
+    Checking intent-identity v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/identity)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.67s

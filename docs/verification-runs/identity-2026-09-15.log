@@ -1,0 +1,47 @@
+    Blocking waiting for file lock on build directory
+   Compiling intent-identity v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/identity)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.99s
+     Running unittests src/lib.rs (target/debug/deps/intent_identity-a57534806d535c9b)
+
+running 6 tests
+test tests::dsse_reference_pae_and_unicode_bytes ... ok
+test tests::canonical_identity_separates_agents ... ok
+test tls::tests::root_expiration_is_checked_after_configuration_creation ... ok
+test tests::enforces_role_revocation_validity_and_payload_type ... ok
+test tests::key_hint_is_not_authority_and_urlsafe_base64_is_accepted ... ok
+test tests::exact_payload_signature_and_rotation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/evidence.rs (target/debug/deps/evidence-c58c6099fbdf2c0e)
+
+running 6 tests
+test revoked_key_and_duplicate_json_fields_are_rejected ... ok
+test assignment_validity_rejects_expired_and_future_statements ... ok
+test independently_signed_assignment_and_evidence_are_accepted ... ok
+test evidence_freshness_and_completeness_never_turn_unavailable_into_success ... ok
+test assignment_scope_rejects_wrong_role_and_every_binding_field ... ok
+test evidence_is_bound_to_immutable_assignment_and_rejects_role_fields_and_digest ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/pki.rs (target/debug/deps/pki-315c83c4ec871c24)
+
+running 9 tests
+test rejects_expired_tickets_and_leaf_lifetimes_over_a_day ... ok
+test roots_overlap_rotate_monotonically_and_keep_a_root ... ok
+test enrollment_uses_ticket_identity_and_rejects_replay_or_bad_csr ... ok
+test issued_validity_matches_der_and_expiry_boundary ... ok
+test root_domain_and_removed_root_cannot_authorize_renewal ... ok
+test renewal_requires_current_key_proof_and_revocation_survives_restart ... ok
+test tls_rotation_accepts_overlap_and_rejects_removed_root ... ok
+test tls_rejects_expired_leaf_and_expired_root_bundle ... ok
+test tls_configuration_binds_exact_spiffe_peer_uris ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+   Doc-tests intent_identity
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

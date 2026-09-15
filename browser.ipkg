@@ -1,0 +1,6 @@
+package browser-compiler
+version = 0.1.0
+sourcedir = "src"
+main = Browser
+executable = netc-browser
+opts = "--total --cg javascript"

@@ -1,0 +1,19 @@
+   Compiling intent-controller v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/controller)
+warning: unused import: `HealthStatus`
+ --> runtime/controller/src/monitor.rs:8:40
+  |
+8 |     health::{HealthError, HealthState, HealthStatus, HealthTransition},
+  |                                        ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: `intent-controller` (lib) generated 1 warning (run `cargo fix --lib -p intent-controller` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.84s
+     Running tests/compiler_admission.rs (target/debug/deps/compiler_admission-1964bdf52ec6ef3f)
+
+running 3 tests
+test invalid_source_cannot_become_a_compiled_draft ... ok
+test every_target_has_a_checked_witness ... ok
+test executes_authoritative_native_compiler_and_binds_exact_source ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s

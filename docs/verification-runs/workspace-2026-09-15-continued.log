@@ -1,0 +1,279 @@
+   Compiling tokio v1.49.0
+   Compiling rusqlite v0.32.1
+   Compiling tempfile v3.27.0
+   Compiling parking_lot_core v0.9.12
+   Compiling darling_core v0.21.3
+   Compiling logos-codegen v0.16.1
+   Compiling miette-derive v7.6.0
+   Compiling educe v0.6.0
+   Compiling serde_urlencoded v0.7.1
+   Compiling intent-apply-agent v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/apply-agent)
+   Compiling parking_lot v0.12.5
+   Compiling native-tls v0.2.14
+   Compiling string_cache v0.8.9
+   Compiling intent-protocol v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/protocol)
+   Compiling lalrpop v0.22.2
+   Compiling intent-identity v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/identity)
+   Compiling miette v7.6.0
+   Compiling logos-derive v0.16.1
+   Compiling logos v0.16.1
+   Compiling darling_macro v0.21.3
+   Compiling darling v0.21.3
+   Compiling serde_with_macros v3.17.0
+   Compiling tokio-util v0.7.18
+   Compiling tokio-native-tls v0.3.1
+   Compiling tower v0.5.3
+   Compiling hickory-proto v0.25.2
+   Compiling serde_with v3.17.0
+   Compiling tower-http v0.6.8
+   Compiling h2 v0.4.13
+   Compiling hyper v1.8.1
+   Compiling cedar-policy-core v4.9.1
+   Compiling hyper-util v0.1.19
+   Compiling hyper-tls v0.6.0
+   Compiling reqwest v0.12.28
+   Compiling intent-witness-agent v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/witness-agent)
+   Compiling cedar-policy-formatter v4.9.1
+   Compiling cedar-policy v4.9.1
+   Compiling intent-authorization v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/authorization)
+   Compiling intent-controller v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/controller)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.57s
+     Running unittests src/lib.rs (target/debug/deps/intent_apply_agent-bab2327b8db65622)
+
+running 6 tests
+test tests::duplicate_identity_rejected ... ok
+test tests::preserves_unowned_and_scalar_list_order ... ok
+test tests::blocks_unowned_requests_and_section_kind_drift ... ok
+test tests::drift_and_binding_rejected ... ok
+test tests::deletion_noop_and_secrets ... ok
+test tests::blocks_unowned_section_create_type_and_reorder_but_preserves_current_drift ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/intent_apply_agent-5f4f37d9d5242959)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/intent_authorization-331d268d43e7947b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/matrix.rs (target/debug/deps/matrix-33328f4b098011d5)
+
+running 4 tests
+test duplicate_trusted_binding_is_rejected ... ok
+test trust_domain_device_grant_and_binding_fences_are_required ... ok
+test role_attribute_cannot_be_spoofed_by_identity_text ... ok
+test role_action_matrix_and_explicit_forbids ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running unittests src/lib.rs (target/debug/deps/intent_controller-ef9d98da315bc6ac)
+
+running 28 tests
+test health::tests::rejects_out_of_order_and_foreign_plan_and_unknown_dependencies ... ok
+test health::tests::ambiguity_and_staleness_never_close_incident_or_accumulate_success ... ok
+test health::tests::incident_threshold_recovery_and_duplicate_across_restart ... ok
+test monitor::tests::failed_migration_rolls_back_all_schema_changes ... ok
+test monitor::tests::failed_foreign_key_write_rolls_back_transaction ... ok
+test monitor::tests::activation_is_immutable_idempotent_and_monotonic ... ok
+test monitor::tests::reconcile_marks_health_unknown_after_controller_outage ... ok
+test monitor::tests::corrupt_timeline_transition_is_rejected ... ok
+test storage::tests::backup_refuses_source_path ... ok
+test storage::tests::conflicting_id_is_rejected ... ok
+test storage::tests::duplicate_receipt_is_acknowledged_after_expiry_but_never_processed ... ok
+test monitor::tests::schedules_and_expired_leases_survive_reopen_without_double_claiming ... ok
+test storage::tests::rejects_memory_and_uri_databases ... ok
+test monitor::tests::original_signed_envelopes_survive_reopen_for_audit ... ok
+test storage::tests::expired_and_bad_digest_are_rejected ... ok
+test storage::tests::future_migration_is_rejected_without_changing_version ... ok
+test monitor::tests::exact_evidence_replay_deduplicates_conflict_and_rollback_do_not_advance_health ... ok
+test storage::tests::fence_and_epoch_cannot_roll_back ... ok
+test storage::tests::expired_or_superseded_messages_release_capacity_without_erasing_tombstones ... ok
+test storage::tests::outbox_is_bounded_and_progress_is_monotonic ... ok
+test storage::tests::revision_digest_must_match_source_bytes ... ok
+test storage::tests::inbox_is_bounded_and_processed_state_survives_restart ... ok
+test storage::tests::transaction_rolls_back_baseline_link_failure ... ok
+test storage::tests::ready_messages_never_cross_expiry_or_a_new_fence ... ok
+test storage::tests::restart_deduplicates_exact_message ... ok
+test storage::tests::retention_preserves_baselines_and_backup_restores ... ok
+test storage::tests::versioned_migration_upgrades_v1_without_resetting_it ... ok
+test storage::tests::validates_required_fields_time_window_and_bounds ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests src/main.rs (target/debug/deps/intent_controller-719c915a255a3442)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/compiler_admission.rs (target/debug/deps/compiler_admission-f9a19b3eb9be8172)
+
+running 3 tests
+test invalid_source_cannot_become_a_compiled_draft ... ok
+test every_target_has_a_checked_witness ... ok
+test executes_authoritative_native_compiler_and_binds_exact_source ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/ingress.rs (target/debug/deps/ingress-02c3d6cf2fc1e7c2)
+
+running 4 tests
+test route_filtered_replay_cannot_be_starved_by_a_different_inbox_route ... ok
+test signed_evidence_is_durable_before_ack_and_replay_after_crash_is_idempotent ... ok
+test receipt_rejects_unauthorized_peer_scope_and_forged_evidence_before_durability ... ok
+test malformed_outer_digest_and_oversized_payload_are_rejected_before_signature_parsing ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running unittests src/lib.rs (target/debug/deps/intent_identity-4e70b44b1000225c)
+
+running 6 tests
+test tests::dsse_reference_pae_and_unicode_bytes ... ok
+test tests::canonical_identity_separates_agents ... ok
+test tls::tests::root_expiration_is_checked_after_configuration_creation ... ok
+test tests::enforces_role_revocation_validity_and_payload_type ... ok
+test tests::key_hint_is_not_authority_and_urlsafe_base64_is_accepted ... ok
+test tests::exact_payload_signature_and_rotation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/evidence.rs (target/debug/deps/evidence-ec467e5c9410238a)
+
+running 6 tests
+test revoked_key_and_duplicate_json_fields_are_rejected ... ok
+test assignment_validity_rejects_expired_and_future_statements ... ok
+test independently_signed_assignment_and_evidence_are_accepted ... ok
+test evidence_freshness_and_completeness_never_turn_unavailable_into_success ... ok
+test assignment_scope_rejects_wrong_role_and_every_binding_field ... ok
+test evidence_is_bound_to_immutable_assignment_and_rejects_role_fields_and_digest ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/pki.rs (target/debug/deps/pki-31ce7be5e9f6cce4)
+
+running 9 tests
+test rejects_expired_tickets_and_leaf_lifetimes_over_a_day ... ok
+test roots_overlap_rotate_monotonically_and_keep_a_root ... ok
+test enrollment_uses_ticket_identity_and_rejects_replay_or_bad_csr ... ok
+test issued_validity_matches_der_and_expiry_boundary ... ok
+test root_domain_and_removed_root_cannot_authorize_renewal ... ok
+test renewal_requires_current_key_proof_and_revocation_survives_restart ... ok
+test tls_rotation_accepts_overlap_and_rejects_removed_root ... ok
+test tls_rejects_expired_leaf_and_expired_root_bundle ... ok
+test tls_configuration_binds_exact_spiffe_peer_uris ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running unittests src/lib.rs (target/debug/deps/intent_protocol-48366d9c0100e9f8)
+
+running 1 test
+test assurance::address_tests::interface_addresses_preserve_host_bits_and_validate_prefix ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/contracts.rs (target/debug/deps/contracts-f4d03f593d89b787)
+
+running 10 tests
+test freshness_rejects_stale_incomplete_and_future_observations ... ok
+test validate_probe_rejects_mismatched_expectation ... ok
+test validate_probe_rejects_missing_endpoint_source_and_family_mismatch ... ok
+test rejects_omitted_or_modified_authoritative_claims ... ok
+test rejects_tampered_revision_and_profile_binding ... ok
+test accepts_a_complete_plan_against_independent_authoritative_context ... ok
+test rejects_stale_and_future_profiles ... ok
+test rejects_missing_coverage_even_when_the_plan_claim_is_authoritative ... ok
+test rejects_unsupported_claims_and_primitives ... ok
+test rejects_duplicate_ids_dangling_dependencies_and_cycles ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/intent_witness_agent-cca58e6747dde703)
+
+running 17 tests
+test adapters::tests::only_fixed_read_methods_are_permitted ... ok
+test adapters::tests::netifd_parsers_reject_malformed_and_only_complete_typed_data ... ok
+test adapters::tests::malformed_uci_never_becomes_empty_success ... ok
+test adapters::tests::netifd_calls_authorize_then_send_session_and_use_assignment_limits ... ok
+test tests::icmp_reply_validator_rejects_corruption ... ok
+test tests::rejects_missing_required_network_binding_before_effect ... ok
+test adapters::tests::session_requires_every_read_permission_and_rejects_every_uci_write ... ok
+test adapters::tests::uci_parser_preserves_index_and_redacts_before_serialization ... ok
+test adapters::native_ubus::tests::response_json_rejects_duplicate_keys_at_any_depth ... ok
+test adapters::tests::committed_read_checks_staging_before_and_after ... ok
+test tests::tcp_success_and_refusal_are_distinct ... ok
+test tests::udp_dns_success_and_nxdomain_are_distinct ... ok
+test tests::dns_rejects_truncated_or_unrelated_answers_and_empty_expectations ... ok
+test tests::http_enforces_body_limit_and_concrete_ip_host ... ok
+test tests::http_status_and_no_redirect_following ... ok
+test tests::tcp_dns_success_frame_limit_malformed_and_timeout_are_distinct ... ok
+test tests::malformed_and_timeout_udp_dns_are_not_success ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running unittests src/main.rs (target/debug/deps/intent_witness_agent-6a9e7709341e0f17)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/execution.rs (target/debug/deps/execution-aabfe38c642c92a2)
+
+running 3 tests
+test assignment_lifetime_is_checked_again_at_execution ... ok
+test signed_assignment_executes_safe_unsupported_probe_and_verifies_evidence ... ok
+test executor_rejects_scope_and_unknown_ids_before_execution ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_observation.rs (target/debug/deps/local_observation-3b7e8c0d447a4924)
+
+running 5 tests
+test mismatched_local_binding_or_source_does_zero_rpc ... ok
+test netifd_compares_ip_semantics_and_rejects_bad_prefixes_before_rpc ... ok
+test timeout_and_netifd_exactness_never_promote_unknown ... ok
+test section_kind_redaction_staging_denial_and_malformed_are_not_success ... ok
+test scalar_list_order_and_absence_are_distinct ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests intent_apply_agent
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests intent_authorization
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests intent_controller
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests intent_identity
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests intent_protocol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests intent_witness_agent
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

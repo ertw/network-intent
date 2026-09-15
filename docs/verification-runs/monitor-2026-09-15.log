@@ -1,0 +1,15 @@
+   Compiling intent-controller v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/controller)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.39s
+     Running unittests src/lib.rs (target/debug/deps/intent_controller-1b2003dbab9be70b)
+
+running 8 tests
+test monitor::tests::failed_migration_rolls_back_all_schema_changes ... ok
+test monitor::tests::failed_foreign_key_write_rolls_back_transaction ... ok
+test monitor::tests::reconcile_marks_health_unknown_after_controller_outage ... ok
+test monitor::tests::schedules_and_expired_leases_survive_reopen_without_double_claiming ... ok
+test monitor::tests::activation_is_immutable_idempotent_and_monotonic ... ok
+test monitor::tests::corrupt_timeline_transition_is_rejected ... ok
+test monitor::tests::original_signed_envelopes_survive_reopen_for_audit ... ok
+test monitor::tests::exact_evidence_replay_deduplicates_conflict_and_rollback_do_not_advance_health ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.02s

@@ -1,0 +1,48 @@
+   Compiling intent-witness-agent v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/witness-agent)
+   Compiling intent-protocol v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/protocol)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.39s
+     Running unittests src/lib.rs (target/debug/deps/intent_witness_agent-41d0743a7df609f8)
+
+running 17 tests
+test adapters::tests::only_fixed_read_methods_are_permitted ... ok
+test adapters::tests::malformed_uci_never_becomes_empty_success ... ok
+test adapters::tests::netifd_parsers_reject_malformed_and_only_complete_typed_data ... ok
+test adapters::tests::uci_parser_preserves_index_and_redacts_before_serialization ... ok
+test tests::icmp_reply_validator_rejects_corruption ... ok
+test adapters::native_ubus::tests::response_json_rejects_duplicate_keys_at_any_depth ... ok
+test tests::rejects_missing_required_network_binding_before_effect ... ok
+test adapters::tests::session_requires_every_read_permission_and_rejects_every_uci_write ... ok
+test adapters::tests::netifd_calls_authorize_then_send_session_and_use_assignment_limits ... ok
+test adapters::tests::committed_read_checks_staging_before_and_after ... ok
+test tests::tcp_success_and_refusal_are_distinct ... ok
+test tests::udp_dns_success_and_nxdomain_are_distinct ... ok
+test tests::dns_rejects_truncated_or_unrelated_answers_and_empty_expectations ... ok
+test tests::http_enforces_body_limit_and_concrete_ip_host ... ok
+test tests::http_status_and_no_redirect_following ... ok
+test tests::tcp_dns_success_frame_limit_malformed_and_timeout_are_distinct ... ok
+test tests::malformed_and_timeout_udp_dns_are_not_success ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running unittests src/main.rs (target/debug/deps/intent_witness_agent-b3d0e344b4b1f6f2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_observation.rs (target/debug/deps/local_observation-d94766c192ae9b98)
+
+running 5 tests
+test mismatched_local_binding_or_source_does_zero_rpc ... ok
+test netifd_compares_ip_semantics_and_rejects_bad_prefixes_before_rpc ... ok
+test timeout_and_netifd_exactness_never_promote_unknown ... ok
+test section_kind_redaction_staging_denial_and_malformed_are_not_success ... ok
+test scalar_list_order_and_absence_are_distinct ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests intent_witness_agent
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
