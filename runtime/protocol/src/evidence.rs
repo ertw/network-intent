@@ -12,6 +12,13 @@ pub const WITNESS_EVIDENCE_TYPE: &str = "urn:network-intent:evidence:witness:v1"
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+pub struct DeploymentBinding {
+    pub deployment_id: String,
+    pub checkpoint_digest: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Statement<T> {
     #[serde(rename = "_type")]
     pub statement_type: String,
@@ -31,6 +38,7 @@ pub struct Subject {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct WitnessAssignment {
+    pub deployment: Option<DeploymentBinding>,
     pub version: u32,
     pub assignment_id: String,
     pub issuer: String,
@@ -48,6 +56,7 @@ pub struct WitnessAssignment {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct WitnessEvidence {
+    pub deployment: Option<DeploymentBinding>,
     pub version: u32,
     pub evidence_id: String,
     pub assignment_id: String,

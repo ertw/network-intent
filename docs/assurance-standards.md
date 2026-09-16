@@ -41,6 +41,7 @@ Primary references: [OpenWrt ubus technical reference](https://openwrt.org/docs/
 * OpenWrt’s LuCI flow may use a separate HTTP endpoint around ubus, and LuCI also maintains frontend-local staging. The apply-agent must call and verify the native rpcd/ubus contract directly rather than infer behavior from LuCI UI calls.
 * For read-only observation, restrict ACLs to UCI `configs`/`get` (and any exact read methods required), device/interface/netifd state reads, and session inspection. Do not grant `set`, `add`, `delete`, `commit`, `apply`, `confirm`, or `rollback` to the witness identity. Redact secrets and sensitive options before persistence, export, or telemetry.
 * The `network.interface` and `network.device` operational trees describe runtime state supplied by netifd; they are not proof of UCI persistence. Collect them as operational evidence with timestamps and completeness, independently of UCI configuration reads.
+* A direct native libubus connection does not become an rpcd session merely by including `ubus_rpc_session` in a request. rpcd's UCI plugin consumes that field for ACL/session staging, while netifd operational handlers ignore it. Native netifd reads therefore require OS-level ubusd ACL enforcement and a dedicated unprivileged witness identity; the witness must also recheck session access after collection to reject revocation races.
 
 ### Required transaction checks
 

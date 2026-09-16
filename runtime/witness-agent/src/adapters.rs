@@ -17,8 +17,9 @@ const READ_PERMISSIONS: [(&str, &str); 5] = [
     ("network.device", "status"),
     ("network.wireless", "status"),
 ];
-const WRITE_METHODS: [&str; 7] = [
-    "set", "add", "delete", "commit", "apply", "confirm", "rollback",
+const WRITE_METHODS: [&str; 11] = [
+    "set", "add", "delete", "rename", "order", "commit", "apply", "confirm", "rollback",
+    "revert", "reload_config",
 ];
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -76,9 +77,13 @@ impl<T: UbusTransport> ReadOnlyUbus<T> {
         max_response_bytes: usize,
     ) -> Result<Self, ObservationError> {
         let session_id = session_id.into();
-        if session_id.is_empty()
-            || session_id.len() > 128
-            || session_id.chars().any(char::is_control)
+        // rpcd generates exactly 16 random bytes rendered as 32 lowercase
+        // hexadecimal characters.  Keep this value constrained because rpcd
+        // also interpolates it into its per-session UCI save-directory path.
+        if session_id.len() != 32
+            || !session_id
+                .bytes()
+                .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
         {
             return Err(ObservationError::Malformed(
                 "invalid rpcd session ID".into(),
@@ -222,32 +227,38 @@ impl<T: UbusTransport> ReadOnlyUbus<T> {
     pub fn interfaces(&self) -> Result<OperationalCollection, ObservationError> {
         let deadline = self.deadline();
         self.authorize_until(deadline)?;
-        parse_netifd_interfaces(&self.call_until(
+        let collection = parse_netifd_interfaces(&self.call_until(
             deadline,
             "network.interface",
             "dump",
             serde_json::json!({"ubus_rpc_session":self.session_id}),
-        )?)
+        )?)?;
+        self.authorize_until(deadline)?;
+        Ok(collection)
     }
     pub fn devices(&self) -> Result<OperationalCollection, ObservationError> {
         let deadline = self.deadline();
         self.authorize_until(deadline)?;
-        parse_netifd_devices(&self.call_until(
+        let collection = parse_netifd_devices(&self.call_until(
             deadline,
             "network.device",
             "status",
             serde_json::json!({"ubus_rpc_session":self.session_id}),
-        )?)
+        )?)?;
+        self.authorize_until(deadline)?;
+        Ok(collection)
     }
     pub fn wireless(&self) -> Result<OperationalCollection, ObservationError> {
         let deadline = self.deadline();
         self.authorize_until(deadline)?;
-        parse_netifd_wireless(&self.call_until(
+        let collection = parse_netifd_wireless(&self.call_until(
             deadline,
             "network.wireless",
             "status",
             serde_json::json!({"ubus_rpc_session":self.session_id}),
-        )?)
+        )?)?;
+        self.authorize_until(deadline)?;
+        Ok(collection)
     }
 }
 
@@ -360,11 +371,17 @@ pub fn parse_netifd_interfaces(reply: &Value) -> Result<OperationalCollection, O
         let name = required_string(o.get("interface"), "interface")?;
         let up = required_bool(o.get("up"), "interface up")?;
         let device = optional_string(o.get("device"), "interface device")?.map(str::to_owned);
-        let interface_addresses = parse_addresses(o.get("ipv4-address"), o.get("ipv6-address"))?;
+        let mut interface_addresses = parse_addresses(o.get("ipv4-address"), o.get("ipv6-address"))?;
+        let (assigned_addresses, assignment_missing) =
+            parse_prefix_assignment_addresses(o.get("ipv6-prefix-assignment"))?;
+        interface_addresses.extend(assigned_addresses);
         // netifd does not promise address arrays for every interface state.
         // Absence is unknown addressing, never proof of an empty address set.
         if o.get("ipv4-address").is_none() || o.get("ipv6-address").is_none() {
             missing.push(format!("interface:{name}:address-family"));
+        }
+        if assignment_missing {
+            missing.push(format!("interface:{name}:ipv6-prefix-assignment"));
         }
         facts.push(OperationalFact::Interface {
             name: name.into(),
@@ -460,6 +477,44 @@ fn parse_addresses(
         }
     }
     Ok(addresses)
+}
+
+fn parse_prefix_assignment_addresses(
+    value: Option<&Value>,
+) -> Result<(Vec<String>, bool), ObservationError> {
+    let Some(value) = value else {
+        return Ok((Vec::new(), true));
+    };
+    let assignments = value.as_array().ok_or_else(|| {
+        ObservationError::Malformed("ipv6-prefix-assignment is not an array".into())
+    })?;
+    let mut addresses = Vec::new();
+    for assignment in assignments {
+        let object = assignment.as_object().ok_or_else(|| {
+            ObservationError::Malformed("ipv6-prefix-assignment entry is not an object".into())
+        })?;
+        let Some(local) = object.get("local-address") else {
+            continue;
+        };
+        let local = local.as_object().ok_or_else(|| {
+            ObservationError::Malformed("ipv6-prefix-assignment local-address is not an object".into())
+        })?;
+        if local.is_empty() {
+            continue;
+        }
+        let address = required_string(local.get("address"), "local IPv6 address")?;
+        let mask = local
+            .get("mask")
+            .and_then(Value::as_u64)
+            .ok_or_else(|| ObservationError::Malformed("local IPv6 address mask missing".into()))?;
+        if address.parse::<std::net::Ipv6Addr>().is_err() || mask > 128 {
+            return Err(ObservationError::Malformed(
+                "invalid local IPv6 prefix assignment".into(),
+            ));
+        }
+        addresses.push(format!("{address}/{mask}"));
+    }
+    Ok((addresses, false))
 }
 fn string_array(value: Option<&Value>, field: &str) -> Result<Vec<String>, ObservationError> {
     match value {
@@ -566,7 +621,13 @@ mod tests {
         replies
     }
     fn reader(mock: Mock) -> ReadOnlyUbus<Mock> {
-        ReadOnlyUbus::with_limits(mock, "session-a", Duration::from_secs(1), 4096).unwrap()
+        ReadOnlyUbus::with_limits(
+            mock,
+            "0123456789abcdef0123456789abcdef",
+            Duration::from_secs(1),
+            4096,
+        )
+        .unwrap()
     }
     #[test]
     fn uci_parser_preserves_index_and_redacts_before_serialization() {
@@ -625,7 +686,8 @@ mod tests {
     fn only_fixed_read_methods_are_permitted() {
         assert!(read_only_method("uci", "get"));
         for method in [
-            "set", "add", "delete", "commit", "apply", "confirm", "rollback",
+            "set", "add", "delete", "rename", "order", "commit", "apply", "confirm",
+            "rollback", "revert", "reload_config",
         ] {
             assert!(!read_only_method("uci", method));
         }
@@ -660,6 +722,7 @@ mod tests {
     fn netifd_calls_authorize_then_send_session_and_use_assignment_limits() {
         let mut replies = authorization_replies();
         replies.push(Ok(serde_json::json!({"interface":[]})));
+        replies.extend(authorization_replies());
         let reader = reader(Mock::new(replies));
         assert!(matches!(
             reader.interfaces().unwrap().completeness,
@@ -667,7 +730,10 @@ mod tests {
         ));
         let calls = reader.transport.calls.borrow();
         let (_, _, request) = calls.last().unwrap();
-        assert_eq!(request["ubus_rpc_session"], "session-a");
+        assert_eq!(
+            request["ubus_rpc_session"],
+            "0123456789abcdef0123456789abcdef"
+        );
         let limits = reader.transport.limits.borrow();
         assert!(limits.iter().all(|(_, bytes)| *bytes == 4096));
         assert!(limits.windows(2).all(|pair| pair[1].0 <= pair[0].0));
@@ -675,6 +741,27 @@ mod tests {
         assert!(
             ReadOnlyUbus::with_limits(Mock::new(vec![]), "s", Duration::from_secs(1), 0).is_err()
         );
+        assert!(ReadOnlyUbus::with_limits(
+            Mock::new(vec![]),
+            "0123456789abcdef0123456789abcdeg",
+            Duration::from_secs(1),
+            1
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn netifd_revocation_after_collection_is_denied() {
+        let mut replies = authorization_replies();
+        replies.push(Ok(serde_json::json!({"interface":[]})));
+        let mut after = authorization_replies();
+        after[0] = Ok(serde_json::json!({"access":false}));
+        replies.extend(after);
+        let reader = reader(Mock::new(replies));
+        assert!(matches!(
+            reader.interfaces(),
+            Err(ObservationError::Denied(_))
+        ));
     }
     #[test]
     fn netifd_parsers_reject_malformed_and_only_complete_typed_data() {
@@ -687,7 +774,7 @@ mod tests {
             interfaces.completeness,
             Completeness::Partial { .. }
         ));
-        let complete = parse_netifd_interfaces(&serde_json::json!({"interface":[{"interface":"wan","up":false,"ipv4-address":[],"ipv6-address":[]}]})).unwrap();
+        let complete = parse_netifd_interfaces(&serde_json::json!({"interface":[{"interface":"wan","up":false,"ipv4-address":[],"ipv6-address":[],"ipv6-prefix-assignment":[]}]})).unwrap();
         assert!(matches!(complete.completeness, Completeness::Complete));
         assert!(parse_netifd_devices(
             &serde_json::json!({"br-lan":{"present":true,"bridge-members":["lan1"]}})

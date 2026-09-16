@@ -152,6 +152,7 @@ impl Fixture {
     }
     fn envelope(&self, message_id: &str) -> MessageEnvelope {
         let assignment = WitnessAssignment {
+            deployment: None,
             version: PROTOCOL_VERSION,
             assignment_id: "assignment-7".into(),
             issuer: self.controller.to_string(),
@@ -166,6 +167,7 @@ impl Fixture {
             probes: vec![self.probe.clone()],
         };
         let evidence = WitnessEvidence {
+            deployment: None,
             version: PROTOCOL_VERSION,
             evidence_id: "evidence-7".into(),
             assignment_id: assignment.assignment_id.clone(),

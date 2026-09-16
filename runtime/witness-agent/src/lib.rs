@@ -6,6 +6,7 @@
 pub mod adapters;
 pub mod local;
 pub mod execution;
+pub mod queue;
 
 use hickory_proto::{
     op::{Message, MessageType, OpCode, Query, ResponseCode},

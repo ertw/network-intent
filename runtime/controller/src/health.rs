@@ -205,6 +205,7 @@ mod tests {
     };
     fn observation(n: u64, outcome: Outcome) -> WitnessEvidence {
         WitnessEvidence {
+            deployment: None,
             version: 1,
             evidence_id: format!("e{n}"),
             assignment_id: "a".into(),

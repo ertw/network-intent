@@ -11,79 +11,24 @@ use std::{collections::HashSet, fmt, time::Duration};
 /// native observation rather than falling back to a command or HTTP gateway.
 pub struct NativeUbusTransport;
 
+#[cfg(unix)]
+#[path = "native_worker.rs"]
+mod native_worker;
+
 #[cfg(all(target_os = "linux", feature = "native-ubus"))]
-mod ffi {
-    use super::*;
-    use std::{
-        ffi::{CStr, CString},
-        os::raw::{c_char, c_int},
-        ptr,
-    };
-    unsafe extern "C" {
-        fn intent_ubus_invoke_json(
-            object: *const c_char,
-            method: *const c_char,
-            request: *const c_char,
-            timeout_ms: c_int,
-            max_response_bytes: usize,
-            response: *mut *mut c_char,
-        ) -> c_int;
-        fn intent_ubus_free(value: *mut c_char);
-    }
-    impl UbusTransport for NativeUbusTransport {
-        fn invoke(
-            &self,
-            object: &str,
-            method: &str,
-            request: &Value,
-            timeout: Duration,
-            max_response_bytes: usize,
-        ) -> Result<Value, ObservationError> {
-            if !read_only_method(object, method) {
-                return Err(ObservationError::UnsupportedMethod {
-                    object: object.into(),
-                    method: method.into(),
-                });
-            }
-            let object = CString::new(object)
-                .map_err(|_| ObservationError::Malformed("NUL ubus object".into()))?;
-            let method = CString::new(method)
-                .map_err(|_| ObservationError::Malformed("NUL ubus method".into()))?;
-            let request = CString::new(request.to_string())
-                .map_err(|_| ObservationError::Malformed("NUL ubus request".into()))?;
-            let mut response = ptr::null_mut();
-            let result = unsafe {
-                intent_ubus_invoke_json(
-                    object.as_ptr(),
-                    method.as_ptr(),
-                    request.as_ptr(),
-                    timeout.as_millis().min(i32::MAX as u128) as c_int,
-                    max_response_bytes,
-                    &mut response,
-                )
-            };
-            if result != 0 {
-                return Err(match result {
-                    7_003 => ObservationError::Denied("ubus permission denied".into()),
-                    7_001 => ObservationError::ResponseTooLarge,
-                    7_002 => ObservationError::Timeout,
-                    _ => ObservationError::Unavailable(format!("libubus status {result}")),
-                });
-            }
-            if response.is_null() {
-                return Err(ObservationError::Malformed(
-                    "libubus returned no response".into(),
-                ));
-            }
-            let bytes = unsafe { CStr::from_ptr(response).to_bytes().to_vec() };
-            unsafe {
-                intent_ubus_free(response);
-            }
-            if bytes.len() > max_response_bytes {
-                return Err(ObservationError::ResponseTooLarge);
-            }
-            parse_response_json(&bytes)
-        }
+pub use native_worker::helper_main;
+
+#[cfg(all(target_os = "linux", feature = "native-ubus"))]
+impl UbusTransport for NativeUbusTransport {
+    fn invoke(
+        &self,
+        object: &str,
+        method: &str,
+        request: &Value,
+        timeout: Duration,
+        max_response_bytes: usize,
+    ) -> Result<Value, ObservationError> {
+        native_worker::invoke(object, method, request, timeout, max_response_bytes)
     }
 }
 

@@ -1,0 +1,16 @@
+   Compiling intent-identity v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/identity)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.85s
+     Running tests/evidence.rs (target/debug/deps/evidence-c58c6099fbdf2c0e)
+
+running 8 tests
+test revoked_key_and_duplicate_json_fields_are_rejected ... ok
+test assignment_validity_rejects_expired_and_future_statements ... ok
+test independently_signed_assignment_and_evidence_are_accepted ... ok
+test deployment_nonce_cannot_be_added_to_ordinary_monitoring_evidence ... ok
+test evidence_freshness_and_completeness_never_turn_unavailable_into_success ... ok
+test deployment_confirmation_requires_two_fresh_bound_independent_rounds ... ok
+test assignment_scope_rejects_wrong_role_and_every_binding_field ... ok
+test evidence_is_bound_to_immutable_assignment_and_rejects_role_fields_and_digest ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

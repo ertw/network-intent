@@ -1065,9 +1065,12 @@ dependencies = [
 name = "intent-apply-agent"
 version = "0.1.0"
 dependencies = [
+ "intent-identity",
  "intent-protocol",
+ "rusqlite",
  "serde",
  "serde_json",
+ "tempfile",
  "thiserror",
 ]
 
@@ -1137,9 +1140,11 @@ dependencies = [
  "intent-protocol",
  "rand",
  "reqwest",
+ "rusqlite",
  "serde",
  "serde_json",
  "socket2",
+ "tempfile",
  "thiserror",
  "tokio",
 ]

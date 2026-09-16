@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 use std::fmt;
 use thiserror::Error;
 pub mod evidence;
+pub mod confirmation;
 pub mod pki;
 pub mod tls;
 

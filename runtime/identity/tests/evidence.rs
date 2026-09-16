@@ -118,6 +118,7 @@ impl Fixture {
 
     fn assignment(&self) -> WitnessAssignment {
         WitnessAssignment {
+            deployment: None,
             version: PROTOCOL_VERSION,
             assignment_id: "assignment-7".into(),
             issuer: self.controller.to_string(),
@@ -157,6 +158,7 @@ impl Fixture {
 
     fn evidence(&self, assignment: &WitnessAssignment) -> WitnessEvidence {
         WitnessEvidence {
+            deployment: assignment.deployment.clone(),
             version: PROTOCOL_VERSION,
             evidence_id: "evidence-7".into(),
             assignment_id: assignment.assignment_id.clone(),
@@ -468,4 +470,62 @@ fn revoked_key_and_duplicate_json_fields_are_rejected() {
     let duplicate = br#"{"_type":"https://in-toto.io/Statement/v1","_type":"duplicate","subject":[],"predicateType":"urn:network-intent:assignment:witness:v1","predicate":{}}"#;
     let env = f.controller_key.sign(duplicate).unwrap();
     assert!(verify_assignment(&env, &[f.controller_trusted.clone()], &f.scope(), NOW).is_err());
+}
+
+
+#[test]
+fn deployment_confirmation_requires_two_fresh_bound_independent_rounds() {
+    use intent_identity::confirmation::*;
+    use intent_protocol::evidence::DeploymentBinding;
+    let f = Fixture::new();
+    let binding = DeploymentBinding { deployment_id: "deploy-1".into(), checkpoint_digest: "a".repeat(64) };
+    let mut assignment = f.assignment();
+    assignment.deployment = Some(binding.clone());
+    let verified_assignment = verify_assignment(&f.assignment_envelope(&assignment), &[f.controller_trusted.clone()], &f.scope(), NOW).unwrap();
+    let seal = |id: &str, start, finish, outcome, completeness| {
+        let mut e = f.evidence(&assignment);
+        e.evidence_id = id.into();
+        e.result.started_at_ms = start;
+        e.result.finished_at_ms = finish;
+        e.result.outcome = outcome;
+        e.completeness = completeness;
+        verify_evidence(&f.evidence_envelope(&e), &[f.witness_trusted.clone()], &verified_assignment, NOW).unwrap()
+    };
+    let first = seal("first", 2_000, 2_100, Outcome::Success, Completeness::Complete);
+    let second = seal("second", 4_000, 4_100, Outcome::Success, Completeness::Complete);
+    let required = [RequiredVerification { probe_id: f.probe.id.clone(), probe_digest: probe_digest(&f.probe).unwrap(), source: f.probe.source.clone(), lan_management_path: true }];
+    let mut scope = ConfirmationScope { deployment: &binding, device: &f.device, revision: &f.revision, plan_id: "plan-7", plan_epoch: 9, graph_version: 3, provisional_started_at_ms: 1_500, deadline_ms: 9_000, required: &required };
+    let rounds = [vec![&first], vec![&second]];
+    let confirmed = verify_confirmation(&rounds, &scope, NOW).unwrap();
+    assert_eq!(confirmed.deployment(), &binding);
+    assert_eq!(confirmed.confirmed_at_ms(), NOW);
+    assert!(matches!(verify_confirmation(&rounds[..1], &scope, NOW), Err(ConfirmationError::MissingRounds)));
+    assert!(verify_confirmation(&[vec![&first],vec![&first]], &scope, NOW).is_err());
+    assert!(verify_confirmation(&[vec![&second],vec![&first]], &scope, NOW).is_err());
+    assert!(verify_confirmation(&rounds, &scope, 9_000).is_err());
+    let timeout = seal("timeout", 4_000, 4_100, Outcome::Timeout, Completeness::Complete);
+    assert!(verify_confirmation(&[vec![&first],vec![&timeout]], &scope, NOW).is_err());
+    let partial = seal("partial", 4_000, 4_100, Outcome::Success, Completeness::Partial { missing: vec!["scope".into()] });
+    assert!(verify_confirmation(&[vec![&first],vec![&partial]], &scope, NOW).is_err());
+    let changed_checkpoint = DeploymentBinding { checkpoint_digest: "b".repeat(64), ..binding.clone() };
+    scope.deployment = &changed_checkpoint;
+    assert!(verify_confirmation(&rounds, &scope, NOW).is_err());
+    scope.deployment = &binding;
+    scope.provisional_started_at_ms = 2_001;
+    assert!(verify_confirmation(&rounds, &scope, NOW).is_err());
+    scope.provisional_started_at_ms = 1_500;
+    scope.deadline_ms = 90_000;
+    assert!(verify_confirmation(&rounds, &scope, 50_000).is_err());
+    let without_lan = [RequiredVerification { probe_id: f.probe.id.clone(), probe_digest: probe_digest(&f.probe).unwrap(), source: f.probe.source.clone(), lan_management_path: false }];
+    scope.required = &without_lan;
+    assert!(matches!(verify_confirmation(&rounds, &scope, NOW), Err(ConfirmationError::IncompleteScope)));
+}
+
+#[test]
+fn deployment_nonce_cannot_be_added_to_ordinary_monitoring_evidence() {
+    let f = Fixture::new();
+    let assignment = f.verified_assignment();
+    let mut evidence = f.evidence(assignment.assignment());
+    evidence.deployment = Some(intent_protocol::evidence::DeploymentBinding { deployment_id: "forged".into(), checkpoint_digest: "a".repeat(64) });
+    assert!(verify_evidence(&f.evidence_envelope(&evidence), &[f.witness_trusted.clone()], &assignment, NOW).is_err());
 }

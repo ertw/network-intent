@@ -1,0 +1,7 @@
+{
+  "release": "25.12.5",
+  "unavailable_objects": [
+    "network.wireless"
+  ],
+  "collection": "direct root ubus baseline; session permission acceptance is separate"
+}

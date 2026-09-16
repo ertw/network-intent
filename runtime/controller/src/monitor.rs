@@ -532,6 +532,7 @@ mod tests {
         };
         let probe = probe();
         let assignment = WitnessAssignment {
+            deployment: None,
             version: PROTOCOL_VERSION,
             assignment_id: "a".into(),
             issuer: controller.to_string(),
@@ -573,6 +574,7 @@ mod tests {
         )
         .unwrap();
         let evidence = WitnessEvidence {
+            deployment: None,
             version: PROTOCOL_VERSION,
             evidence_id: format!("e{n}"),
             assignment_id: "a".into(),

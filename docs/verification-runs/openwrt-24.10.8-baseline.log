@@ -1,0 +1,1247 @@
+[H[J[1;1H[?25l[m[H[J[1;1H[2;30HGNU GRUB  version 2.12
+
+[m[4;2H+----------------------------------------------------------------------------+[5;2H|[5;79H|[6;2H|[6;79H|[7;2H|[7;79H|[8;2H|[8;79H|[9;2H|[9;79H|[10;2H|[10;79H|[11;2H|[11;79H|[12;2H|[12;79H|[13;2H|[13;79H|[14;2H|[14;79H|[15;2H|[15;79H|[16;2H+----------------------------------------------------------------------------+[m[17;2H[18;2H[m     Use the ^ and v keys to select which entry is highlighted.          
+      Press enter to boot the selected OS, `e' to edit the commands       
+      before booting or `c' for a command-line. ESC to return             
+      previous menu.                                                      [5;80H [7m[5;3H*OpenWrt                                                                    [m[5;78H[m[m[6;3H OpenWrt (failsafe)                                                         [m[6;78H[m[m[7;3H                                                                            [m[7;78H[m[m[8;3H                                                                            [m[8;78H[m[m[9;3H                                                                            [m[9;78H[m[m[10;3H                                                                            [m[10;78H[m[m[11;3H                                                                            [m[11;78H[m[m[12;3H                                                                            [m[12;78H[m[m[13;3H                                                                            [m[13;78H[m[m[14;3H                                                                            [m[14;78H[m[m[15;3H                                                                            [m[15;78H[m[15;80H [5;78H[22;1H   The highlighted entry will be executed automatically in 5s.                 [5;78H[22;1H   The highlighted entry will be executed automatically in 4s.                 [5;78H[22;1H   The highlighted entry will be executed automatically in 3s.                 [5;78H[22;1H   The highlighted entry will be executed automatically in 2s.                 [5;78H[22;1H   The highlighted entry will be executed automatically in 1s.                 [5;78H[22;1H   The highlighted entry will be executed automatically in 0s.                 [5;78H[?25h[H[J[1;1H[H[J[1;1H  Booting `OpenWrt'
+
+[    0.000000] Linux version 6.6.144 (builder@buildhost) (x86_64-openwrt-linux-musl-gcc (OpenWrt GCC 13.3.0 r29233-443ec4032a) 13.3.0, GNU ld (GNU Binutils) 2.42) #0 SMP Fri Jul 24 07:21:50 2026
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz root=PARTUUID=bc021054-02 rootwait console=tty1 console=ttyS0,115200n8 noinitrd
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000001ffdbfff] usable
+[    0.000000] BIOS-e820: [mem 0x000000001ffdc000-0x000000001fffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] APIC: Static calls initialized
+[    0.000000] SMBIOS 2.8 present.
+[    0.000000] DMI: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
+[    0.000000] tsc: Fast TSC calibration using PIT
+[    0.000000] tsc: Detected 1000.077 MHz processor
+[    0.004994] AGP: No AGP bridge found
+[    0.005128] last_pfn = 0x1ffdc max_arch_pfn = 0x400000000
+[    0.005538] MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable MTRRs
+[    0.005649] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[    0.017281] found SMP MP-table at [mem 0x000f54b0-0x000f54bf]
+[    0.020092] ACPI: Early table checksum verification disabled
+[    0.020303] ACPI: RSDP 0x00000000000F52D0 000014 (v00 BOCHS )
+[    0.020474] ACPI: RSDT 0x000000001FFE2367 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.020807] ACPI: FACP 0x000000001FFE215F 0000F4 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.021234] ACPI: DSDT 0x000000001FFE0040 00211F (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.021310] ACPI: FACS 0x000000001FFE0000 000040
+[    0.021342] ACPI: APIC 0x000000001FFE2253 000078 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.021358] ACPI: HPET 0x000000001FFE22CB 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.021372] ACPI: MCFG 0x000000001FFE2303 00003C (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.021385] ACPI: WAET 0x000000001FFE233F 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.021449] ACPI: Reserving FACP table memory at [mem 0x1ffe215f-0x1ffe2252]
+[    0.021482] ACPI: Reserving DSDT table memory at [mem 0x1ffe0040-0x1ffe215e]
+[    0.021487] ACPI: Reserving FACS table memory at [mem 0x1ffe0000-0x1ffe003f]
+[    0.021491] ACPI: Reserving APIC table memory at [mem 0x1ffe2253-0x1ffe22ca]
+[    0.021494] ACPI: Reserving HPET table memory at [mem 0x1ffe22cb-0x1ffe2302]
+[    0.021498] ACPI: Reserving MCFG table memory at [mem 0x1ffe2303-0x1ffe233e]
+[    0.021502] ACPI: Reserving WAET table memory at [mem 0x1ffe233f-0x1ffe2366]
+[    0.023458] Zone ranges:
+[    0.023479]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.023523]   DMA32    [mem 0x0000000001000000-0x000000001ffdbfff]
+[    0.023530]   Normal   empty
+[    0.023544] Movable zone start for each node
+[    0.023558] Early memory node ranges
+[    0.023575]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[    0.023608]   node   0: [mem 0x0000000000100000-0x000000001ffdbfff]
+[    0.023688] Initmem setup node 0 [mem 0x0000000000001000-0x000000001ffdbfff]
+[    0.024208] On node 0, zone DMA: 1 pages in unavailable ranges
+[    0.024431] On node 0, zone DMA: 97 pages in unavailable ranges
+[    0.026924] On node 0, zone DMA32: 36 pages in unavailable ranges
+[    0.027129] ACPI: PM-Timer IO Port: 0x608
+[    0.027346] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[    0.027578] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+[    0.027634] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[    0.027781] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[    0.027812] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[    0.027864] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[    0.027869] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[    0.027977] ACPI: Using ACPI (MADT) for SMP configuration information
+[    0.028005] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+[    0.028179] smpboot: Allowing 1 CPUs, 0 hotplug CPUs
+[    0.028844] [mem 0x20000000-0xafffffff] available for PCI devices
+[    0.028866] Booting paravirtualized kernel on bare hardware
+[    0.029043] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.029367] setup_percpu: NR_CPUS:512 nr_cpumask_bits:1 nr_cpu_ids:1 nr_node_ids:1
+[    0.030371] percpu: Embedded 48 pages/cpu s158632 r8192 d29784 u2097152
+[    0.031628] Kernel command line: BOOT_IMAGE=/boot/vmlinuz root=PARTUUID=bc021054-02 rootwait console=tty1 console=ttyS0,115200n8 noinitrd
+[    0.043321] Dentry cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.043409] Inode-cache hash table entries: 32768 (order: 6, 262144 bytes, linear)
+[    0.044354] Built 1 zonelists, mobility grouping on.  Total pages: 128732
+[    0.044480] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.044537] AGP: Checking aperture...
+[    0.045353] AGP: No AGP bridge found
+[    0.048310] Memory: 489068K/523752K available (14336K kernel code, 1170K rwdata, 2300K rodata, 2452K init, 2404K bss, 34428K reserved, 0K cma-reserved)
+[    0.072196] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.077590] rcu: Hierarchical RCU implementation.
+[    0.077617] rcu: 	RCU restricting CPUs from NR_CPUS=512 to nr_cpu_ids=1.
+[    0.077688] 	Tracing variant of Tasks RCU enabled.
+[    0.077745] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+[    0.077761] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.078422] NR_IRQS: 33024, nr_irqs: 256, preallocated irqs: 16
+[    0.083559] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.087312] Console: colour VGA+ 80x25
+[    0.087506] printk: console [tty1] enabled
+[    0.091331] printk: console [ttyS0] enabled
+[    0.095814] ACPI: Core revision 20230628
+[    0.099715] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
+[    0.102521] APIC: Switch to symmetric I/O mode setup
+[    0.104909] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[    0.153869] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0xe6a5fd9506, max_idle_ns: 440795236170 ns
+[    0.154692] Calibrating delay loop (skipped), value calculated using timer frequency.. 2000.15 BogoMIPS (lpj=10000770)
+[    0.158238] process: using AMD E400 aware idle routine
+[    0.158898] Last level iTLB entries: 4KB 512, 2MB 255, 4MB 127
+[    0.159260] Last level dTLB entries: 4KB 512, 2MB 255, 4MB 127, 1GB 0
+[    0.159916] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+[    0.160121] Spectre V2 : Mitigation: Retpolines
+[    0.160341] Spectre V2 : Spectre v2 / SpectreRSB: Filling RSB on context switch and VMEXIT
+[    0.161693] x86/fpu: x87 FPU will use FXSAVE
+[    0.372587] Freeing SMP alternatives memory: 40K
+[    0.373438] pid_max: default: 32768 minimum: 301
+[    0.380764] Mount-cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
+[    0.380977] Mountpoint-cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
+[    0.518347] smpboot: CPU0: AMD QEMU Virtual CPU version 2.5+ (family: 0xf, model: 0x6b, stepping: 0x1)
+[    0.522357] RCU Tasks Trace: Setting shift to 0 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=1.
+[    0.522590] Performance Events: PMU not available due to virtualization, using software events only.
+[    0.523222] signal: max sigframe size: 1040
+[    0.523987] rcu: Hierarchical SRCU implementation.
+[    0.524068] rcu: 	Max phase no-delay instances is 1000.
+[    0.524574] smp: Bringing up secondary CPUs ...
+[    0.524574] smp: Brought up 1 node, 1 CPU
+[    0.524574] smpboot: Max logical packages: 1
+[    0.524574] smpboot: Total of 1 processors activated (2000.15 BogoMIPS)
+[    0.530061] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.530424] futex hash table entries: 256 (order: 2, 16384 bytes, linear)
+[    0.531534] pinctrl core: initialized pinctrl subsystem
+[    0.539795] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.543346] thermal_sys: Registered thermal governor 'step_wise'
+[    0.543368] thermal_sys: Registered thermal governor 'user_space'
+[    0.543820] cpuidle: using governor ladder
+[    0.544011] cpuidle: using governor menu
+[    0.544845] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+[    0.546589] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0xb0000000-0xbfffffff] (base 0xb0000000)
+[    0.547135] PCI: MMCONFIG at [mem 0xb0000000-0xbfffffff] reserved as E820 entry
+[    0.547995] PCI: Using configuration type 1 for base access
+[    0.552276] cryptd: max_cpu_qlen set to 1000
+[    0.555335] ACPI: Added _OSI(Module Device)
+[    0.555425] ACPI: Added _OSI(Processor Device)
+[    0.555487] ACPI: Added _OSI(Processor Aggregator Device)
+[    0.564275] ACPI: 1 ACPI AML tables successfully acquired and loaded
+[    0.571106] ACPI: _OSC evaluation for CPUs failed, trying _PDC
+[    0.572277] ACPI: Interpreter enabled
+[    0.572664] ACPI: PM: (supports S0 S5)
+[    0.572745] ACPI: Using IOAPIC for interrupt routing
+[    0.574196] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[    0.574319] PCI: Using E820 reservations for host bridge windows
+[    0.575216] ACPI: Enabled 2 GPEs in block 00 to 3F
+[    0.588466] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[    0.588866] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI HPX-Type3]
+[    0.589582] acpi PNP0A08:00: _OSC: platform does not support [LTR]
+[    0.590010] acpi PNP0A08:00: _OSC: OS now controls [PME AER PCIeCapability]
+[    0.592309] PCI host bridge to bus 0000:00
+[    0.592465] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[    0.592601] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[    0.592691] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[    0.592781] pci_bus 0000:00: root bus resource [mem 0x20000000-0xafffffff window]
+[    0.592869] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+[    0.592959] pci_bus 0000:00: root bus resource [mem 0x100000000-0x8ffffffff window]
+[    0.593127] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    0.593899] pci 0000:00:00.0: [8086:29c0] type 00 class 0x060000
+[    0.596307] pci 0000:00:01.0: [1234:1111] type 00 class 0x030000
+[    0.596784] pci 0000:00:01.0: BAR 0 [mem 0xfd000000-0xfdffffff pref]
+[    0.597410] pci 0000:00:01.0: BAR 2 [mem 0xfebd0000-0xfebd0fff]
+[    0.598521] pci 0000:00:01.0: ROM [mem 0xfebc0000-0xfebcffff pref]
+[    0.598739] pci 0000:00:01.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+[    0.599209] pci 0000:00:02.0: [1af4:1005] type 00 class 0x00ff00
+[    0.599842] pci 0000:00:02.0: BAR 0 [io  0xc0c0-0xc0df]
+[    0.600351] pci 0000:00:02.0: BAR 1 [mem 0xfebd1000-0xfebd1fff]
+[    0.601732] pci 0000:00:02.0: BAR 4 [mem 0xfe000000-0xfe003fff 64bit pref]
+[    0.602707] pci 0000:00:03.0: [1af4:1000] type 00 class 0x020000
+[    0.603277] pci 0000:00:03.0: BAR 0 [io  0xc0e0-0xc0ff]
+[    0.603825] pci 0000:00:03.0: BAR 1 [mem 0xfebd2000-0xfebd2fff]
+[    0.605294] pci 0000:00:03.0: BAR 4 [mem 0xfe004000-0xfe007fff 64bit pref]
+[    0.605819] pci 0000:00:03.0: ROM [mem 0xfeb80000-0xfebbffff pref]
+[    0.606358] pci 0000:00:04.0: [1af4:1001] type 00 class 0x010000
+[    0.606869] pci 0000:00:04.0: BAR 0 [io  0xc000-0xc07f]
+[    0.607365] pci 0000:00:04.0: BAR 1 [mem 0xfebd3000-0xfebd3fff]
+[    0.608698] pci 0000:00:04.0: BAR 4 [mem 0xfe008000-0xfe00bfff 64bit pref]
+[    0.610759] pci 0000:00:1f.0: [8086:2918] type 00 class 0x060100
+[    0.611064] pci 0000:00:1f.0: quirk: [io  0x0600-0x067f] claimed by ICH6 ACPI/GPIO/TCO
+[    0.611420] pci 0000:00:1f.2: [8086:2922] type 00 class 0x010601
+[    0.612722] pci 0000:00:1f.2: BAR 4 [io  0xc100-0xc11f]
+[    0.613038] pci 0000:00:1f.2: BAR 5 [mem 0xfebd4000-0xfebd4fff]
+[    0.613614] pci 0000:00:1f.3: [8086:2930] type 00 class 0x0c0500
+[    0.614307] pci 0000:00:1f.3: BAR 4 [io  0x0700-0x073f]
+[    0.616907] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+[    0.617260] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+[    0.617496] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+[    0.617723] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+[    0.617944] ACPI: PCI: Interrupt link LNKE configured for IRQ 10
+[    0.618164] ACPI: PCI: Interrupt link LNKF configured for IRQ 10
+[    0.618444] ACPI: PCI: Interrupt link LNKG configured for IRQ 11
+[    0.618701] ACPI: PCI: Interrupt link LNKH configured for IRQ 11
+[    0.618823] ACPI: PCI: Interrupt link GSIA configured for IRQ 16
+[    0.618924] ACPI: PCI: Interrupt link GSIB configured for IRQ 17
+[    0.619025] ACPI: PCI: Interrupt link GSIC configured for IRQ 18
+[    0.619122] ACPI: PCI: Interrupt link GSID configured for IRQ 19
+[    0.619218] ACPI: PCI: Interrupt link GSIE configured for IRQ 20
+[    0.619315] ACPI: PCI: Interrupt link GSIF configured for IRQ 21
+[    0.619412] ACPI: PCI: Interrupt link GSIG configured for IRQ 22
+[    0.619509] ACPI: PCI: Interrupt link GSIH configured for IRQ 23
+[    0.621236] iommu: Default domain type: Translated
+[    0.621316] iommu: DMA domain TLB invalidation policy: lazy mode
+[    0.622466] SCSI subsystem initialized
+[    0.623823] ACPI: bus type USB registered
+[    0.624048] usbcore: registered new interface driver usbfs
+[    0.624242] usbcore: registered new interface driver hub
+[    0.624366] usbcore: registered new device driver usb
+[    0.624671] pps_core: LinuxPPS API ver. 1 registered
+[    0.624736] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.624861] PTP clock support registered
+[    0.630754] PCI: Using ACPI for IRQ routing
+[    0.634330] hpet: 3 channels of 0 reserved for per-cpu timers
+[    0.634539] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+[    0.634686] hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+[    0.639101] clocksource: Switched to clocksource tsc-early
+[    0.641520] pnp: PnP ACPI init
+[    0.642868] ACPI: IRQ 4 override to edge(!), high(!)
+[    0.642868] system 00:05: [mem 0xb0000000-0xbfffffff window] has been reserved
+[    0.642868] pnp: PnP ACPI: found 6 devices
+[    0.649940] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[    0.650735] NET: Registered PF_INET protocol family
+[    0.651471] IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.655384] tcp_listen_portaddr_hash hash table entries: 256 (order: 0, 4096 bytes, linear)
+[    0.655536] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.655660] TCP established hash table entries: 4096 (order: 3, 32768 bytes, linear)
+[    0.655898] TCP bind hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    0.656086] TCP: Hash tables configured (established 4096 bind 4096)
+[    0.657769] MPTCP token hash table entries: 512 (order: 2, 12288 bytes, linear)
+[    0.658013] UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    0.658201] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    0.659050] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.659989] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+[    0.660073] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+[    0.660143] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+[    0.660226] pci_bus 0000:00: resource 7 [mem 0x20000000-0xafffffff window]
+[    0.660306] pci_bus 0000:00: resource 8 [mem 0xc0000000-0xfebfffff window]
+[    0.660380] pci_bus 0000:00: resource 9 [mem 0x100000000-0x8ffffffff window]
+[    0.660710] PCI: CLS 0 bytes, default 64
+[    0.677680] workingset: timestamp_bits=46 max_order=17 bucket_order=0
+[    0.683752] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.686683] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 247)
+[    0.688782] hv_vmbus: registering driver hyperv_fb
+[    0.690132] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+[    0.694621] ACPI: button: Power Button [PWRF]
+[    0.700112] ACPI: \_SB_.GSIG: Enabled at IRQ 22
+[    0.704122] ACPI: \_SB_.GSIH: Enabled at IRQ 23
+[    0.705383] ACPI: \_SB_.GSIE: Enabled at IRQ 20
+[    0.706214] Serial: 8250/16550 driver, 16 ports, IRQ sharing enabled
+[    0.728457] 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    0.742166] Non-volatile memory driver v1.3
+[    0.747092] random: crng init done
+[    0.747370] Linux agpgart interface v0.103
+[    0.747909] AMD-Vi: AMD IOMMUv2 functionality not available on this system - This is not a bug.
+[    0.748170] ACPI: bus type drm_connector registered
+[    0.749648] [drm] Found bochs VGA, ID 0xb0c5.
+[    0.749725] [drm] Framebuffer size 16384 kB @ 0xfd000000, mmio @ 0xfebd0000.
+[    0.753114] [drm] Found EDID data blob.
+[    0.756063] [drm] Initialized bochs-drm 1.0.0 20130925 for 0000:00:01.0 on minor 0
+[    0.782842] Console: switching to colour frame buffer device 160x50
+[    0.788193] bochs-drm 0000:00:01.0: [drm] fb0: bochs-drmdrmfb frame buffer device
+[    0.800694] loop: module loaded
+[    0.801148] virtio_blk virtio2: 1/0/0 default/read/poll queues
+[    0.804702] virtio_blk virtio2: [vda] 246784 512-byte logical blocks (126 MB/121 MiB)
+[    0.809122]  vda: vda1 vda2
+[    0.811077] Guest personality initialized and is inactive
+[    0.811399] VMCI host device registered (name=vmci, major=10, minor=256)
+[    0.811500] Initialized host personality
+[    0.812258] lpc_ich 0000:00:1f.0: I/O space for GPIO uninitialized
+[    0.812704] VMware PVSCSI driver - version 1.0.7.0-k
+[    0.812829] hv_vmbus: registering driver hv_storvsc
+[    0.817582] ACPI: \_SB_.GSIA: Enabled at IRQ 16
+[    0.820125] ahci 0000:00:1f.2: AHCI 0001.0000 32 slots 6 ports 1.5 Gbps 0x3f impl SATA mode
+[    0.820300] ahci 0000:00:1f.2: flags: 64bit ncq only 
+[    0.825307] scsi host0: ahci
+[    0.826479] scsi host1: ahci
+[    0.827143] scsi host2: ahci
+[    0.827904] scsi host3: ahci
+[    0.828557] scsi host4: ahci
+[    0.829166] scsi host5: ahci
+[    0.829593] ata1: SATA max UDMA/133 abar m4096@0xfebd4000 port 0xfebd4100 irq 28
+[    0.829858] ata2: SATA max UDMA/133 abar m4096@0xfebd4000 port 0xfebd4180 irq 28
+[    0.829958] ata3: SATA max UDMA/133 abar m4096@0xfebd4000 port 0xfebd4200 irq 28
+[    0.830049] ata4: SATA max UDMA/133 abar m4096@0xfebd4000 port 0xfebd4280 irq 28
+[    0.830138] ata5: SATA max UDMA/133 abar m4096@0xfebd4000 port 0xfebd4300 irq 28
+[    0.831739] ata6: SATA max UDMA/133 abar m4096@0xfebd4000 port 0xfebd4380 irq 28
+[    0.837347] VMware vmxnet3 virtual NIC driver - version 1.7.0.0-k-NAPI
+[    0.838641] hv_vmbus: registering driver hv_netvsc
+[    0.839748] Fusion MPT base driver 3.04.20
+[    0.840711] Copyright (c) 1999-2008 LSI Corporation
+[    0.841813] Fusion MPT SPI Host driver 3.04.20
+[    0.842929] Fusion MPT SAS Host driver 3.04.20
+[    0.845061] usbcore: registered new interface driver usb-storage
+[    0.846718] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[    0.849821] serio: i8042 KBD port at 0x60,0x64 irq 1
+[    0.851047] serio: i8042 AUX port at 0x60,0x64 irq 12
+[    0.852157] hv_vmbus: registering driver hyperv_keyboard
+[    0.853454] rtc_cmos 00:04: RTC can wake from S4
+[    0.856061] rtc_cmos 00:04: registered as rtc0
+[    0.857243] rtc_cmos 00:04: setting system clock to 2026-09-16T14:25:59 UTC (1789568759)
+[    0.858487] rtc_cmos 00:04: alarms up to one day, y3k, 242 bytes nvram, hpet irqs
+[    0.859925] amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
+[    0.861025] sdhci: Secure Digital Host Controller Interface driver
+[    0.862012] sdhci: Copyright(c) Pierre Ossman
+[    0.867671] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+[    0.878948] hid: raw HID events driver (C) Jiri Kosina
+[    0.880504] hv_vmbus: registering driver hid_hyperv
+[    0.881999] usbcore: registered new interface driver usbhid
+[    0.883070] usbhid: USB HID core driver
+[    0.884136] hv_utils: Registering HyperV Utility Driver
+[    0.885105] hv_vmbus: registering driver hv_utils
+[    0.886049] hv_vmbus: registering driver hv_balloon
+[    0.887778] NET: Registered PF_INET6 protocol family
+[    0.896378] Segment Routing with IPv6
+[    0.897617] In-situ OAM (IOAM) with IPv6
+[    0.898739] NET: Registered PF_PACKET protocol family
+[    0.900308] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+[    0.904027] 8021q: 802.1Q VLAN Support v1.8
+[    0.905378] NET: Registered PF_VSOCK protocol family
+[    0.910297] IPI shorthand broadcast: enabled
+[    0.917651] sched_clock: Marking stable (899182338, 10702556)->(919377208, -9492314)
+[    0.954986] clk: Disabling unused clocks
+[    1.212205] ata2: SATA link down (SStatus 0 SControl 300)
+[    1.216944] ata6: SATA link down (SStatus 0 SControl 300)
+[    1.219416] ata3: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+[    1.224344] ata3.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+[    1.226215] ata3.00: applying bridge limits
+[    1.229241] ata3.00: configured for UDMA/100
+[    1.232172] ata4: SATA link down (SStatus 0 SControl 300)
+[    1.234014] ata1: SATA link down (SStatus 0 SControl 300)
+[    1.241464] scsi 2:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+[    1.249009] ata5: SATA link down (SStatus 0 SControl 300)
+[    1.304094] sr 2:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+[    1.364073] cdrom: Uniform CD-ROM driver Revision: 3.20
+[    1.416324] EXT4-fs (vda2): mounted filesystem ff313567-e9f1-5a5d-9895-3ba130b4a864 ro with ordered data mode. Quota mode: disabled.
+[    1.419330] VFS: Mounted root (ext4 filesystem) readonly on device 254:2.
+[    1.466120] Freeing unused kernel image (initmem) memory: 2452K
+[    1.467807] Write protecting the kernel read-only data: 18432k
+[    1.470402] Freeing unused kernel image (rodata/data gap) memory: 1796K
+[    1.472203] Run /sbin/init as init process
+[    1.533264] init: Console is alive
+[    1.570853] kmodloader: loading kernel modules from /etc/modules-boot.d/*
+[    1.596473] button_hotplug: loading out-of-tree module taints kernel.
+[    1.600583] Button Hotplug driver version 0.4.1
+[    1.611428] Intel(R) 2.5G Ethernet Linux Driver
+[    1.613015] Copyright(c) 2018 Intel Corporation.
+[    1.622831] igb: Intel(R) Gigabit Ethernet Network Driver
+[    1.624281] igb: Copyright (c) 2007-2014 Intel Corporation.
+[    1.632581] kmodloader: done loading kernel modules from /etc/modules-boot.d/*
+[    1.646242] init: - preinit -
+[    1.701683] tsc: Refined TSC clocksource calibration: 999.994 MHz
+[    1.703286] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1cd422f1293, max_idle_ns: 881590485101 ns
+[    1.704662] clocksource: Switched to clocksource tsc
+[    1.869421] 8021q: adding VLAN 0 to HW filter on device eth0
+Press the [f] key and hit [enter] to enter failsafe mode
+Press the [1], [2], [3] or [4] key and hit [enter] to select the debug level
+[    6.083846] mount_root: mounting /dev/root with options 
+[    6.115534] EXT4-fs (vda2): re-mounted ff313567-e9f1-5a5d-9895-3ba130b4a864 r/w.
+[    6.469624] EXT4-fs (vda1): mounted filesystem 84173db5-fa99-e35a-95c6-28613cc79ea9 r/w without journal. Quota mode: disabled.
+[    6.478251] urandom-seed: Seed file not found (/etc/urandom.seed)
+[    6.506305] procd: - early -
+[    7.090952] procd: - ubus -
+[    7.163883] procd: - init -
+Please press Enter to activate this console.
+
+login[1012]: root login on 'ttyS0'
+
+
+BusyBox v1.36.1 (2026-07-24 07:21:50 UTC) built-in shell (ash)
+
+  _______                     ________        __
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |_______||   __|_____|__|__||________||__|  |____|
+          |__| W I R E L E S S   F R E E D O M
+ -----------------------------------------------------
+ OpenWrt 24.10.8, r29233-443ec4032a
+ -----------------------------------------------------
+=== WARNING! =====================================
+There is no root password defined on this device!
+Use the "passwd" command to set up a new password
+in order to prevent unauthorized SSH logins.
+--------------------------------------------------
+root@(none):~# stty -echo
+-ash: stty: not found
+root@(none):~# cat > /tmp/intent-capture.sh <<'INTENT_SCRIPT'
+> n=0; while [ "$n" -lt 90 ]; do [ "$(ubus list network.interface 2>/dev/null)" 
+= network.interface ] && break; n=$((n+1)); sleep 1; done
+> cat /etc/openwrt_release; uptime; ubus list; /etc/init.d/network status
+> ps w; logread -e netifd
+> ubus -v list uci; ubus -v list network.interface
+> ubus -v list network.device; ubus -v list network.wireless
+> if command -v apk >/dev/null; then apk list --inst[    7.620935] kmodloader: loading kernel modules from /etc/modules.d/*
+alled; else opkg list-instal
+led; fi
+> printf '\n%s%s\n' INTENT_BEG[    7.675262] e1000: Intel(R) PRO/1000 Network Driver
+[    7.676773] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    7.687849] ixgbe: Intel(R) 10 Gigabit PCI Express Network Driver
+[    7.689345] ixgbe: Copyright (c) 1999-2016 Intel Corporation.
+IN_ uci-network; ubus call uci get '{"config":"net
+work"}'; print[    7.739000] i2c_dev: i2c /dev entries driver
+f '\n%s%s\n' INTENT_END_ uci-network
+> printf '\n%s%s\n' INTENT_BE[    7.794954] e1000e: Intel(R) PRO/1000 Network Driver
+[    7.796429] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+GIN_ uci-changes; ubus call uci changes '{"config":
+"network"}'; printf '\n%s%s\n' INTENT_END_ uci-changes
+> printf '\n%s%s\n' INTENT_BEGIN_ netifd-interfaces; ubus call network.interface
+ dump; p[    7.935978] PPP generic driver version 2.4.2
+[    7.945660] NET: Registered PF_PPPOX protocol family
+rintf '\n%s%s\n' INTENT_END_ netifd-interfaces
+> printf '\n%s%s\n' INTENT_BEGIN_ netifd-devices; ubus call network.device statu
+s; printf '\n%s%s\n' INTENT_END_ netifd-devices
+> printf '\n%s%s\n' I[    8.129883] kmodloader: done loading kernel modules from /etc/modules.d/*
+NTENT_BEGIN_ netifd-wireless; ubus call network.wireless st
+atus; printf '\n%s%s\n' INTENT_END_ netifd-wireless
+> printf '\n%s%s\n' INTENT_ LAB_DONE
+> INTENT_SCRIPT
+root@(none):~# sh /tmp/intent-capture.sh
+DISTRIB_ID='OpenWrt'
+DISTRIB_RELEASE='24.10.8'
+DISTRIB_REVISION='r29233-443ec4032a'
+DISTRIB_TARGET='x86/64'
+DISTRIB_ARCH='x86_64'
+DISTRIB_DESCRIPTION='OpenWrt 24.10.8 r29233-443ec4032a'
+DISTRIB_TAINTS=''
+ 14:26:17 up 0 min,  load average: 0.46, 0.09, 0.03
+container
+dhcp
+dnsmasq
+dnsmasq.dns
+file
+hotplug.dhcp
+hotplug.iface
+hotplug.leds
+hotplug.neigh
+hotplug.net
+hotplug.ntp
+hotplug.tftp
+iwinfo
+log
+luci
+luci-rpc
+network
+network.device
+network.interface
+network.rrdns
+network.wireless
+rc
+service
+session
+system
+uci
+[   19.886973] 8021q: adding VLAN 0 to HW filter on device eth0
+[   19.915258] br-lan: port 1(eth0) entered blocking state
+[   19.916818] br-lan: port 1(eth0) entered disabled state
+[   19.918291] virtio_net virtio1 eth0: entered allmulticast mode
+[   19.920990] virtio_net virtio1 eth0: entered promiscuous mode
+[   19.993498] br-lan: port 1(eth0) entered blocking state
+[   19.994963] br-lan: port 1(eth0) entered forwarding state
+running
+  PID USER       VSZ STAT COMMAND
+    1 root      1516 S    /sbin/procd
+    2 root         0 SW   [kthreadd]
+    3 root         0 SW   [pool_workqueue_]
+    4 root         0 IW<  [kworker/R-rcu_g]
+    5 root         0 IW<  [kworker/R-rcu_p]
+    6 root         0 IW<  [kworker/R-slub_]
+    7 root         0 IW<  [kworker/R-netns]
+    8 root         0 IW   [kworker/0:0-eve]
+    9 root         0 IW<  [kworker/0:0H-ev]
+   10 root         0 IW   [kworker/0:1]
+   11 root         0 IW   [kworker/u2:0-ev]
+   12 root         0 IW<  [kworker/R-mm_pe]
+   13 root         0 IW   [rcu_tasks_trace]
+   14 root         0 SW   [ksoftirqd/0]
+   15 root         0 IW   [rcu_sched]
+   16 root         0 SW   [migration/0]
+   17 root         0 SW   [cpuhp/0]
+   18 root         0 IW<  [kworker/R-inet_]
+   19 root         0 SW   [oom_reaper]
+   20 root         0 IW<  [kworker/R-write]
+   21 root         0 SW   [kcompactd0]
+   22 root         0 IW<  [kworker/R-pencr]
+   23 root         0 IW<  [kworker/R-pdecr]
+   24 root         0 IW<  [kworker/R-crypt]
+   25 root         0 IW<  [kworker/R-kinte]
+   26 root         0 IW<  [kworker/R-kbloc]
+   27 root         0 IW<  [kworker/R-blkcg]
+   28 root         0 IW<  [kworker/R-ata_s]
+   29 root         0 SW   [watchdogd]
+   30 root         0 IW   [kworker/u2:1-ev]
+   31 root         0 IW<  [kworker/0:1H-kb]
+   33 root         0 IW   [kworker/u2:2-ev]
+   37 root         0 SW   [kswapd0]
+   50 root         0 IW<  [kworker/R-kthro]
+   80 root         0 IW<  [kworker/R-acpi_]
+  177 root         0 SW   [hwrng]
+  178 root         0 IW<  [kworker/R-ttm]
+  211 root         0 IW<  [kworker/R-nvme-]
+  237 root         0 IW<  [kworker/R-nvme-]
+  239 root         0 IW<  [kworker/R-nvme-]
+  240 root         0 SW   [scsi_eh_0]
+  264 root         0 IW<  [kworker/R-scsi_]
+  268 root         0 SW   [scsi_eh_1]
+  269 root         0 IW<  [kworker/R-scsi_]
+  273 root         0 SW   [scsi_eh_2]
+  274 root         0 IW<  [kworker/R-scsi_]
+  278 root         0 SW   [scsi_eh_3]
+  279 root         0 IW<  [kworker/R-scsi_]
+  283 root         0 SW   [scsi_eh_4]
+  284 root         0 IW<  [kworker/R-scsi_]
+  288 root         0 SW   [scsi_eh_5]
+  289 root         0 IW<  [kworker/R-scsi_]
+  293 root         0 IW   [kworker/u2:3-ev]
+  294 root         0 IW   [kworker/u2:4-ev]
+  295 root         0 IW   [kworker/u2:5-ev]
+  296 root         0 IW   [kworker/u2:6-ev]
+  297 root         0 IW   [kworker/u2:7-ev]
+  325 root         0 IW   [kworker/u2:8-ev]
+  355 root         0 IW<  [kworker/R-mld]
+  365 root         0 IW<  [kworker/R-ipv6_]
+  366 root         0 IW<  [kworker/R-kstrp]
+  585 root         0 IW   [kworker/u2:9]
+  708 root         0 SW   [jbd2/vda2-8]
+  709 root         0 IW<  [kworker/R-ext4-]
+  713 root         0 IW   [kworker/0:2-eve]
+  875 root         0 IW<  [kworker/R-ext4-]
+ 1006 ubus      1024 S    /sbin/ubusd
+ 1007 root      1180 S    /bin/login -f root
+ 1008 root       804 S    /sbin/askfirst /usr/libexec/login.sh
+ 1012 root      1192 S    -ash
+ 1054 root      1016 R    /sbin/urngd
+ 1111 root         0 IW<  [kworker/R-ena]
+ 1124 root         0 IW<  [kworker/R-ixgbe]
+ 1202 root      1180 S    sh /tmp/intent-capture.sh
+ 1473 logd      1652 S    /sbin/logd -S 128
+ 1529 root      2008 S    /sbin/rpcd -s /var/run/ubus/ubus.sock -t 30
+ 1678 root      2236 S    {dnsmasq} /sbin/ujail -t 5 -n dnsmasq -u -l -r /bin/ubus -r /etc/TZ -r /etc/dnsmasq.conf -r /etc/ethers -
+ 1692 dnsmasq   1388 S    /usr/sbin/dnsmasq -C /var/etc/dnsmasq.conf.cfg01411c -k -x /var/run/dnsmasq/dnsmasq.cfg01411c.pid
+ 1777 root      1000 S    /usr/sbin/dropbear -F -P /var/run/dropbear.1.pid -p 22 -K 300 -T 3 -W 262144
+ 1899 root      1760 S    /sbin/netifd
+ 2018 root      1224 S    /usr/sbin/odhcpd
+ 2101 root      1348 S    {hotplug-call} /bin/sh /sbin/hotplug-call iface
+ 2103 root      1532 S    {cron} /bin/sh /etc/rc.common /etc/init.d/cron running
+ 2104 root      1568 S    {S50uhttpd} /bin/sh /etc/rc.common /etc/rc.d/S50uhttpd boot
+ 2131 root      1352 S    {hotplug-call} /bin/sh /sbin/hotplug-call iface
+ 2135 root      1372 S    {firewall} /bin/sh /etc/rc.common /etc/init.d/firewall enabled
+ 2151 root      1188 R    ps w
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'lan' is enabled
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'lan' is setting up now
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'lan' is now up
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: bridge 'br-lan' link is up
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'lan' has link connectivity
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'loopback' is enabled
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'loopback' is setting up now
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'loopback' is now up
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: bridge 'br-lan' link is down
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'lan' has link connectivity loss
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Network device 'eth0' link is up
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: bridge 'br-lan' link is up
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'lan' has link connectivity
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Network device 'lo' link is up
+Wed Sep 16 14:26:17 2026 daemon.notice netifd: Interface 'loopback' has link connectivity
+'uci' @218e011e
+	"configs":{}
+	"get":{"config":"String","section":"String","option":"String","type":"String","match":"Table","ubus_rpc_session":"String"}
+	"state":{"config":"String","section":"String","option":"String","type":"String","match":"Table","ubus_rpc_session":"String"}
+	"add":{"config":"String","type":"String","name":"String","values":"Table","ubus_rpc_session":"String"}
+	"set":{"config":"String","section":"String","type":"String","match":"Table","values":"Table","ubus_rpc_session":"String"}
+	"delete":{"config":"String","section":"String","type":"String","match":"Table","option":"String","options":"Array","ubus_rpc_session":"String"}
+	"rename":{"config":"String","section":"String","option":"String","name":"String","ubus_rpc_session":"String"}
+	"order":{"config":"String","sections":"Array","ubus_rpc_session":"String"}
+	"changes":{"config":"String","ubus_rpc_session":"String"}
+	"revert":{"config":"String","ubus_rpc_session":"String"}
+	"commit":{"config":"String","ubus_rpc_session":"String"}
+	"apply":{"rollback":"Boolean","timeout":"Integer","ubus_rpc_session":"String"}
+	"confirm":{"ubus_rpc_session":"String"}
+	"rollback":{"ubus_rpc_session":"String"}
+	"reload_config":{}
+'network.interface' @9afa7110
+	"up":{}
+	"down":{}
+	"renew":{}
+	"status":{}
+	"prepare":{}
+	"dump":{}
+	"add_device":{"name":"String","link-ext":"Boolean","vlan":"Array"}
+	"remove_device":{"name":"String","link-ext":"Boolean","vlan":"Array"}
+	"notify_proto":{}
+	"remove":{}
+	"set_data":{}
+'network.device' @10587621
+	"status":{"name":"String"}
+	"set_alias":{"alias":"Array","device":"String"}
+	"set_state":{"name":"String","defer":"Boolean","auth_status":"Boolean","auth_vlans":"Array"}
+	"stp_init":{}
+'network.wireless' @d4f5df7e
+	"up":{}
+	"down":{}
+	"reconf":{}
+	"status":{}
+	"notify":{}
+	"get_validate":{}
+base-files - 1674~443ec4032a
+bnx2-firmware - 20241110-r2
+busybox - 1.36.1-r3
+ca-bundle - 20260601-r1
+cgi-io - 2026.07.21~31cb3c89-r1
+dnsmasq - 2.93-r1
+dropbear - 2024.86-r3
+e2fsprogs - 1.47.0-r2
+firewall4 - 2024.12.18~18fc0ead-r1
+fstools - 2024.07.14~408c2cc4-r1
+fwtool - 2019.11.12~8f7fe925-r1
+getrandom - 2024.04.26~85f10530-r1
+grub2 - 2.12-r1
+grub2-bios-setup - 2.12-r1
+grub2-efi - 2.12-r1
+i915-firmware-dmc - 20241110-r2
+jansson4 - 2.14-r3
+jshn - 2025.07.23~49056d17-r1
+jsonfilter - 2025.04.18~8a86fb78-r1
+kernel - 6.6.144~50daf8372d971124fb3519e8d87e02ae-r1
+kmod-acpi-video - 6.6.144-r1
+kmod-amazon-ena - 6.6.144-r1
+kmod-amd-xgbe - 6.6.144-r1
+kmod-backlight - 6.6.144-r1
+kmod-bnx2 - 6.6.144-r1
+kmod-button-hotplug - 6.6.144-r3
+kmod-crypto-acompress - 6.6.144-r1
+kmod-crypto-crc32c - 6.6.144-r1
+kmod-crypto-hash - 6.6.144-r1
+kmod-dma-buf - 6.6.144-r1
+kmod-drm - 6.6.144-r1
+kmod-drm-buddy - 6.6.144-r1
+kmod-drm-display-helper - 6.6.144-r1
+kmod-drm-exec - 6.6.144-r1
+kmod-drm-i915 - 6.6.144-r1
+kmod-drm-kms-helper - 6.6.144-r1
+kmod-drm-suballoc-helper - 6.6.144-r1
+kmod-drm-ttm - 6.6.144-r1
+kmod-drm-ttm-helper - 6.6.144-r1
+kmod-dwmac-intel - 6.6.144-r1
+kmod-e1000 - 6.6.144-r1
+kmod-e1000e - 6.6.144-r1
+kmod-fb - 6.6.144-r1
+kmod-fb-cfb-copyarea - 6.6.144-r1
+kmod-fb-cfb-fillrect - 6.6.144-r1
+kmod-fb-cfb-imgblt - 6.6.144-r1
+kmod-fb-sys-fops - 6.6.144-r1
+kmod-fb-sys-ram - 6.6.144-r1
+kmod-forcedeth - 6.6.144-r1
+kmod-fs-vfat - 6.6.144-r1
+kmod-hwmon-core - 6.6.144-r1
+kmod-i2c-algo-bit - 6.6.144-r1
+kmod-i2c-core - 6.6.144-r1
+kmod-igb - 6.6.144-r1
+kmod-igc - 6.6.144-r1
+kmod-input-core - 6.6.144-r1
+kmod-ixgbe - 6.6.144-r1
+kmod-lib-crc-ccitt - 6.6.144-r1
+kmod-lib-crc32c - 6.6.144-r1
+kmod-lib-lzo - 6.6.144-r1
+kmod-libphy - 6.6.144-r1
+kmod-mdio - 6.6.144-r1
+kmod-mdio-devres - 6.6.144-r1
+kmod-mii - 6.6.144-r1
+kmod-nf-conntrack - 6.6.144-r1
+kmod-nf-conntrack6 - 6.6.144-r1
+kmod-nf-flow - 6.6.144-r1
+kmod-nf-log - 6.6.144-r1
+kmod-nf-log6 - 6.6.144-r1
+kmod-nf-nat - 6.6.144-r1
+kmod-nf-reject - 6.6.144-r1
+kmod-nf-reject6 - 6.6.144-r1
+kmod-nfnetlink - 6.6.144-r1
+kmod-nft-core - 6.6.144-r1
+kmod-nft-fib - 6.6.144-r1
+kmod-nft-nat - 6.6.144-r1
+kmod-nft-offload - 6.6.144-r1
+kmod-nls-base - 6.6.144-r1
+kmod-nls-cp437 - 6.6.144-r1
+kmod-nls-iso8859-1 - 6.6.144-r1
+kmod-nls-utf8 - 6.6.144-r1
+kmod-pcs-xpcs - 6.6.144-r1
+kmod-phy-realtek - 6.6.144-r1
+kmod-phylink - 6.6.144-r1
+kmod-ppp - 6.6.144-r1
+kmod-pppoe - 6.6.144-r1
+kmod-pppox - 6.6.144-r1
+kmod-pps - 6.6.144-r1
+kmod-ptp - 6.6.144-r1
+kmod-r8169 - 6.6.144-r1
+kmod-slhc - 6.6.144-r1
+kmod-stmmac-core - 6.6.144-r1
+kmod-tg3 - 6.6.144-r1
+libblkid1 - 2.40.2-r1
+libblobmsg-json20240329 - 2025.07.23~49056d17-r1
+libc - 1.2.5-r4
+libcomerr0 - 1.47.0-r2
+libe2p2 - 1.47.0-r2
+libext2fs2 - 1.47.0-r2
+libf2fs6 - 1.16.0-r3
+libgcc1 - 13.3.0-r4
+libiwinfo-data - 2024.10.20~b94f066e-r1
+libiwinfo20230701 - 2024.10.20~b94f066e-r1
+libjson-c5 - 0.18-r1
+libjson-script20240329 - 2025.07.23~49056d17-r1
+liblucihttp-ucode - 2023.03.15~9b5b683f-r1
+liblucihttp0 - 2023.03.15~9b5b683f-r1
+libmbedtls21 - 3.6.6-r2
+libmnl0 - 1.0.5-r1
+libnftnl11 - 1.2.8-r1
+libnl-tiny1 - 2025.03.19~c0df580a-r1
+libpthread - 1.2.5-r4
+librt - 1.2.5-r4
+libsmartcols1 - 2.40.2-r1
+libss2 - 1.47.0-r2
+libubox20240329 - 2025.07.23~49056d17-r1
+libubus20250102 - 2025.10.17~60e04048-r1
+libuci20250120 - 2025.01.20~16ff0bad-r1
+libuclient20201210 - 2024.10.22~88ae8f20-r1
+libucode20230711 - 2025.07.18~3f64c808-r1
+libudebug - 2025.08.24~edeb4d6d
+libustream-mbedtls20201210 - 2024.07.28~99bd3d2b-r1
+libuuid1 - 2.40.2-r1
+logd - 2024.04.26~85f10530-r1
+luci - 26.205.85413~cac97ed
+luci-app-firewall - 26.205.85413~cac97ed
+luci-app-package-manager - 26.205.85413~cac97ed
+luci-base - 26.205.85413~cac97ed
+luci-light - 26.205.85413~cac97ed
+luci-mod-admin-full - 26.205.85413~cac97ed
+luci-mod-network - 26.205.85413~cac97ed
+luci-mod-status - 26.205.85413~cac97ed
+luci-mod-system - 26.205.85413~cac97ed
+luci-proto-ipv6 - 26.205.85413~cac97ed
+luci-proto-ppp - 26.205.85413~cac97ed
+luci-ssl - 26.205.85413~cac97ed
+luci-theme-bootstrap - 26.205.85413~cac97ed
+mkf2fs - 1.16.0-r3
+mtd - 26
+netifd - 2025.05.23~7901e66c-r1
+nftables-json - 1.1.1-r1
+odhcp6c - 2024.09.25~b6ae9ffa-r2
+odhcpd-ipv6only - 2025.10.02~b14cf98c-r3
+openwrt-keyring - 2024.11.01~fbae29d7-r2
+opkg - 2024.10.16~38eccbb1-r1
+partx-utils - 2.40.2-r1
+ppp - 2.5.1-r1
+ppp-mod-pppoe - 2.5.1-r1
+procd - 2026.03.14~c59f2d80-r1
+procd-seccomp - 2026.03.14~c59f2d80-r1
+procd-ujail - 2026.03.14~c59f2d80-r1
+px5g-mbedtls - 11
+r8169-firmware - 20241110-r2
+rpcd - 2025.09.01~bba95191-r2
+rpcd-mod-file - 2025.09.01~bba95191-r2
+rpcd-mod-iwinfo - 2025.09.01~bba95191-r2
+rpcd-mod-luci - 20240305-r1
+rpcd-mod-rrdns - 20170710
+rpcd-mod-ucode - 2025.09.01~bba95191-r2
+ubox - 2024.04.26~85f10530-r1
+ubus - 2025.10.17~60e04048-r1
+ubusd - 2025.10.17~60e04048-r1
+uci - 2025.01.20~16ff0bad-r1
+uclient-fetch - 2024.10.22~88ae8f20-r1
+ucode - 2025.07.18~3f64c808-r1
+ucode-mod-fs - 2025.07.18~3f64c808-r1
+ucode-mod-html - 1
+ucode-mod-math - 2025.07.18~3f64c808-r1
+ucode-mod-ubus - 2025.07.18~3f64c808-r1
+ucode-mod-uci - 2025.07.18~3f64c808-r1
+uhttpd - 2025.07.06~7e64e8ba-r5
+uhttpd-mod-ubus - 2025.07.06~7e64e8ba-r5
+urandom-seed - 3
+urngd - 2023.11.01~44365eb1-r1
+usign - 2020.05.23~f1f65026-r1
+
+INTENT_BEGIN_uci-network
+{
+	"values": {
+		"loopback": {
+			".anonymous": false,
+			".type": "interface",
+			".name": "loopback",
+			".index": 0,
+			"device": "lo",
+			"proto": "static",
+			"ipaddr": "127.0.0.1",
+			"netmask": "255.0.0.0"
+		},
+		"globals": {
+			".anonymous": false,
+			".type": "globals",
+			".name": "globals",
+			".index": 1,
+			"ula_prefix": "fdbe:f54:5df7::/48"
+		},
+		"cfg030f15": {
+			".anonymous": true,
+			".type": "device",
+			".name": "cfg030f15",
+			".index": 2,
+			"name": "br-lan",
+			"type": "bridge",
+			"ports": [
+				"eth0"
+			]
+		},
+		"lan": {
+			".anonymous": false,
+			".type": "interface",
+			".name": "lan",
+			".index": 3,
+			"device": "br-lan",
+			"proto": "static",
+			"ipaddr": "192.168.1.1",
+			"netmask": "255.255.255.0",
+			"ip6assign": "60"
+		}
+	}
+}
+
+INTENT_END_uci-network
+
+INTENT_BEGIN_uci-changes
+{
+	"changes": [
+		
+	]
+}
+
+INTENT_END_uci-changes
+
+INTENT_BEGIN_netifd-interfaces
+{
+	"interface": [
+		{
+			"interface": "lan",
+			"up": true,
+			"pending": false,
+			"available": true,
+			"autostart": true,
+			"dynamic": false,
+			"uptime": 0,
+			"l3_device": "br-lan",
+			"proto": "static",
+			"device": "br-lan",
+			"updated": [
+				"addresses"
+			],
+			"metric": 0,
+			"dns_metric": 0,
+			"delegation": true,
+			"ipv4-address": [
+				{
+					"address": "192.168.1.1",
+					"mask": 24
+				}
+			],
+			"ipv6-address": [
+				
+			],
+			"ipv6-prefix": [
+				
+			],
+			"ipv6-prefix-assignment": [
+				{
+					"address": "fdbe:f54:5df7::",
+					"mask": 60,
+					"local-address": {
+						"address": "fdbe:f54:5df7::1",
+						"mask": 60
+					}
+				}
+			],
+			"route": [
+				
+			],
+			"dns-server": [
+				
+			],
+			"dns-search": [
+				
+			],
+			"neighbors": [
+				
+			],
+			"inactive": {
+				"ipv4-address": [
+					
+				],
+				"ipv6-address": [
+					
+				],
+				"route": [
+					
+				],
+				"dns-server": [
+					
+				],
+				"dns-search": [
+					
+				],
+				"neighbors": [
+					
+				]
+			},
+			"data": {
+				
+			}
+		},
+		{
+			"interface": "loopback",
+			"up": true,
+			"pending": false,
+			"available": true,
+			"autostart": true,
+			"dynamic": false,
+			"uptime": 0,
+			"l3_device": "lo",
+			"proto": "static",
+			"device": "lo",
+			"updated": [
+				"addresses"
+			],
+			"metric": 0,
+			"dns_metric": 0,
+			"delegation": true,
+			"ipv4-address": [
+				{
+					"address": "127.0.0.1",
+					"mask": 8
+				}
+			],
+			"ipv6-address": [
+				
+			],
+			"ipv6-prefix": [
+				
+			],
+			"ipv6-prefix-assignment": [
+				
+			],
+			"route": [
+				
+			],
+			"dns-server": [
+				
+			],
+			"dns-search": [
+				
+			],
+			"neighbors": [
+				
+			],
+			"inactive": {
+				"ipv4-address": [
+					
+				],
+				"ipv6-address": [
+					
+				],
+				"route": [
+					
+				],
+				"dns-server": [
+					
+				],
+				"dns-search": [
+					
+				],
+				"neighbors": [
+					
+				]
+			},
+			"data": {
+				
+			}
+		}
+	]
+}
+
+INTENT_END_netifd-interfaces
+
+INTENT_BEGIN_netifd-devices
+{
+	"br-lan": {
+		"external": false,
+		"present": true,
+		"type": "bridge",
+		"up": true,
+		"carrier": true,
+		"auth_status": false,
+		"link-advertising": [
+			
+		],
+		"link-partner-advertising": [
+			
+		],
+		"link-supported": [
+			
+		],
+		"autoneg": false,
+		"flow-control": {
+			"autoneg": true,
+			"supported": [
+				
+			],
+			"link-advertising": [
+				
+			],
+			"link-partner-advertising": [
+				
+			],
+			"negotiated": [
+				
+			]
+		},
+		"hw-tc-offload": false,
+		"devtype": "bridge",
+		"bridge-members": [
+			"eth0"
+		],
+		"bridge-attributes": {
+			"stp": false,
+			"forward_delay": 8,
+			"priority": 32767,
+			"ageing_time": 0,
+			"hello_time": 1,
+			"max_age": 10,
+			"igmp_snooping": false,
+			"bridge_empty": false,
+			"multicast_querier": false,
+			"hash_max": 512,
+			"robustness": 2,
+			"query_interval": 12500,
+			"query_response_interval": 1000,
+			"last_member_interval": 100,
+			"vlan_filtering": false,
+			"stp_kernel": false
+		},
+		"mtu": 1500,
+		"mtu6": 1500,
+		"macaddr": "52:54:00:12:34:56",
+		"txqueuelen": 1000,
+		"ipv6": true,
+		"ip6segmentrouting": false,
+		"promisc": false,
+		"rpfilter": 0,
+		"acceptlocal": false,
+		"igmpversion": 0,
+		"mldversion": 0,
+		"neigh4reachabletime": 30000,
+		"neigh6reachabletime": 30000,
+		"neigh4gcstaletime": 60,
+		"neigh6gcstaletime": 60,
+		"neigh4locktime": 100,
+		"dadtransmits": 1,
+		"multicast": true,
+		"sendredirects": true,
+		"drop_v4_unicast_in_l2_multicast": false,
+		"drop_v6_unicast_in_l2_multicast": false,
+		"drop_gratuitous_arp": false,
+		"drop_unsolicited_na": false,
+		"arp_accept": false,
+		"gro": true,
+		"statistics": {
+			"collisions": 0,
+			"rx_frame_errors": 0,
+			"tx_compressed": 0,
+			"multicast": 0,
+			"rx_length_errors": 0,
+			"tx_dropped": 0,
+			"rx_bytes": 0,
+			"rx_missed_errors": 0,
+			"tx_errors": 0,
+			"rx_compressed": 0,
+			"rx_over_errors": 0,
+			"tx_fifo_errors": 0,
+			"rx_crc_errors": 0,
+			"rx_packets": 0,
+			"tx_heartbeat_errors": 0,
+			"rx_dropped": 0,
+			"tx_aborted_errors": 0,
+			"tx_packets": 2,
+			"rx_errors": 0,
+			"tx_bytes": 220,
+			"tx_window_errors": 0,
+			"rx_fifo_errors": 0,
+			"tx_carrier_errors": 0
+		}
+	},
+	"eth0": {
+		"external": false,
+		"present": true,
+		"type": "Network device",
+		"up": true,
+		"carrier": true,
+		"auth_status": false,
+		"link-advertising": [
+			
+		],
+		"link-partner-advertising": [
+			
+		],
+		"link-supported": [
+			
+		],
+		"autoneg": false,
+		"flow-control": {
+			"autoneg": true,
+			"supported": [
+				
+			],
+			"link-advertising": [
+				
+			],
+			"link-partner-advertising": [
+				
+			],
+			"negotiated": [
+				
+			]
+		},
+		"hw-tc-offload": false,
+		"devtype": "ethernet",
+		"mtu": 1500,
+		"mtu6": 1500,
+		"macaddr": "52:54:00:12:34:56",
+		"txqueuelen": 1000,
+		"ipv6": false,
+		"ip6segmentrouting": false,
+		"promisc": false,
+		"rpfilter": 0,
+		"acceptlocal": false,
+		"igmpversion": 0,
+		"mldversion": 0,
+		"neigh4reachabletime": 30000,
+		"neigh6reachabletime": 30000,
+		"neigh4gcstaletime": 60,
+		"neigh6gcstaletime": 60,
+		"neigh4locktime": 100,
+		"dadtransmits": 1,
+		"multicast": true,
+		"sendredirects": true,
+		"drop_v4_unicast_in_l2_multicast": false,
+		"drop_v6_unicast_in_l2_multicast": false,
+		"drop_gratuitous_arp": false,
+		"drop_unsolicited_na": false,
+		"arp_accept": false,
+		"gro": true,
+		"statistics": {
+			"collisions": 0,
+			"rx_frame_errors": 0,
+			"tx_compressed": 0,
+			"multicast": 0,
+			"rx_length_errors": 0,
+			"tx_dropped": 0,
+			"rx_bytes": 134,
+			"rx_missed_errors": 0,
+			"tx_errors": 0,
+			"rx_compressed": 0,
+			"rx_over_errors": 0,
+			"tx_fifo_errors": 0,
+			"rx_crc_errors": 0,
+			"rx_packets": 1,
+			"tx_heartbeat_errors": 0,
+			"rx_dropped": 0,
+			"tx_aborted_errors": 0,
+			"tx_packets": 13,
+			"rx_errors": 0,
+			"tx_bytes": 4994,
+			"tx_window_errors": 0,
+			"rx_fifo_errors": 0,
+			"tx_carrier_errors": 0
+		}
+	},
+	"lo": {
+		"external": false,
+		"present": true,
+		"type": "Network device",
+		"up": true,
+		"carrier": true,
+		"auth_status": false,
+		"mtu": 65536,
+		"mtu6": 65536,
+		"macaddr": "00:00:00:00:00:00",
+		"txqueuelen": 1000,
+		"ipv6": true,
+		"ip6segmentrouting": false,
+		"promisc": false,
+		"rpfilter": 0,
+		"acceptlocal": false,
+		"igmpversion": 0,
+		"mldversion": 0,
+		"neigh4reachabletime": 30000,
+		"neigh6reachabletime": 30000,
+		"neigh4gcstaletime": 60,
+		"neigh6gcstaletime": 60,
+		"neigh4locktime": 100,
+		"dadtransmits": 1,
+		"multicast": false,
+		"sendredirects": true,
+		"drop_v4_unicast_in_l2_multicast": false,
+		"drop_v6_unicast_in_l2_multicast": false,
+		"drop_gratuitous_arp": false,
+		"drop_unsolicited_na": false,
+		"arp_accept": false,
+		"gro": true,
+		"statistics": {
+			"collisions": 0,
+			"rx_frame_errors": 0,
+			"tx_compressed": 0,
+			"multicast": 0,
+			"rx_length_errors": 0,
+			"tx_dropped": 0,
+			"rx_bytes": 0,
+			"rx_missed_errors": 0,
+			"tx_errors": 0,
+			"rx_compressed": 0,
+			"rx_over_errors": 0,
+			"tx_fifo_errors": 0,
+			"rx_crc_errors": 0,
+			"rx_packets": 0,
+			"tx_heartbeat_errors": 0,
+			"rx_dropped": 0,
+			"tx_aborted_errors": 0,
+			"tx_packets": 0,
+			"rx_errors": 0,
+			"tx_bytes": 0,
+			"tx_window_errors": 0,
+			"rx_fifo_errors": 0,
+			"tx_carrier_errors": 0
+		}
+	}
+}
+
+INTENT_END_netifd-devices
+
+INTENT_BEGIN_netifd-wireless
+{
+	
+}
+
+INTENT_END_netifd-wireless
+
+INTENT_LAB_DONE

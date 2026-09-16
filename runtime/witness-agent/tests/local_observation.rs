@@ -90,14 +90,14 @@ fn context() -> LocalObservationContext {
     LocalObservationContext {
         device: binding(),
         source: source(),
-        rpcd_session: "session-a".into(),
+        rpcd_session: "0123456789abcdef0123456789abcdef".into(),
     }
 }
 fn access() -> Vec<Result<Value, ObservationError>> {
     let mut r = (0..5)
         .map(|_| Ok(serde_json::json!({"access":true})))
         .collect::<Vec<_>>();
-    r.extend((0..7).map(|_| Ok(serde_json::json!({"access":false}))));
+    r.extend((0..11).map(|_| Ok(serde_json::json!({"access":false}))));
     r
 }
 fn uci_reply(_extra: Value) -> Value {
@@ -330,7 +330,8 @@ fn timeout_and_netifd_exactness_never_promote_unknown() {
     );
     assert_eq!(outcome, Outcome::Timeout);
     let mut r = access();
-    r.push(Ok(serde_json::json!({"interface":[{"interface":"lan","up":true,"ipv4-address":[{"address":"192.0.2.1","mask":24}],"ipv6-address":[]}]})));
+    r.push(Ok(serde_json::json!({"interface":[{"interface":"lan","up":true,"ipv4-address":[{"address":"192.0.2.1","mask":24}],"ipv6-address":[],"ipv6-prefix-assignment":[]}]})));
+    r.extend(access());
     let (mock, _) = Mock::new(r);
     let s = spec(Expectation::NetifdInterface {
         interface: "lan".into(),
@@ -339,11 +340,13 @@ fn timeout_and_netifd_exactness_never_promote_unknown() {
     });
     assert_eq!(execute(&s, &context(), mock).outcome, Outcome::Success);
     let mut r = access();
-    r.push(Ok(serde_json::json!({"interface":[{"interface":"lan","up":true,"ipv4-address":[{"address":"192.0.2.1","mask":24}]}]})));
+    r.push(Ok(serde_json::json!({"interface":[{"interface":"lan","up":true,"ipv4-address":[{"address":"192.0.2.1","mask":24}],"ipv6-prefix-assignment":[]}]})));
+    r.extend(access());
     let (mock, _) = Mock::new(r);
     assert_eq!(execute(&s, &context(), mock).outcome, Outcome::Unavailable);
     let mut r = access();
-    r.push(Ok(serde_json::json!({"interface":[{"interface":"lan","up":true,"ipv4-address":[],"ipv6-address":[]},{"interface":"lan","up":true,"ipv4-address":[],"ipv6-address":[]}]})));
+    r.push(Ok(serde_json::json!({"interface":[{"interface":"lan","up":true,"ipv4-address":[],"ipv6-address":[],"ipv6-prefix-assignment":[]},{"interface":"lan","up":true,"ipv4-address":[],"ipv6-address":[],"ipv6-prefix-assignment":[]}]})));
+    r.extend(access());
     let (mock, _) = Mock::new(r);
     assert_eq!(
         execute(&s, &context(), mock).outcome,
@@ -356,8 +359,9 @@ fn netifd_compares_ip_semantics_and_rejects_bad_prefixes_before_rpc() {
     let mut replies = access();
     replies.push(Ok(serde_json::json!({"interface":[{
         "interface":"lan", "up":true, "ipv4-address":[],
-        "ipv6-address":[{"address":"2001:0db8:0:0:0:0:0:1","mask":64}]
+        "ipv6-address":[{"address":"2001:0db8:0:0:0:0:0:1","mask":64}], "ipv6-prefix-assignment":[]
     }]})));
+    replies.extend(access());
     let (mock, _) = Mock::new(replies);
     let equivalent = spec(Expectation::NetifdInterface {
         interface: "lan".into(),
@@ -372,8 +376,9 @@ fn netifd_compares_ip_semantics_and_rejects_bad_prefixes_before_rpc() {
     let mut replies = access();
     replies.push(Ok(serde_json::json!({"interface":[{
         "interface":"lan", "up":true,
-        "ipv4-address":[{"address":"192.0.2.1","mask":24}], "ipv6-address":[]
+        "ipv4-address":[{"address":"192.0.2.1","mask":24}], "ipv6-address":[], "ipv6-prefix-assignment":[]
     }]})));
+    replies.extend(access());
     let (mock, _) = Mock::new(replies);
     let mismatch = spec(Expectation::NetifdInterface {
         interface: "lan".into(),

@@ -50,6 +50,7 @@ impl WitnessExecutor {
             _ => Completeness::Complete,
         };
         let evidence = WitnessEvidence {
+            deployment: assignment.deployment.clone(),
             version: PROTOCOL_VERSION, evidence_id: evidence_id.into(), assignment_id: assignment.assignment_id.clone(),
             plan_id: assignment.plan_id.clone(), plan_epoch: assignment.plan_epoch, graph_version: assignment.graph_version,
             revision: assignment.revision.clone(), device: assignment.device.clone(), witness: self.identity.to_string(),

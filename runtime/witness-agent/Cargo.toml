@@ -16,6 +16,7 @@ reqwest = { version = "0.12.28", default-features = true }
 hickory-proto = "0.25.2"
 rand = "0.9"
 thiserror.workspace = true
+rusqlite = { version = "0.32", features = ["bundled"] }
 
 [features]
 native-ubus = []
@@ -23,6 +24,14 @@ native-ubus = []
 [build-dependencies]
 cc = "1.2"
 
+[dev-dependencies]
+tempfile.workspace = true
+
 [[bin]]
 name = "intent-witness-agent"
 path = "src/main.rs"
+
+[[bin]]
+name = "intent-ubus-observe"
+path = "src/bin/intent-ubus-observe.rs"
+required-features = ["native-ubus"]

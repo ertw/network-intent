@@ -92,6 +92,7 @@ impl Fixture {
         };
         let now = now_ms();
         let assignment = WitnessAssignment {
+            deployment: None,
             version: PROTOCOL_VERSION,
             assignment_id: "assignment-1".into(),
             issuer: controller.to_string(),
@@ -158,7 +159,7 @@ impl Fixture {
             LocalObservationContext {
                 device: self.device.clone(),
                 source: self.source.clone(),
-                rpcd_session: "session-a".into(),
+                rpcd_session: "0123456789abcdef0123456789abcdef".into(),
             },
         )
         .unwrap()
@@ -221,7 +222,7 @@ async fn executor_rejects_scope_and_unknown_ids_before_execution() {
             LocalObservationContext {
                 device: f.device.clone(),
                 source: f.source.clone(),
-                rpcd_session: "session-a".into()
+                rpcd_session: "0123456789abcdef0123456789abcdef".into()
             }
         ),
         Err(ExecutionError::Scope)
@@ -236,7 +237,7 @@ async fn executor_rejects_scope_and_unknown_ids_before_execution() {
             LocalObservationContext {
                 device: f.device.clone(),
                 source: wrong_source,
-                rpcd_session: "session-a".into()
+                rpcd_session: "0123456789abcdef0123456789abcdef".into()
             }
         ),
         Err(ExecutionError::Scope)

@@ -68,6 +68,7 @@ pub fn verify_assignment(
         || a.version != PROTOCOL_VERSION
         || a.assignment_id.is_empty()
         || a.assignment_id.len() > 256
+        || a.deployment.as_ref().is_some_and(|d| d.deployment_id.is_empty() || d.deployment_id.len() > 256 || d.deployment_id.chars().any(char::is_control) || d.checkpoint_digest.len() != 64 || !d.checkpoint_digest.bytes().all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase()))
         || a.issuer != scope.controller.to_string()
         || scope.witness.role() != AgentRole::Witness
         || a.recipient != scope.witness.to_string()
@@ -102,6 +103,7 @@ pub fn verify_assignment(
 }
 
 pub struct VerifiedEvidence {
+    probe: ProbeSpec,
     evidence: WitnessEvidence,
     envelope: DsseEnvelope,
     assignment_envelope: DsseEnvelope,
@@ -109,6 +111,7 @@ pub struct VerifiedEvidence {
     timeout_ms: u64,
 }
 impl VerifiedEvidence {
+    pub fn assigned_probe(&self) -> &ProbeSpec { &self.probe }
     /// Keep the signed bytes and signatures for later audit verification.
     pub fn envelope(&self) -> &DsseEnvelope { &self.envelope }
     pub fn assignment_envelope(&self) -> &DsseEnvelope { &self.assignment_envelope }
@@ -160,6 +163,7 @@ pub fn verify_evidence(
         || e.evidence_id.is_empty()
         || e.evidence_id.len() > 256
         || e.assignment_id != a.assignment_id
+        || e.deployment != a.deployment
         || e.plan_id != a.plan_id
         || e.plan_epoch != a.plan_epoch
         || e.graph_version != a.graph_version
@@ -183,6 +187,7 @@ pub fn verify_evidence(
         return Err(EvidenceError::Binding("exact assigned probe"));
     }
     Ok(VerifiedEvidence {
+        probe: probe.clone(),
         evidence: e,
         envelope: envelope.clone(),
         assignment_envelope: assignment.envelope().clone(),

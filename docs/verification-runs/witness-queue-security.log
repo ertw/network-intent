@@ -1,0 +1,27 @@
+   Compiling intent-witness-agent v0.1.0 (/Users/erikwilliamson/Documents/network-intent/runtime/witness-agent)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s
+     Running tests/execution.rs (target/debug/deps/execution-c094a6965a241790)
+
+running 3 tests
+test assignment_lifetime_is_checked_again_at_execution ... ok
+test signed_assignment_executes_safe_unsupported_probe_and_verifies_evidence ... ok
+test executor_rejects_scope_and_unknown_ids_before_execution ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/queue.rs (target/debug/deps/queue-c49f3dbd8792a5a0)
+
+running 10 tests
+test schema_is_versioned_and_configuration_is_bounded ... ok
+test sealed_assignment_time_is_checked_again_at_receive ... ok
+test durable_assignment_executes_once_and_retries_saved_evidence_after_reopen ... ok
+test a_different_scope_at_the_head_cannot_starve_current_work ... ok
+test claims_and_delivery_recheck_address_scope_and_current_trust ... ok
+test recovery_tokens_and_evidence_ids_do_not_depend_on_time_or_identifier_lengths ... ok
+test conflicts_fences_expiry_and_crashed_leases_are_fail_closed ... ok
+test delivery_retires_expired_or_superseded_evidence_without_deleting_it ... ok
+test pending_capacity_retires_expired_and_superseded_work ... ok
+test live_work_and_unacked_evidence_share_capacity_and_keep_tombstones ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
