@@ -1,0 +1,127 @@
+#!/bin/sh
+# Isolated OpenWrt x86/64 VM harness. All mutable state is below lab/openwrt/state.
+set -eu
+
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+STATE="$ROOT/state"
+IMAGES="$STATE/images"
+RUN="$STATE/run"
+KEYRING="$STATE/gnupg"
+MANIFEST="$ROOT/manifest.tsv"
+QEMU=${QEMU_SYSTEM_X86_64:-qemu-system-x86_64}
+
+usage() { echo "usage: $0 {prepare|fetch VERSION|verify VERSION KEYFILE FINGERPRINT|launch VERSION|stop}" >&2; exit 64; }
+entry() { awk -F '\t' -v v="$1" '$1 == v { print $2 "\t" $3; exit }' "$MANIFEST"; }
+require_entry() {
+  VERSION=$1; ENTRY=$(entry "$VERSION"); [ -n "$ENTRY" ] || { echo "unsupported OpenWrt version: $VERSION" >&2; exit 64; }
+  FILE=$(printf '%s\n' "$ENTRY" | cut -f1); HASH=$(printf '%s\n' "$ENTRY" | cut -f2)
+  RELEASE="$IMAGES/$VERSION"; RELEASE_KEYRING="$KEYRING/$VERSION"
+}
+
+prepare() {
+  umask 077
+  mkdir -p "$IMAGES" "$RUN" "$KEYRING"
+  chmod 700 "$STATE" "$IMAGES" "$RUN" "$KEYRING"
+  echo "prepared private lab state at $STATE"
+}
+
+fetch() {
+  require_entry "$1"; prepare
+  base="https://downloads.openwrt.org/releases/$1/targets/x86/64"
+  mkdir -p "$RELEASE"; chmod 700 "$RELEASE"
+  for f in "$FILE" sha256sums sha256sums.asc; do
+    [ -e "$RELEASE/$f" ] || curl --fail --location --proto '=https' --tlsv1.2 --output "$RELEASE/$f.part" "$base/$f"
+    [ ! -e "$RELEASE/$f.part" ] || mv "$RELEASE/$f.part" "$RELEASE/$f"
+  done
+  echo "downloaded; run verify before launch"
+}
+
+verify() {
+  require_entry "$1"; key=${2:-}; fingerprint=$(printf '%s' "${3:-}" | tr '[:lower:]' '[:upper:]')
+  [ -r "$key" ] && [ "${#fingerprint}" -eq 40 ] || { echo "provide key file and authenticated 40-hex fingerprint" >&2; exit 64; }
+  [ -r "$RELEASE/$FILE" ] && [ -r "$RELEASE/sha256sums" ] && [ -r "$RELEASE/sha256sums.asc" ] || { echo "artifacts missing; run fetch first" >&2; exit 66; }
+  awk -v hash="$HASH" -v file="$FILE" '$1 == hash && ($2 == file || $2 == "*" file) { found = 1 } END { exit !found }' "$RELEASE/sha256sums" || { echo "official manifest does not match pinned hash" >&2; exit 65; }
+  actual=$(shasum -a 256 "$RELEASE/$FILE" | awk '{print $1}')
+  [ "$actual" = "$HASH" ] || { echo "image SHA-256 mismatch" >&2; exit 65; }
+  mkdir -p "$RELEASE_KEYRING"; chmod 700 "$RELEASE_KEYRING"
+  candidate=$(GNUPGHOME="$RELEASE_KEYRING" gpg --batch --with-colons --import-options show-only --dry-run --import "$key" 2>/dev/null | awk -F: '$1 == "fpr" {print $10}' | tr '[:lower:]' '[:upper:]')
+  printf '%s\n' "$candidate" | grep -Fx "$fingerprint" >/dev/null || { echo "supplied key does not contain the pinned fingerprint" >&2; exit 65; }
+  GNUPGHOME="$RELEASE_KEYRING" gpg --batch --import "$key" >/dev/null 2>&1
+  valid_primary=$(GNUPGHOME="$RELEASE_KEYRING" gpg --batch --status-fd 1 --verify "$RELEASE/sha256sums.asc" "$RELEASE/sha256sums" 2>/dev/null | awk '$2 == "VALIDSIG" {print $NF}')
+  printf '%s\n' "$valid_primary" | tr '[:lower:]' '[:upper:]' | grep -Fx "$fingerprint" >/dev/null || { echo "manifest signature was not made by the pinned primary fingerprint" >&2; exit 65; }
+  printf '%s\n' "$HASH  $FILE" > "$RELEASE/$FILE.verified"
+  chmod 600 "$RELEASE/$FILE.verified"
+  echo "verified $FILE"
+}
+
+launch() {
+  require_entry "$1"; [ -x "$(command -v "$QEMU" || true)" ] || { echo "missing qemu-system-x86_64; no VM launched" >&2; exit 69; }
+  [ -r "$RELEASE/$FILE.verified" ] || { echo "unverified image; run verify first" >&2; exit 65; }
+  [ ! -e "$RUN/qemu.pid" ] || { echo "lab VM already recorded as running" >&2; exit 73; }
+  marker_hash=$(awk 'NR == 1 {print $1}' "$RELEASE/$FILE.verified")
+  [ "$marker_hash" = "$HASH" ] || { echo "verification marker is not for the pinned image" >&2; exit 65; }
+  actual=$(shasum -a 256 "$RELEASE/$FILE" | awk '{print $1}')
+  [ "$actual" = "$marker_hash" ] || { echo "image changed after verification" >&2; exit 65; }
+  # Ruby zlib validates gzip CRC/ISIZE.  24.10.8 has an OpenWrt fwtool
+  # signature container after the gzip member; parse it rather than accepting
+  # arbitrary unused bytes. A disk is atomically replaced only after checks.
+  ruby -rzlib -e '
+    source, destination = ARGV
+    temporary = "#{destination}.part"
+    begin
+      File.open(source, "rb") do |input|
+        gzip = Zlib::GzipReader.new(input)
+        File.open(temporary, "wb", 0o600) { |output| IO.copy_stream(gzip, output) }
+        unused = gzip.unused || ""
+        gzip.close
+        unless unused.empty?
+          abort "fwtool trailer too short" if unused.bytesize < 16
+          magic, stored_crc, type, pad1, pad2, pad3, size = unused[-16, 16].unpack("NNC4N")
+          abort "unrecognized fwtool trailer" unless magic == 0x46577830 && type == 0 && pad1 == 0 && pad2 == 0 && pad3 == 0
+          abort "invalid fwtool signature length" unless size == unused.bytesize && size <= 1024
+          all = File.binread(source)
+          crc = 0xffffffff
+          all[0, all.bytesize - 16].each_byte do |byte|
+            crc ^= byte
+            8.times { crc = (crc & 1) == 1 ? (crc >> 1) ^ 0xedb88320 : crc >> 1 }
+          end
+          abort "fwtool signature CRC mismatch" unless crc == stored_crc
+        end
+      end
+      File.rename(temporary, destination)
+    ensure
+      File.delete(temporary) if File.exist?(temporary)
+    end
+  ' "$RELEASE/$FILE" "$RUN/disk.img"
+  chmod 600 "$RUN/disk.img"
+  "$QEMU" -machine q35 -m 512M -smp 1 -drive "file=$RUN/disk.img,format=raw,if=virtio" \
+    -object rng-random,id=entropy,filename=/dev/urandom -device virtio-rng-pci,rng=entropy \
+    -display none -chardev "socket,id=serial,path=$RUN/serial.sock,server=on,wait=off" -serial chardev:serial \
+    -monitor "unix:$RUN/monitor.sock,server=on,wait=off" \
+    -netdev user,id=isolated,restrict=on -device virtio-net-pci,netdev=isolated -pidfile "$RUN/qemu.pid" -daemonize
+  echo "launched isolated VM; serial console: $RUN/serial.sock"
+}
+
+stop() {
+  [ -r "$RUN/qemu.pid" ] || { rm -f "$RUN/monitor.sock" "$RUN/serial.sock"; echo "no lab VM pidfile" >&2; exit 0; }
+  pid=$(cat "$RUN/qemu.pid")
+  case $pid in *[!0-9]*|'') echo "invalid lab pidfile" >&2; exit 65 ;; esac
+  command=$(ps -p "$pid" -o command=) || { echo "cannot establish lab process state; preserving pidfile and sockets" >&2; exit 69; }
+  case $command in
+    *"$RUN/disk.img"*"$RUN/qemu.pid"*) kill "$pid" || { echo "failed to stop lab VM; preserving state" >&2; exit 69; } ;;
+    '') rm -f "$RUN/qemu.pid" "$RUN/monitor.sock" "$RUN/serial.sock"; echo "removed stale lab pidfile"; exit 0 ;;
+    *) echo "pid $pid is not this lab QEMU process; refusing to signal it" >&2; exit 65 ;;
+  esac
+  attempts=0
+  while kill -0 "$pid" 2>/dev/null; do
+    attempts=$((attempts + 1))
+    [ "$attempts" -lt 100 ] || { echo "lab VM has not exited; preserving state" >&2; exit 69; }
+    sleep 0.1
+  done
+  rm -f "$RUN/qemu.pid" "$RUN/monitor.sock" "$RUN/serial.sock"
+  echo "stopped lab VM"
+}
+
+case ${1:-} in
+  prepare) prepare ;; fetch) [ $# = 2 ] || usage; fetch "$2" ;; verify) [ $# = 4 ] || usage; verify "$2" "$3" "$4" ;; launch) [ $# = 2 ] || usage; launch "$2" ;; stop) [ $# = 1 ] || usage; stop ;; *) usage ;;
+esac

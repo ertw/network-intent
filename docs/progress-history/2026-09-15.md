@@ -1,0 +1,125 @@
+# Network Intent assurance progress
+
+## Objective and accepted specification
+
+Implement and verify the complete suite specified in [implementation-plan.md](implementation-plan.md), revision `assurance-suite-v1`. Goal remains incomplete until integration, packaging, pinned OpenWrt VM acceptance, and hardware validation are finished. Hardware profiles remain disabled until validated.
+
+## Repository checkpoint
+
+- Execution started: 2026-09-14 America/Los_Angeles (2026-09-15 UTC).
+- Initial branch: `main`, clean at `298ed31`.
+- Existing implementation: Idris compiler 0.3.0 / language 3.0, Python acceptance tests, OpenWrt and Cisco compilation. No Rust workspace or frontend yet.
+- Tools present: Idris 2, Rust/Cargo, Node/npm, Python. Nix and QEMU were not found on PATH.
+- No applicable AGENTS.md found.
+
+## Milestones and acceptance
+
+1. **Active — setup and contracts:** goal/heartbeat active; versioned runtime types, concrete Rust coverage checker and partial independent Idris witness implemented; complete admitted revision-to-plan path still pending.
+2. **Pending — observation:** SQLite controller, PKI enrollment, independent witness agent, seven primitives, native read-only ubus.
+3. **Pending — continuous assurance:** generated coverage, persistent scheduling, signed/idempotent delivery, health/history, OpenTelemetry.
+4. **Pending — deployment:** separate apply agent; adoption, conflicts, independent confirmation, durable rollback/recovery.
+5. **Pending — visualizer:** Svelte Flow/ELK/CodeMirror, layers/states, drafts, source preserving editing, compiler worker parity, admission and deployment review.
+6. **Pending — acceptance:** existing make test; forgery/coverage/binding tests; primitive failure matrix; UCI/ownership/redaction; identity/auth/signature/replay/fencing; deployment boundary crash injection; persistent monitoring; browser round trips/undo/stale workers; pinned OpenWrt 25.12.5 and 24.10.8 VMs; real hardware validation.
+
+## Decisions
+
+- Idris remains the semantic and witness authority. Rust must not treat an untrusted boolean as proof of compiler admission.
+- Config readback, config in use, operational observations, deployment receipts, and independent evidence remain separate typed records.
+- Unknown/stale/incomplete evidence cannot satisfy coverage or health success.
+- Build shared protocol schemas, with separate controller, witness-agent, and apply-agent packages and execution paths.
+- No secret materialization, deployment to existing devices, or hardware profile enablement before the relevant guarded path is implemented and verified.
+
+## Assignments and verification
+
+- Goal registered active without a token budget.
+- Heartbeat `resume-network-intent-assurance` created active for this task every 15 minutes. Existing paused `resume-network-intent-dsl` left unchanged.
+- `make test` baseline: PASS (2026-09-15 UTC); log `/tmp/network-intent-baseline.log`.
+- Coordinator: `runtime/protocol/**`, root workspace, versioned contracts, Idris witness and Rust coverage checker.
+- Earlier Terra controller storage contribution saved; 7 focused tests passed. New Terra `storage_hardening` owns storage.rs and storage tests; migration, inbox processing bounds, expiry/fencing and backup hardening active.
+- Earlier Terra witness contribution saved; native ubus still unsupported. Terra `probe_hardening` owns witness lib.rs/probes and its dependencies; review found DNS matching, invocation limits, HTTP binding and ICMP validation issues to fix before acceptance.
+- Luna standards and protocol tests completed (10 protocol tests pass). New Luna `browser_parity` completing interrupted browser registration/parity work; own browser entry/ipkg/parity script/doc.
+- Initial Rust workspace/protocol types and `docs/runtime-contracts.md` saved. Runtime implementations are not yet integrated or accepted.
+
+## Blockers and external inputs
+
+- User confirmed **no dedicated hardware device yet** on 2026-09-14. Hardware acceptance and hardware profile enablement remain incomplete. Continue independent implementation and isolated pinned VM preparation; no production device may be substituted. QEMU was not on PATH at startup.
+
+## Usage and resumption
+
+Fresh account snapshot on continuation: 98% five-hour remaining (reset epoch 1789463806); 100% weekly remaining (reset epoch 1790050606). Prior turn hit usage limits; no assistant credit redemption/purchase was performed. Ordinary usage is currently allowed. No credits will be purchased or redeemed. Refresh all reported windows at milestones.
+
+Next action: implement independent Idris witness checks and Rust concrete coverage checker; review and integrate storage/witness contributions. Before redispatch after interruption, inspect git status, this file, live goal, automation state, and existing contributions. Never assume a worker session survived.
+
+## Integration checkpoint (2026-09-15 04:17 UTC)
+
+Previous goal turn: progress (implementation, protocol/Idris tests and heartbeat registration). `make test` integration completed successfully, including new independent WitnessAPI checks; `/tmp/network-intent-integration.log`. `cargo test --workspace` failed four witness local-network tests with sandbox EPERM on bind; protocol/controller tests passed. Rerun local socket tests with the appropriate sandbox escalation, do not misreport them as implementation failures. No earlier processes/agents remain live.
+
+Current Idris witness checks interface/addressing/bridge/attachment/gateway/DNS configuration bindings; preserves unsupported claims and blocks admission. `netc assurance FILE` exposes claims/blockers. This is not complete assurance coverage: every current router firewall has an explicit blocker. Full native/browser parity remains unverified after worker interruption. Rust plan checker checks exact authoritative claim/profile set, source/endpoint/expectation coverage and DAG structure; controller admission and authoritative dependencies still need integration.
+
+Coordinator next: cryptographic identity/evidence contracts, native read-only ubus adapter, full typed admission path; review all worker changes. No runtime server or deployment path is enabled. Apply agent, PKI/mTLS/Cedar, scheduling/health/OTel, visualizer and VM/hardware acceptance remain pending.
+
+## Completed bounded work after resumption
+
+- `python3 scripts/check_browser_parity.py`: PASS, 8 fixtures including core-router and WDS, isolated browser global environment; reviewed temp wrapper cleanup/build separation.
+- `cargo test -p intent-witness-agent`: PASS, 11 tests, rerun by coordinator with sandbox escalation for local-only TCP/UDP binds. Coordinator also corrected ICMP sequence high-byte serialization found during review. Native ubus and real ICMP/TLS fixture coverage still incomplete.
+- `cargo test -p intent-controller storage`: worker reports PASS, 16 tests; schema v3, durable inbox processing, migration/version/expiry/fencing/backup checks. Coordinator review: expired/superseded pending records still consume queue capacity; delivery reads currently suppress DB errors with `unwrap_or(false)`; local-filesystem detection does not detect mounted network FS. Follow-up required.
+- DSSE/identity module added with exact byte PAE, Ed25519, canonical role-separated SPIFFE IDs, current trust-key validity/revocation checks. 5 unit tests passed. Signed assignment/evidence verification added; Luna adversarial suite passed 6 tests. PKI integration in progress (new module temporarily compiling while worker resolves errors). No mTLS/authorization service is enabled yet.
+- Health transition module added (3 violations open, 2 successes recover; unknown/stale resets streaks and never closes incident), pending integrated tests once PKI compiles.
+
+Current active workers: Terra PKI library/enrollment/renewal/rotation (identity/pki.rs, PKI tests/deps); Terra native ubus adapter/strict UCI-netifd parsing/ACL fixtures (witness adapters/native files/deps). Luna completed browser parity and signed evidence tests. Coordinator owns remaining files and reviews security/integration.
+
+## Resume checkpoint — 2026-09-15 09:18 UTC (authoritative latest)
+
+- Prior turn made implementation/testing progress, then hit five-hour quota. Fresh read now allows ordinary usage: 80% five-hour remaining (reset epoch 1789481917), 81% weekly remaining (reset epoch 1790050606). Goal tool still reports scheduler-managed `usageLimited`; do not misuse update_goal to change it (only complete/blocked allowed). Continue under available allowance. No credit redemption/purchase performed.
+- Whole Rust workspace passed before the interruption: controller20, identity5 + evidence6 + PKI4, protocol10, witness14 = 59 tests. Original /tmp log is gone after interruption; new durable logs will go in docs/verification-runs/. Integration evidence is prior successful tool process exit0, not a claim that full suite acceptance is complete.
+- Storage is now schema **v4**. Coordinator fixed expired/superseded pending records consuming queue capacity, retained explicit discard tombstones, propagated DB errors instead of hiding them. Regression and realistic v1 migration fixture passed integrated workspace tests. Local filesystem mount detection and concurrent open/migration hardening still pending.
+- PKI source compiles/tests; remaining coordinator findings: DER vs registry millisecond precision, rotation lock split/races, trailing CSR parse check, secure initial creation/sidecar perms. Registry-backed TrustedKey exists.
+- Native ubus adapter source/strict parsers/C shim exist and mock tests pass; NOT enabled in witness execution. Remaining corrections: actual network.device JSON shape, session denies mutations and all read checks, custom denial status7003, blobmsg_json linking, exact invocation limits/deadlines, missing scope completeness. Real Linux/VM validation still pending.
+- Health transitions pass3 tests; uses authenticated evidence and authoritative freshness intervals. No persistent monitor service or health transaction yet.
+- New active bounded workers after verifying no old agent is live: Terra `ubus_integration` adapters/native/tests; Terra `tls_identity` pki.rs + tls.rs + identity deps/tests; Luna `cedar_authorization` isolated runtime/authorization crate. Coordinator owns compiler/admission/controller integration and reviews all security code.
+- Coordinator adding pure compiler witness output to native/browser `evaluateSource`, new `netc evaluate FILE`, controller CompilerRunner and sealed compiled/admitted tokens. Admission remains explicitly blocked wherever semantic or operational coverage is incomplete. Do not claim every-claim coverage achieved.
+
+Next actions after current builds: test real native CompilerRunner/source digest binding and browser parity; finish/wire ubus limits & mTLS/Cedar; persist monitor plans/evidence/health atomically; implement remaining claims/bindings; introduce separate apply-agent and guarded deployment; then visualizer/VM acceptance. Hardware remains unavailable per user.
+
+## Resume and integration checkpoint — 2026-09-15 14:40 UTC
+
+- User confirms no dedicated OpenWrt hardware. Hardware acceptance remains incomplete; independent local/VM work continues.
+- Resumed after quota reset; fresh account read allowed ordinary usage, initially 94% five-hour / 67% weekly remaining; latest milestone 51% / 61% remaining, five-hour reset epoch 1789500153. Goal remains scheduler-managed usageLimited; no purchase or reset-credit redemption performed.
+- `netc evaluate` now returns native/browser witnesses with model/targets/diagnostics. Browser parity passed 8 fixtures. `cargo test -p intent-controller --test compiler_admission` passed 3 actual native compiler/source-digest tests; durable log in docs/verification-runs/compiler-admission-2026-09-15.log.
+- Cedar crate API/schema fixes complete; focused 4 tests passed. Coordinator reviewed policy and trusted grant/binding boundary. Not yet wired into a network service.
+- PKI/mTLS corrections and actual Rustls handshake negative tests passed. Coordinator additionally fixed root expiration after TLS config construction and explicitly disabled server session storage. `cargo test -p intent-identity` passed (6 unit + 6 evidence + 9 PKI); log docs/verification-runs/identity-2026-09-15.log. Signed assignment/evidence tokens now retain original DSSE envelopes for durable audit (new getters pending integration retest).
+- Native ubus reads now connected through witness `execute_with_local`/`local::execute` with installed device/source/session context and exact binding checks. Protocol adds typed UCI Scalar/OrderedList/Absent and section-type predicates. UCI type/order/absence/staging/redaction/errors and netifd incomplete/duplicate/local-scope checks pass 4 mock integration tests. Root adding canonical address/prefix matching and stricter CIDR validation; followup tests active. Native Linux C/VM execution still unverified.
+- Controller monitor module exported. Worker fixed activation idempotency/immutable plan digest/monotonic epoch+graph, generation-fenced leases, corrupt timeline rejection; 6 monitor tests passed. Worker currently persisting original signed DSSE envelopes atomically for audit, pending coordinator review/integrated test.
+- Lab harness and official pinned image hashes saved under lab/openwrt; no actual image/boot verified yet. Terra worker now continuing QEMU dependency setup and authenticated signing-key/image verification. No physical device or production network changes authorized/performed.
+- Coordinator found and closed unknown semantic claim-kind fallback in draft admission. Complete semantic/operational assurance generation remains unfinished; all current router examples retain explicit firewall coverage blockers. No bypass enabled.
+
+Active bounded work: Terra monitor signed audit persistence (`monitor.rs` only); Terra isolated QEMU/OpenWrt lab (`lab/openwrt/**`, lab doc); Luna local observation address regression tests. Coordinator integration/security/remaining runtime contracts. Next: finish focused checks, native VM bootstrap, complete generated coverage and agent runtime/delivery wiring, then guarded apply-agent, visualizer, OTel, full acceptance. Whole objective remains incomplete.
+
+### Verified integration and quota checkpoint — 2026-09-15 continuation
+
+- Non-socket integrated Rust suite (`cargo test -p intent-protocol -p intent-controller -p intent-identity -p intent-authorization`) passed after worker completion; durable runtime-integration log. Subsequent coordinator monitor migration transaction fix passed all8 focused monitor tests, including failed migration rollback. Original signed evidence+assignment envelopes survive reopen; plan activation and schedule leases are fenced/idempotent.
+- Witness full suite passed under approved local socket-test escalation:17 unit +5 local-observation integration tests; durable witness-integration log. Added shared conservative secret-field predicate and typed UCI predicates; netifd expected address prefixes validated, expanded/compressed IPv6 compared semantically. Native OpenWrt execution remains unverified.
+- `make test` rerun active session41851; output passed core512 directed graph and prefix/certification/migration/AAA checks and typestate/release tests, currently core-probes. Verify command completion before claiming full pass.
+- Lab review found shell tab parsing, cross-release checksum manifest reuse, and signer-fingerprint verification defects; Terra worker correcting before image use. Homebrew QEMU setup/official key verification ongoing; inspect lab doc and live worker state before resuming. No VM acceptance claimed.
+- New Terra apply-agent task owns runtime/apply-agent/**: pure explicit adoption/three-way UCI plan with binding, ownership/conflict/secret preservation tests. Actual device mutation/journal not yet implemented. Contribution may be partial at quota interruption; inspect before redispatch.
+- Latest usage85%five-hour consumed,45%weekly consumed (15%/55%remaining), reset epoch1789500153. No credit purchases/redemptions. Workers told to save bounded progress before interruption. Goal and heartbeat remain unfinished/active; hardware unavailable.
+
+- Completion update: `make test` session41851 exited0; full compiler checks passed, recorded in docs/verification-runs/compiler-full-2026-09-15.log. This includes independent WitnessAPI core probes. Native/browser parity previously passed8 fixtures with the current witness-bearing evaluator.
+
+## Resume checkpoint — 2026-09-15 19:38 UTC
+
+- Fresh allowance available after reset:88%five-hour remaining(reset1789519077),50%weekly remaining(reset1790050606). No credit purchases/redemptions. Prior quota interruption did not complete goal.
+- Last lab worker reported QEMU11.1.1 installed with approved Homebrew escalation, both pinned release images/signatures verified,25.12.5 boot reached procd/ubus. 24.10.8 macOS gunzip trailing-data failure needs exact format investigation. Worker resumed to validate decompression and boot both with interactive serial evidence. Coordinator has not yet accepted VM integration/native C checks.
+- Apply-agent pure adoption/three-way planner saved and5tests passed per worker. Coordinator requested fixes for desired-vs-current unowned drift semantics and unsupported section structural changes; worker active. Separate package/binary exists, no actual writes yet.
+- New Terra controller_ingress owns controller ingress module+tests, connects Cedar, signed evidence, durable inbox and monitor processing. Export/dependency added by coordinator. Tests may seed temp SQLite plan fixtures; never ship an unadmitted activation bypass. No socket service yet.
+- Coordinator added witness execution module accepting sealed VerifiedAssignment, matching installed identity/source, enforcing remaining assignment lifetime, running bounded observation and signing exact assignment-bound DSSE/in-toto evidence. Returned envelope still needs durable witness queue and service delivery integration; tests pending.
+
+### Verified repository checkpoint — 2026-09-15 19:55 UTC
+
+- Created local branch `codex/network-intent-assurance` with approved git escalation, preserving main.
+- `cargo test --workspace` completed exit0:102 tests passed across controller, authorization, identity, protocol, witness and pure apply planner; log docs/verification-runs/workspace-2026-09-15-continued.log. Full `make test` and8-fixture browser parity already passed in this implementation run.
+- Corrected declared Rust minimum to1.89, matching Cedar4.9.1 dependency and tested toolchain (previous1.85 understated dependency requirements).
+- Ingress now checks bounded outer envelope/digest before decoding, binds authenticated peer/Cedar/current signed scope, stores before acknowledgement, and replays monitor ingest idempotently. Route filtering occurs before batch limit, so other-device queues cannot starve the current route. Four actual signature/Cedar/SQLite/crash regression tests passed.
+- WitnessExecutor cryptographic roundtrip, role/source/ID rejection and execution-time expiry checks passed3 tests. It still requires service+durable witness work/outbox integration before production use.
+- Apply planner6tests passed; coordinator reviewed current-vs-baseline drift, desired revision binding, unowned section/type/order conflict handling. Field-only ownership intentionally blocks section creation/removal/type/order changes until explicit section ownership is implemented. Actual guarded mutation/journal not implemented yet.
+- Lab worker still finishing strict gzip unused-buffer validation and interactive ubus console acceptance. Prior EOF-by-file-position check was insufficient because of decompressor read-ahead; no native VM acceptance claimed yet.

@@ -1,0 +1,96 @@
+#!/bin/sh
+# Build the native read-only ubus shim smoke executable with an official,
+# pinned OpenWrt SDK. Mutable downloads and outputs stay in ../state.
+set -eu
+
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+STATE="$ROOT/state/native-build"
+SOURCE="$ROOT/../.."
+IMAGE='debian@sha256:88200866dfff7ea7f5cbcb6ec7c8a701889efe6fe859fe64d6990e4b07ea4171'
+
+entry() {
+  case "$1" in
+    25.12.5) printf '%s\t%s\n' 'openwrt-sdk-25.12.5-x86-64_gcc-14.3.0_musl.Linux-x86_64.tar.zst' '0c8df0151a1e88feb7c03d694d61f6a18d51872815b7c811d76e2b77504d5e9c' ;;
+    24.10.8) printf '%s\t%s\n' 'openwrt-sdk-24.10.8-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst' 'ac4a0405d2eea821b06f93c14ba13ffa90ad0457648903df7dde02570027ab21' ;;
+    *) echo "unsupported OpenWrt release: $1" >&2; exit 64 ;;
+  esac
+}
+
+prepare_sdk() {
+  version=$1
+  record=$(entry "$version")
+  archive=$(printf '%s\n' "$record" | cut -f1)
+  expected=$(printf '%s\n' "$record" | cut -f2)
+  release="$STATE/$version"
+  mkdir -p "$release"
+  chmod 700 "$STATE" "$release"
+  if [ ! -f "$release/$archive" ]; then
+    # Resume an interrupted SDK transfer, but verify the complete archive
+    # before extraction so a partial file is never trusted.
+    curl --fail --silent --show-error --location --continue-at - --proto '=https' --tlsv1.2 --output "$release/$archive.part" \
+      "https://downloads.openwrt.org/releases/$version/targets/x86/64/$archive"
+    mv "$release/$archive.part" "$release/$archive"
+  fi
+  actual=$(shasum -a 256 "$release/$archive" | awk '{print $1}')
+  if [ "$actual" != "$expected" ]; then
+    # A failed integrity check must not become the starting point for a later
+    # resume. Keep no unverified SDK archive in the build state.
+    rm -f "$release/$archive"
+    echo "SDK SHA-256 mismatch for $version" >&2
+    exit 65
+  fi
+  sdk="$release/sdk"
+  if [ ! -d "$sdk" ]; then
+    temporary="$release/sdk.part"
+    rm -rf "$temporary"
+    mkdir "$temporary"
+    zstd -dc "$release/$archive" | tar -xf - -C "$temporary"
+    extracted=$(find "$temporary" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')
+    [ "$extracted" = 1 ] || { echo "SDK archive layout is unexpected" >&2; exit 65; }
+    mv "$(find "$temporary" -mindepth 1 -maxdepth 1 -type d)" "$sdk"
+    rmdir "$temporary"
+  fi
+  printf '%s\n' "$sdk"
+}
+
+build() {
+  version=$1
+  sdk=$(prepare_sdk "$version")
+  # This scaffold requires development staging which stock SDKs do not ship.
+  # Fail before touching any previous output; native dependency assembly is
+  # reserved for Astra and is not part of the Grok handoff.
+  target=$(find "$sdk/staging_dir" -maxdepth 1 -type d -name 'target-*' | head -n 1)
+  if [ -z "$target" ] || [ ! -f "$target/usr/include/libubus.h" ] || [ ! -f "$target/usr/include/libubox/blobmsg_json.h" ]; then
+    echo "native build incomplete: matching libubus/libubox development staging is required; see build-native/README.md" >&2
+    exit 69
+  fi
+  output="$STATE/$version/out"
+  rm -rf "$output"
+  mkdir -p "$output"
+  chmod 700 "$output"
+  docker run --rm --platform linux/amd64 --network none --read-only --cap-drop ALL \
+    --security-opt no-new-privileges --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+    -v "$SOURCE:/src:ro" -v "$sdk:/sdk:ro" -v "$output:/out:rw" "$IMAGE" \
+    /bin/sh -ceu '
+      toolchain=$(find /sdk/staging_dir -maxdepth 1 -type d -name "toolchain-*" | head -n 1)
+      target=$(find /sdk/staging_dir -maxdepth 1 -type d -name "target-*" | head -n 1)
+      test -n "$toolchain" && test -n "$target"
+      cc=$(find "$toolchain/bin" -type f -name "*-gcc" | head -n 1)
+      test -x "$cc"
+      "$cc" -D_GNU_SOURCE -std=c11 -O2 -Wall -Wextra -Werror -Wl,-z,relro,-z,now \
+        -I"$target/usr/include" -L"$target/usr/lib" \
+        -o /out/intent-ubus-smoke \
+        /src/runtime/witness-agent/native/ubus_readonly.c \
+        /src/lab/openwrt/build-native/intent_ubus_smoke.c \
+        -lubus -lubox -lblobmsg_json -ljson-c
+      "${cc%-gcc}-readelf" -h /out/intent-ubus-smoke > /out/readelf-header.txt
+      "${cc%-gcc}-readelf" -d /out/intent-ubus-smoke > /out/readelf-dynamic.txt
+    '
+  chmod 700 "$output/intent-ubus-smoke"
+  echo "$output/intent-ubus-smoke"
+}
+
+case ${1:-} in
+  build) [ $# -eq 2 ] || { echo "usage: $0 build VERSION" >&2; exit 64; }; build "$2" ;;
+  *) echo "usage: $0 build {25.12.5|24.10.8}" >&2; exit 64 ;;
+esac

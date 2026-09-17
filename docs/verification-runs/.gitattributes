@@ -1,0 +1,2 @@
+# Preserve raw OpenWrt serial transcripts, including CR and terminal whitespace.
+openwrt-*.log -text -whitespace
