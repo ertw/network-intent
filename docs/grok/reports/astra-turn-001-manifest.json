@@ -1,0 +1,205 @@
+{
+  "base_head": "788b486863db9af36e3e932bfed899396c708ac6",
+  "excluded_review_metadata": [
+    "docs/grok/REVIEW-GATES.md",
+    "docs/grok/reports/astra-turn-001-manifest.json",
+    "docs/grok/reports/astra-turn-001.md"
+  ],
+  "files": {
+    "README.md": {
+      "bytes": 7543,
+      "executable": false,
+      "sha256": "1a24b7cc8eb531aa440ad2183d97a668e122170cf9174f650c136dbbc0fff453"
+    },
+    "docs/developer-guide.md": {
+      "bytes": 9290,
+      "executable": false,
+      "sha256": "498539cf85f52d688997fb108a8589c29c450800034ca0ec9d9215c534b94b12"
+    },
+    "docs/grok/reports/G01.md": {
+      "bytes": 5276,
+      "executable": false,
+      "sha256": "d5ff284b815074c9235c0e853fec931293ca6af960e182971312dee59164d834"
+    },
+    "docs/grok/reports/G02.md": {
+      "bytes": 7585,
+      "executable": false,
+      "sha256": "0863883a0d8bfa5115357e5f88420dd5a79a7ecef31707849b20749bbfa37df8"
+    },
+    "docs/grok/reports/G02/desktop-1280x800-harness-example.png": {
+      "bytes": 67474,
+      "executable": false,
+      "sha256": "0646ecacd5cb9e461134a6e61c088ef9b232e73e6b373d1cfa62ccd9b7390f15"
+    },
+    "docs/grok/reports/G02/desktop-1280x800-home.png": {
+      "bytes": 60187,
+      "executable": false,
+      "sha256": "91ce3f699678dfb6916348957c7871e2a374d8ac1fd48565831dae3f251d7fc4"
+    },
+    "docs/grok/reports/G02/desktop-1280x800-keyboard-focus.png": {
+      "bytes": 60245,
+      "executable": false,
+      "sha256": "7d35d0c7c954e8f80922c02878ae99fc1aa6b176c889d65656b84ecd2ac54493"
+    },
+    "docs/grok/reports/G02/desktop-1280x800-unknown.png": {
+      "bytes": 62211,
+      "executable": false,
+      "sha256": "b4aaaab25e07fcec32bc6e990e5aebea5794138d0cbcd91f475144b4b1b111ec"
+    },
+    "docs/grok/reports/G02/mobile-390x844-harness-example.png": {
+      "bytes": 58184,
+      "executable": false,
+      "sha256": "ab4b2fb9d018a8b96abd6440d78042fea637969089d0f473faa6b4910c68cf7f"
+    },
+    "docs/grok/reports/G02/mobile-390x844-unknown-view-controls.png": {
+      "bytes": 54479,
+      "executable": false,
+      "sha256": "85cd57903fc89fe87f8ca241d928dd4e06f8bb8e2a4c005ee55b4f2485612ae0"
+    },
+    "docs/grok/reports/G02/mobile-390x844-unknown.png": {
+      "bytes": 56705,
+      "executable": false,
+      "sha256": "4b2a962bc26c90e6c3abb4f4016f5fd19955277abb000ea4d8bff86b093b8177"
+    },
+    "docs/grok/reports/G09.md": {
+      "bytes": 9364,
+      "executable": false,
+      "sha256": "de409a0da28f432760fa40dff5db4e5428412dee87bb21e02920872862bd9c6e"
+    },
+    "docs/grok/reports/turn-001.md": {
+      "bytes": 6870,
+      "executable": false,
+      "sha256": "6475ba13e1762a4c0979d6ddcd6f48f1af9c959a163da769a2f88dc2bf68c43b"
+    },
+    "frontend/.gitignore": {
+      "bytes": 49,
+      "executable": false,
+      "sha256": "236c5a49e0b294291399deb704c61c144e75eb30cea725c5fd7f7f1e0d87e92b"
+    },
+    "frontend/README.md": {
+      "bytes": 2041,
+      "executable": false,
+      "sha256": "390da56e71ac849e6dd373bc6aaa852143e13a573626d16a3fd56b91d2134864"
+    },
+    "frontend/index.html": {
+      "bytes": 353,
+      "executable": false,
+      "sha256": "90b439309ed1ad81572a0f78b1bfaacaafd0290814b5883cc283a502074290f5"
+    },
+    "frontend/package-lock.json": {
+      "bytes": 66731,
+      "executable": false,
+      "sha256": "3f1ea7d03e2831aa61d1e4a0c2fd31caed2706c5dc9b1ed9cc98df310410abd6"
+    },
+    "frontend/package.json": {
+      "bytes": 1024,
+      "executable": false,
+      "sha256": "815a1014d91072f3f1550730a6d9f1333e6b6bc136486413dd9a76fc66647e5b"
+    },
+    "frontend/playwright.config.ts": {
+      "bytes": 622,
+      "executable": false,
+      "sha256": "8cd56045d824cadf965746251eb59d2a62d07d2df5e317d0fa6432544fc8c901"
+    },
+    "frontend/src/App.svelte": {
+      "bytes": 5368,
+      "executable": false,
+      "sha256": "d48f4d899f34d129d642697c3b8abc9b5894e832fbd7d59b9441bbaec282cbeb"
+    },
+    "frontend/src/app.css": {
+      "bytes": 953,
+      "executable": false,
+      "sha256": "c523b4768886bb5ffab20b7808a285660cd63fd66d66a8d0bd8c57f57166549c"
+    },
+    "frontend/src/contracts/presentation.ts": {
+      "bytes": 3667,
+      "executable": false,
+      "sha256": "3a4e4db2e959c6e1b74adc63b7384d9191af56aa80aee10da4931b4c70c0bb85"
+    },
+    "frontend/src/features/harness-discovery/Demo.svelte": {
+      "bytes": 777,
+      "executable": false,
+      "sha256": "fcc404bfa5e271ab89091154a43f6a8b77023e4e686ee172ffeb49ba8c151585"
+    },
+    "frontend/src/features/harness-example/Demo.svelte": {
+      "bytes": 740,
+      "executable": false,
+      "sha256": "b21ac4084dda684d11ce44646b728ee52e6b300202c55ae19c39e8a72b8101e7"
+    },
+    "frontend/src/lib/discover.ts": {
+      "bytes": 292,
+      "executable": false,
+      "sha256": "2b6d6f01a31f1b5f9ce912595683b1402f2aec43ab951d5b5acb837af30073fd"
+    },
+    "frontend/src/lib/fixtures.test.ts": {
+      "bytes": 4097,
+      "executable": false,
+      "sha256": "16dbf5670fd2ce34319654693db72f9a5d5b30bc31106e5807b8dacbd7470474"
+    },
+    "frontend/src/lib/fixtures.ts": {
+      "bytes": 2339,
+      "executable": false,
+      "sha256": "83da0cccf57b27604c6c50843909eed198f775e3ff404268af02affc46a82560"
+    },
+    "frontend/src/main.ts": {
+      "bytes": 255,
+      "executable": false,
+      "sha256": "ab0cc88043da8a24fa7334ae0f26732aa1fa34f22141d56538c48e5ba405e94b"
+    },
+    "frontend/src/vite-env.d.ts": {
+      "bytes": 71,
+      "executable": false,
+      "sha256": "cc9c01ab82cd866d596b11028637a284c3cca4b115d2aa5a02c31d2c59977fc1"
+    },
+    "frontend/svelte.config.js": {
+      "bytes": 86,
+      "executable": false,
+      "sha256": "738f1704ab9154e6a8cc1eb9d691f0a0309776140765474bdff7678fa429d438"
+    },
+    "frontend/tests/harness.spec.ts": {
+      "bytes": 7113,
+      "executable": false,
+      "sha256": "7ad8ef9cc73fc6456dcf541eb395115b64968f7fc77264a92ffedf3c97b0d8ec"
+    },
+    "frontend/tsconfig.app.json": {
+      "bytes": 467,
+      "executable": false,
+      "sha256": "3833abf60ea7b3baa2f0d46252c7ae3aa81186cdf3c9e30fa73fd504de701a6e"
+    },
+    "frontend/tsconfig.json": {
+      "bytes": 119,
+      "executable": false,
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808"
+    },
+    "frontend/tsconfig.node.json": {
+      "bytes": 539,
+      "executable": false,
+      "sha256": "e00415a24436f0a50c362f9a530791e636a27ce49b09a281f2b785cda6c318c3"
+    },
+    "frontend/tsconfig.tests.json": {
+      "bytes": 336,
+      "executable": false,
+      "sha256": "045e63e99702a45ff9fb9c63a25cbb90df2109fecf93af8ccd7a12aa2fede15a"
+    },
+    "frontend/vite.config.ts": {
+      "bytes": 312,
+      "executable": false,
+      "sha256": "67a64ef504a6e045dd515c82c19cd67ac1a8ce93b81919a5109991a8609de029"
+    },
+    "lab/openwrt/fixtures/index.json": {
+      "bytes": 2482,
+      "executable": false,
+      "sha256": "4515eba79d64b443bd677f682dec4ee900a98e9849406418ee65619c6f47b634"
+    },
+    "scripts/index_openwrt_fixtures.py": {
+      "bytes": 13532,
+      "executable": false,
+      "sha256": "2724647486f7d999cd276752c2b4e9f1cda2028fbc80ca3aff4517bbb48b7e76"
+    },
+    "tests/test_fixture_index.py": {
+      "bytes": 11237,
+      "executable": false,
+      "sha256": "a52cea7258f37ca5bd580605b66c0c933e230a8465496da74aef94dc9b6a96fd"
+    }
+  }
+}

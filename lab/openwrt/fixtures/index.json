@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "releases": [
+    {
+      "release": "24.10.8",
+      "files": [
+        {
+          "path": "lab/openwrt/fixtures/24.10.8/capabilities.json",
+          "sha256": "6b00fa8fa7b8741b54faf95c41ebab076a70520bf1241503393220b36e2f8f88",
+          "bytes": 144
+        },
+        {
+          "path": "lab/openwrt/fixtures/24.10.8/netifd-devices.json",
+          "sha256": "12bd380dde7453b3927550dbac5f503b6f591c16cb8c790c07e3dcd22f6aa511",
+          "bytes": 5542
+        },
+        {
+          "path": "lab/openwrt/fixtures/24.10.8/netifd-interfaces.json",
+          "sha256": "a265a019f830714fe4edf8df7531f8a867bb62c8d56bee5369724ec6f0514b0c",
+          "bytes": 1926
+        },
+        {
+          "path": "lab/openwrt/fixtures/24.10.8/netifd-wireless.json",
+          "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+          "bytes": 3
+        },
+        {
+          "path": "lab/openwrt/fixtures/24.10.8/uci-changes.json",
+          "sha256": "7104436211d3e256d0fd8216269af13723b1a2c1314bb924f069ae7f84c61f0d",
+          "bytes": 20
+        },
+        {
+          "path": "lab/openwrt/fixtures/24.10.8/uci-network.json",
+          "sha256": "a9bad1b07dd86fa43222d365aed81f20fbe4bd027fe4eec9f42d19ae0e55be37",
+          "bytes": 883
+        }
+      ],
+      "unavailable_objects": []
+    },
+    {
+      "release": "25.12.5",
+      "files": [
+        {
+          "path": "lab/openwrt/fixtures/25.12.5/capabilities.json",
+          "sha256": "69cd47d906948d5c4ceddb44a5f6add49e5c070b81a5dc35885941ae12a5ae7a",
+          "bytes": 170
+        },
+        {
+          "path": "lab/openwrt/fixtures/25.12.5/netifd-devices.json",
+          "sha256": "f38c43154a7d0913601ead661e159d6292bb67374f6abebc721359ed4675955c",
+          "bytes": 5541
+        },
+        {
+          "path": "lab/openwrt/fixtures/25.12.5/netifd-interfaces.json",
+          "sha256": "ca0c80616fe4b67cefcb8bb290b76c73a73f626ffa46041b583014336978f894",
+          "bytes": 1928
+        },
+        {
+          "path": "lab/openwrt/fixtures/25.12.5/uci-changes.json",
+          "sha256": "7104436211d3e256d0fd8216269af13723b1a2c1314bb924f069ae7f84c61f0d",
+          "bytes": 20
+        },
+        {
+          "path": "lab/openwrt/fixtures/25.12.5/uci-network.json",
+          "sha256": "1d7b18a2186e20395b714c7812b09464bf00fdca5ad21bc6c2f7151edf94e4d9",
+          "bytes": 928
+        }
+      ],
+      "unavailable_objects": [
+        "network.wireless"
+      ]
+    }
+  ]
+}

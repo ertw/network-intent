@@ -8,6 +8,23 @@ Language **3.0** and compiler **0.3.0** support VLAN switching and explicit rout
 intent. Versions 1.0 and 2.0 are no longer accepted; there is no compatibility adapter or
 automatic migration command.
 
+## Current status
+
+`netc` is the existing **compiler release**: an offline checker and target compiler.
+It does not observe live devices or install configuration.
+
+This repository also contains an **in-progress broader suite**—runtime agents,
+OpenWrt lab captures, identity/authorization foundations, and a fixture UI
+harness. That work is not a ready service or deployment path. Current router
+examples remain admission-blocked, and hardware acceptance is incomplete.
+
+- Full objective: [implementation plan](docs/implementation-plan.md)
+- Recorded progress: [goal progress](docs/goal-progress.md)
+- Commands and verification layers: [developer guide](docs/developer-guide.md)
+- Isolated OpenWrt lab: [OpenWrt lab](docs/openwrt-lab.md)
+- Bounded Grok handoff (not the whole goal): [GROK_HANDOFF.md](GROK_HANDOFF.md)
+- Component harness (development fixtures only, awaiting Astra integration): [frontend/README.md](frontend/README.md)
+
 ## Build and use
 
 Requires Idris 2 **0.8.0**, its Chez Scheme backend, Make, and Python 3.10+.
@@ -32,6 +49,9 @@ profile assumptions, and secret-binding readiness.
 The included flake pins Nixpkgs and provides `nix develop`, `nix build .#netc`,
 and `nix flake check`. Native macOS builds/tests are verified; Nix is not available
 on the development host and its build remains unverified.
+
+Runtime workspace tests, browser-compiler parity, and lab captures are documented
+in the [developer guide](docs/developer-guide.md). They are not part of `make test`.
 
 ## Gateway and wireless satellite
 
@@ -112,7 +132,9 @@ interfaces, address families, NAT, and zone policies. See the
 [backend contracts](docs/backends.md), and [verification notes](docs/verification.md).
 
 VRFs, dynamic routing, VPNs, arbitrary vendor extensions, live observation,
-deployment, and secret resolution remain outside this release.
+deployment, and secret resolution remain outside this compiler release. In-tree
+runtime, lab, and harness work toward observation and deployment is in progress;
+it is not a ready service or deployment path. See [Current status](#current-status).
 
 ## Language release gate
 
