@@ -2,23 +2,16 @@
 
 ## 1. Goal and activation
 
-**Activation status:** No goal or new resume automation has been activated because this task remains in Plan Mode. Creating both is the first step when execution begins. The existing paused “Resume Network Intent DSL” automation belongs to another task and remains unchanged.
+**Current execution status (2026-09-17):** the full objective remains incomplete.
+Implementation proceeds through manually launched, scoped Grok batches and manual
+Astra review. The continuation heartbeat is paused. This specification does not
+authorize a batch agent to start goals, automations, services or deployment.
+See [current checkpoint](goal-progress.md) and [current batch](grok/CURRENT.md).
 
-### Goal Mode objective
-
-> Implement and verify the Network Intent suite: bidirectional ELK/Svelte Flow visualization and DSL editing; practical L1/L2/L3/L4/L7 views; typed intended, configured, operational, and assurance state; compiler-checked realization witnesses; generated assurance plans and continuous monitoring; real OpenWrt ubus observation; a separate Rust configuration-apply agent with guarded deployment and recovery; cryptographic agent identities; idempotent messaging; SQLite persistence; and OpenTelemetry instrumentation. Use lower-cost Codex subagents for suitable bounded work, with a higher-capability coordinator responsible for architecture, assurance correctness, security, integration, and acceptance. Continue across usage resets until the acceptance criteria are satisfied or an external dependency genuinely blocks progress.
-
-Create this goal **without a token budget**, since none was requested.
-
-At execution startup:
-
-1. Save the complete technical specification and these execution rules in `docs/implementation-plan.md`.
-2. Create `docs/goal-progress.md` with milestones, acceptance checks, decisions, blockers, and resume instructions.
-3. Register the goal using `create_goal`.
-4. Register the same-task resume heartbeat described below.
-5. Begin implementation and maintain both the goal and progress record.
-
-Mark the goal complete only after implementation, integration, documentation, and required acceptance checks are finished. Missing hardware validation must remain an explicit incomplete acceptance item.
+The original startup/activation checklist has been completed or superseded by
+this manual workflow; its historical wording is available in Git at `2774655`.
+The technical objective and acceptance scope below remain in force. Missing
+hardware validation remains an explicit incomplete acceptance item.
 
 ## 2. Technical implementation contract
 

@@ -5,7 +5,7 @@ import type { ViewSelection } from '../src/contracts/presentation';
 
 const screenshotDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  '../../docs/grok/reports/G03',
+  '../test-results/G03-screenshots',
 );
 
 const localHost = '127.0.0.1';

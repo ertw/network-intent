@@ -14,7 +14,7 @@ import {
 
 const screenshotDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  '../../docs/grok/reports/G05',
+  '../test-results/G05-screenshots',
 );
 
 const localHost = '127.0.0.1';

@@ -43,6 +43,7 @@ name registry. Product features such as `view-controls` are reachable at
 Keep fixture strings as text. Do not fetch, persist, or talk to a compiler from
 UI components.
 
-Routine harness screenshots are written to ignored
-`test-results/harness-screenshots/`. The committed G02 report screenshots are
-historical review evidence and are not overwritten by later test runs.
+Routine G02–G05 browser screenshots are written to ignored `test-results/`
+subdirectories. Their committed report screenshots are historical review evidence
+and are not overwritten by later test runs. New task specs should expose an
+explicit evidence-capture option; see `docs/grok/CURRENT.md`.

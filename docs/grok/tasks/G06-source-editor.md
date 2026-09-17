@@ -1,6 +1,7 @@
 # G06 — Controlled CodeMirror source component
 
-**Requires Astra acceptance of G02 and an explicit new user turn.** This task is
+**Turn 003; read [CURRENT.md](../CURRENT.md).** Prerequisites are accepted in
+`d527622` and `2774655`; start only on the user’s manual Cursor launch. This task is
 an editor widget, not DSL interpretation, admission, preview, semantic history or
 source-preserving visual editing.
 
@@ -51,3 +52,34 @@ fixture/dispatch with an actual cancelable paste event; disclose that test metho
 Capture readable wide/narrow screenshots. Run `npm run check` and
 `npx playwright test tests/source-editor.spec.ts` from frontend, plus focused unit
 checks for newline/selection helpers if used. Stop for Astra on any contract gap.
+
+## Resolved implementation boundaries (Astra validation)
+
+The installed CodeMirror 6 supports `EditorState.lineSeparator`, `sliceDoc`,
+readOnly and change/transaction filters. Astra verified CRLF roundtrip and an edit
+using the installed package. No dependency or compiler work is required.
+
+- Configure the exact uniform line separator and serialize via state.sliceDoc();
+  do not use doc.toString() for CRLF output. A document without line breaks defaults
+  to LF. On external replacement, update the separator configuration if necessary.
+- Selection offsets refer to CodeMirror's UTF-16 document positions: each internal
+  line boundary occupies one position even when source output uses CRLF. Test
+  this distinction explicitly; do not change the frozen contract to source offsets.
+- Mixed LF/CRLF or any standalone CR is unsupported in this packet. Show the
+  original raw text in a read-only fallback with an explanation; do not normalize
+  it or emit source/history edits. Resume normal editing on a supported external
+  replacement. At most one live EditorView; dispose any inactive view correctly.
+- Both the DOM editable setting and transaction-level checks must prevent user
+  edits in view mode. Mark parent-driven replacement transactions internally so
+  they remain allowed without echoing onChange. Do not expose the EditorView as
+  a public bypass; test typing, cut/paste/drop and a user-edit command path.
+- A user edit is a request. After callbacks and the parent's update, reconcile the
+  document to the latest source prop even when the parent retains the old source.
+  Accepted normal feedback preserves cursor/scroll; rejected changes roll back
+  without a second source callback. Include an ignored-callback fixture/test.
+- `selection=null` means no external selection override. Finite external offsets
+  are truncated to integers and clamped to the internal document length. Non-finite
+  selections are ignored. Never emit selection callbacks just because props change.
+- A history shortcut emits exactly one request and prevents browser/CodeMirror
+  history mutation. Do not install local history or implement a demo history stack.
+  Document any platform-specific clipboard test technique truthfully.

@@ -1,6 +1,7 @@
 # G08 — Read-only supplied changes panel
 
-**Requires Astra acceptance of G02 and an explicit new user turn.** Display an
+**Turn 003; read [CURRENT.md](../CURRENT.md).** Prerequisites are accepted in
+`d527622` and `2774655`; start only on the user’s manual Cursor launch. Display an
 existing list; do not calculate textual/semantic/three-way differences.
 
 Own only `frontend/src/features/changes-panel/**`,
@@ -34,3 +35,20 @@ Do not implement a diff algorithm to produce the fixture cases.
 Run `npm run check` and `npx playwright test tests/changes-panel.spec.ts` from
 frontend. Capture wide/narrow screenshots and report. Stop for Astra before adding
 anything that decides whether a change is safe, supported, admitted or deployable.
+
+## Resolved display and review rules
+
+This is the simplest remaining task and needs no new algorithm or dependency.
+Use local rendering code; do not import/edit SnapshotPanel or extract shared UI.
+
+- Show a visible Empty value label for empty scalars while leaving the value text
+  itself empty. Show Empty list separately. Empty Before/After arrays mean No
+  fields supplied; an unknown field displays Unknown plus its supplied reason.
+- Preserve visible whitespace using pre-wrap or equivalent. Ordered list entries,
+  including empty entries and duplicates, remain separate. Null explanation means
+  no explanation supplied; it is not proof that a blocked change is safe.
+- Parent-retained selectedId must leave selection unchanged after onSelect. Null
+  or an absent selected ID means no details selected, not an invented default row.
+- Test accepted/ignored selection, external replacement/removal of a selected
+  entry, exact whitespace, long values, empty distinctions and absence of mutation
+  controls. If scroll handlers are needed, leave modified navigation keys alone.

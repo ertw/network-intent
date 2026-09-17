@@ -1,3 +1,6 @@
+> Historical completed batch: G03/G04/G05 were committed in `2774655`.
+> Do not execute this packet again; use [CURRENT.md](CURRENT.md).
+
 # Turn 002 — controlled views, snapshots and assurance display
 
 Execute **G03 / G04 / G05 only** when the user supplies this batch's Cursor prompt.

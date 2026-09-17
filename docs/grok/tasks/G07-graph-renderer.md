@@ -1,6 +1,7 @@
 # G07 — Read-only supplied-graph renderer with ELK
 
-**Requires Astra acceptance of G02 and an explicit new user turn.** Only render
+**Turn 003; read [CURRENT.md](../CURRENT.md).** Prerequisites are accepted in
+`d527622` and `2774655`; start only on the user’s manual Cursor launch. Only render
 already-projected nodes/edges. The compiler-to-graph mapping and semantic layer
 filtering are reserved for Astra.
 
@@ -48,3 +49,27 @@ Run `npm run check`, the focused layout unit tests, and
 `npx playwright test tests/graph-renderer.spec.ts`. Capture wide/narrow screenshots.
 Do not add editing gestures, DSL conversion, admission, health aggregation,
 persistence, or invented L5/L6 views. Report unresolved renderer behavior to Astra.
+
+## Resolved implementation boundaries (Astra validation)
+
+Installed Svelte Flow 1.6.6 exposes nodesDraggable, nodesConnectable,
+elementsSelectable, selectionOnDrag and deleteKey controls. The installed bundled
+ELK 0.12.0 completed a local layout probe. Read installed types to use the exact API;
+do not upgrade packages or add a renderer framework.
+
+- Use local bundled ELK (no remote worker URL), with its promise-based layout.
+  A local injectable layout function enables race tests without contract changes.
+- Clone all objects handed to libraries. Parent arrays, objects and selectedId
+  remain authoritative even when a selection callback is ignored. Never propagate
+  library position/selection mutations into the supplied graph or semantic source.
+- While new input is laying out, show loading and remove the previous canvas
+  rather than presenting it as current. Invalidate pending work on every input
+  replacement, including empty/invalid input, and on unmount. Only the latest
+  generation may show a graph or an error.
+- Configure explicit handles/ports so supplied edges actually render; parallel
+  edges and cycles must not disappear. Validate finite positions after ELK.
+- Keep fixed 200x80 canvas nodes. Full labels/subtitles and edge labels must remain
+  inspectable in the accessible selection list if they exceed the canvas box.
+- Test ignored parent selection, A/B reverse completion, older rejected promises,
+  replacement by empty/invalid data, no mutation via Delete/Backspace/drag/connect,
+  multiple instances, and unmount. Run real ELK+Flow in at least one browser case.
