@@ -27,17 +27,24 @@ context, not tasks to fix.
 2. Work on `codex/grok-easy-tasks`. If starting on main, switch to that existing
    branch and fast-forward it from main with `git merge --ff-only main`. Stop if
    it has diverged. Do not reset branches or make commits. Record HEAD after this.
-3. Use supported Node `^20.19.0 || ^22.12.0 || >=24.0.0` and npm >=10; report
-   actual versions. The host default Node 23 is unsupported. Existing Node 24 on
-   this host can be selected for the current shell only:
+3. Use the committed Nix development shell, including in each worker terminal.
+   Require the Nix baseline commit `bd9da11` as an ancestor of starting HEAD.
+   From the repository root, enter `nix develop --no-write-lock-file`, then run
+   frontend commands inside that shell. Noninteractive terminals may use:
 
    ```sh
-   export PATH="/Users/erikwilliamson/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH"
+   nix develop --no-write-lock-file -c sh -c 'cd frontend && npm ci'
+   nix develop --no-write-lock-file -c sh -c 'cd frontend && npm run check'
    ```
 
-   If unavailable, use another installed supported runtime; do not install global
-   tools or alter user settings. Run `npm ci` once in frontend before workers.
-   No `--force`/`--legacy-peer-deps`, dependency changes or lockfile regeneration.
+   Use the same wrapper for tests, build and Playwright. Record actual Node/npm
+   versions; the verified shell supplies Node 24.19.0 and npm 11.17.0. Do not
+   prepend the old host runtime PATH over Nix. Run `npm ci` once before workers.
+   No `--force`/`--legacy-peer-deps`, global installs, dependency changes, Nix
+   configuration changes or lockfile regeneration. If Nix cannot start, report
+   the failure instead of silently switching toolchains. Nix supplies Node/npm;
+   frontend dependencies and Playwright browser availability still need checking.
+   Do not run `nix flake check` for this presentation-only batch.
 4. Verify both contract copies equal each other and their HEAD versions.
 5. One coordinator may assign up to three workers, one per task. No nested
    coordinators. Workers may implement concurrently; **serialize all Playwright

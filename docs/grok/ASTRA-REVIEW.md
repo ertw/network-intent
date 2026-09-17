@@ -36,11 +36,16 @@ to ignored outputs. Grok must report that actual starting HEAD, not merely
    each other. Inspect source and tests, not just reports. No new dependency,
    authority, persistence, external request, shared infrastructure or old evidence
    modification is allowed by these task packets.
-3. Use supported Node `^20.19.0 || ^22.12.0 || >=24.0.0`, npm >=10. On the original
-   host the existing Node 24 bin is:
-   `/Users/erikwilliamson/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin`.
-   Prepend it to the command PATH if needed; do not change user settings or install
-   global tools. Run clean `npm ci` from frontend, without forced peers.
+3. Use the committed Nix shell from the repository root:
+   `nix develop --no-write-lock-file`. For isolated command terminals use
+   `nix develop --no-write-lock-file -c sh -c 'cd frontend && npm ci'`, and the
+   same wrapper for subsequent frontend checks. Verify starting HEAD includes
+   Nix baseline `bd9da11`; report actual Node/npm versions (verified at preparation:
+   24.19.0 / 11.17.0). Do not override Nix with the old host Node PATH, change
+   flake/lockfiles, install global tools or force peers. If Nix is unavailable,
+   report the blocked check; do not silently substitute a toolchain. Browser
+   availability remains a separate check. No full `nix flake check` is required
+   for this UI-only review.
 4. Serialize all browser runs on port 4173. Run `npm run check`, `npm test`,
    `npm run build`, and `npm run test:browser` yourself. Inspect relevant real
    Chromium screenshots at 1280x800 and 390x844. Preserve old committed screenshots.
