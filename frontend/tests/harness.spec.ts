@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const screenshotDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  '../../docs/grok/reports/G02',
+  '../test-results/harness-screenshots',
 );
 
 const localHost = '127.0.0.1';

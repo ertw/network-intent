@@ -42,3 +42,7 @@ name registry. Product features such as `view-controls` are reachable at
 
 Keep fixture strings as text. Do not fetch, persist, or talk to a compiler from
 UI components.
+
+Routine harness screenshots are written to ignored
+`test-results/harness-screenshots/`. The committed G02 report screenshots are
+historical review evidence and are not overwritten by later test runs.

@@ -8,9 +8,9 @@ component approvals.
 |---|---|---|---|
 | G01 | Accepted after review fixes | Manifest `83703c70aff1…` at base `788b486` | See Astra turn 001 review |
 | G02 | Accepted after review fixes | Manifest `83703c70aff1…` at base `788b486` | See Astra turn 001 review |
-| G03 | Eligible; awaiting user authorization | — | G02 accepted; commit reviewed baseline first |
-| G04 | Eligible; awaiting user authorization | — | G02 accepted; commit reviewed baseline first |
-| G05 | Eligible; awaiting user authorization | — | G02 accepted; commit reviewed baseline first |
+| G03 | Ready for manual turn-002 launch | — | Follow TURN-002.md when user starts Cursor |
+| G04 | Ready for manual turn-002 launch | — | Follow TURN-002.md when user starts Cursor |
+| G05 | Ready for manual turn-002 launch | — | Follow TURN-002.md when user starts Cursor |
 | G06 | Not authorized this turn | — | Reserved for later explicit batch |
 | G07 | Not authorized this turn | — | Reserved for later explicit batch |
 | G08 | Not authorized this turn | — | Reserved for later explicit batch |
@@ -30,3 +30,11 @@ Full manifest SHA-256: `83703c70aff1d2ae9ef87b12b0cf6c11fb5d0fb67e4fac35eaba76a9
 G01/G02/G09 are ready to commit; nothing was staged or committed during review.
 G03/G04/G05 are eligible after that commit and explicit user authorization; this
 review does not itself start or authorize implementation of the next batch.
+
+## Batch 001 committed; turn 002 prepared
+
+Accepted G01/G02/G09 implementation and review records are committed in `d527622`.
+The old manifest describes the reviewed pre-commit state and remains historical
+evidence. [TURN-002.md](TURN-002.md) prepares G03/G04/G05 for manual Cursor launch.
+No later task has been implemented or accepted, and no agent was started by this
+preparation. Runtime/semantic/native/hardware work remains outside Grok scope.

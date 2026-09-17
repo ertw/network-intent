@@ -10,8 +10,9 @@ the whole Network Intent goal. Implement only the numbered tasks below.**
 - Runtime foundation: commit `d33310c`; 165 Rust tests passed at that commit.
 - This handoff commit additionally records reviewed lab tooling and successful
   nonroot permission acceptance on OpenWrt 25.12.5 and 24.10.8.
-- No frontend exists yet. G02 creates a component development harness; the other
-  UI tasks build isolated components for later Astra integration.
+- G01/G02/G09 were accepted by Astra and committed as `d527622`. The Svelte
+  component harness exists; later UI tasks build isolated components for Astra
+  integration. Review evidence is in `docs/grok/reports/astra-turn-001.md`.
 - Compiler admission still blocks the current router examples. Generated
   assurance coverage, real services, native adapter execution, guarded native
   deployment, full UI integration, telemetry, and hardware acceptance remain
@@ -21,25 +22,17 @@ the whole Network Intent goal. Implement only the numbered tasks below.**
 - Automatic Codex implementation has been paused for this handoff. Do not enable
   it, manage Codex automations, or start another coordinator.
 
-## First turn: exactly G01, G02 and G09
+## Current handoff: turn 002 — G03, G04 and G05 only
 
-1. Read `docs/grok/REVIEW-GATES.md`, all three task packets, and any applicable
-   repository instructions. Inspect `git status` and record the current HEAD.
-2. Expect a clean checkout. If it is dirty, do not reset/stash/delete anything;
-   report the affected paths and stop for the user to reconcile ownership.
-3. Create or switch to `codex/grok-easy-tasks` from the handed-off HEAD. If that
-   branch already exists at a different base, report it instead of resetting it.
-4. You may use one coordinating agent and up to three workers. Assign G01, G02,
-   and G09 to separate workers with the exact file ownership in their packets.
-   Alternatively execute them sequentially. Child agents receive the same scope
-   restrictions. No nested coordinator trees or simultaneous edits to shared files.
-5. Each worker completes its task, runs its required checks, and writes its own
-   report using `docs/grok/REPORT-TEMPLATE.md`. Fix failures within owned scope.
-   A missing dependency or failed command is not successful completion.
-6. The coordinator checks the combined diff for file ownership and runs the
-   batch checks specified below. Write `docs/grok/reports/turn-001.md`.
-7. **Stop and return control to the user for Astra review.** Do not start later
-   tasks, stage files, commit, push, create a PR, deploy, or mark the goal complete.
+Follow [TURN-002.md](docs/grok/TURN-002.md). Continue on `codex/grok-easy-tasks`
+from the clean checkout containing this handoff update. Record the actual HEAD.
+The user will start this batch manually in Cursor; this document does not start
+an agent or automation. G01/G02/G09 are complete and must not be repeated.
+
+Only G03/G04/G05 are authorized by the turn-002 starter prompt. Use up to three
+workers with disjoint ownership, run the specified checks, write task reports and
+`docs/grok/reports/turn-002.md`, then leave all changes uncommitted for manual
+Astra review. Do not start G06/G07/G08 or change the frozen contracts.
 
 If one task blocks, finish unrelated authorized tasks, report the exact blocker,
 and stop. Do not invent a replacement task, weaken tests, or change a contract.
@@ -118,7 +111,7 @@ components are simpler. Their scope is fixed, but tests and review still matter.
 
 ## Suggested Cursor prompt
 
-> Read GROK_HANDOFF.md and follow it exactly. Execute the first authorized batch
-> G01, G02 and G09 only, using multi-agent delegation if useful. Complete the
-> specified checks and reports, leave changes uncommitted, then stop for my
-> manual Astra review. Do not begin other work or change the frozen contracts.
+> Read GROK_HANDOFF.md and docs/grok/TURN-002.md. Execute only G03, G04 and G05
+> using the existing reviewed harness and frozen contracts. Delegate within the
+> specified ownership, run all required checks, write the turn-002 reports, leave
+> changes uncommitted, and stop for my manual Astra review. Do not start later tasks.

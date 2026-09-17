@@ -1,6 +1,8 @@
 # G03 — Controlled layer, state and edit controls
 
-**Requires Astra acceptance of G02 and an explicit new user turn.**
+**Turn 002 task. G02 was accepted and committed in `d527622`.**
+Read [TURN-002.md](../TURN-002.md) for the current batch, toolchain and test coordination.
+Start only when the user supplies the turn-002 prompt.
 
 Own only `frontend/src/features/view-controls/**`,
 `frontend/tests/view-controls.spec.ts`, and `docs/grok/reports/G03*`.
@@ -41,3 +43,23 @@ update without spurious callbacks; narrow-screen readability.
 Run `npm run check`, focused unit tests if added, and
 `npx playwright test tests/view-controls.spec.ts` from frontend. Capture wide and
 narrow screenshots. Report and stop; no graph filtering or product integration.
+
+## Harness integration rules
+
+- Implement Svelte 5 typed props using the existing frozen contract; do not edit
+  either contract copy. A Demo.svelte export is discovered automatically.
+- Demo controls may select synthetic cases, replace props and show event counters.
+  Keep those controls outside the exported component's production-facing UI.
+- Test through the real browser route and preserve explicit synthetic labels.
+  Tests must capture uncaught page errors and requests leaving the local origin;
+  copy the small checking pattern into the owned test file if needed. Do not
+  change shared test infrastructure or import another worker's unfinished files.
+- Put helpers/unit tests inside the owned feature directory. Do not create shared
+  field/provenance components in this batch; local duplication can be reviewed
+  for extraction during later integration.
+- Capture screenshots only under `docs/grok/reports/G03/`, at 1280x800 and
+  390x844. Never overwrite G02 or another task's evidence. Coordinate all browser
+  commands through the coordinator so only one owns port 4173 at a time.
+- All original harness tests must still pass. The coordinator runs the full
+  check/unit/build/browser suite after workers finish; passing only a focused
+  test is not acceptance. Stop with actual results for Astra review.

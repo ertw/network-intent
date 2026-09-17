@@ -1,6 +1,8 @@
 # G04 — Read-only snapshot detail panel
 
-**Requires Astra acceptance of G02 and an explicit new user turn.**
+**Turn 002 task. G02 was accepted and committed in `d527622`.**
+Read [TURN-002.md](../TURN-002.md) for the current batch, toolchain and test coordination.
+Start only when the user supplies the turn-002 prompt.
 
 Own only `frontend/src/features/snapshot-panel/**`,
 `frontend/tests/snapshot-panel.spec.ts`, and `docs/grok/reports/G04*`.
@@ -42,3 +44,26 @@ external prop updates; no mutation controls; keyboard scrolling and readable
 
 Run `npm run check` and `npx playwright test tests/snapshot-panel.spec.ts` from
 frontend. Do not add state comparison, secrets heuristics, or health calculations.
+
+## Harness integration rules
+
+- Implement Svelte 5 typed props using the existing frozen contract; do not edit
+  either contract copy. A Demo.svelte export is discovered automatically.
+- Demo controls may select synthetic cases, replace props and show event counters.
+  Keep those controls outside the exported component's production-facing UI.
+- Test through the real browser route and preserve explicit synthetic labels.
+  Tests must capture uncaught page errors and requests leaving the local origin;
+  copy the small checking pattern into the owned test file if needed. Do not
+  change shared test infrastructure or import another worker's unfinished files.
+- Put helpers/unit tests inside the owned feature directory. Do not create shared
+  field/provenance components in this batch; local duplication can be reviewed
+  for extraction during later integration.
+- Capture screenshots only under `docs/grok/reports/G04/`, at 1280x800 and
+  390x844. Never overwrite G02 or another task's evidence. Coordinate all browser
+  commands through the coordinator so only one owns port 4173 at a time.
+- All original harness tests must still pass. The coordinator runs the full
+  check/unit/build/browser suite after workers finish; passing only a focused
+  test is not acceptance. Stop with actual results for Astra review.
+
+Preserve visible whitespace in scalar/list values (for example `white-space:
+pre-wrap`); HTML whitespace collapsing must not turn two spaces into one.
