@@ -46,9 +46,30 @@ Commands write to stdout. They never install configuration or access devices.
 reviewing changes. Compilation JSON contains individual artifacts, source maps,
 profile assumptions, and secret-binding readiness.
 
-The included flake pins Nixpkgs and provides `nix develop`, `nix build .#netc`,
-and `nix flake check`. Native macOS builds/tests are verified; Nix is not available
-on the development host and its build remains unverified.
+The flake uses the same pinned Nixpkgs and package definitions for native
+**macOS ARM64** (`aarch64-darwin`) and **Linux x64** (`x86_64-linux`).
+
+```sh
+nix develop                 # Idris, Python, Rust/Cargo, Node 24/npm, native libraries
+nix build .#netc             # compiler, with acceptance tests; also the default package
+nix run . -- check examples/home.net --format json
+nix build .#runtime          # Rust workspace binaries, with workspace tests
+nix flake check             # build and test both packages on the current platform
+```
+
+Inside `nix develop`, the Make targets above and `make test-runtime` work with
+pinned tools. Build the frontend with `cd frontend && npm ci && npm run build`;
+its dependencies use `frontend/package-lock.json`. The frontend is a development
+harness and is not included in the default compiler package.
+
+Builds exclude generated Idris, Cargo, and npm artifacts from their source.
+The runtime package uses `Cargo.lock` and supplies the compiled Idris executable
+for admission tests. OpenWrt's optional `native-ubus` feature still requires its
+separate target toolchain.
+
+Run these commands natively on each supported OS. Selecting a foreign system
+requires a matching Nix builder; `nix flake check --all-systems --no-build`
+evaluates both configurations without claiming to build them.
 
 Runtime workspace tests, browser-compiler parity, and lab captures are documented
 in the [developer guide](docs/developer-guide.md). They are not part of `make test`.

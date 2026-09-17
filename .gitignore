@@ -2,6 +2,7 @@ build/
 __pycache__/
 .DS_Store
 target/
+result
 node_modules/
 *.sqlite
 *.sqlite-shm

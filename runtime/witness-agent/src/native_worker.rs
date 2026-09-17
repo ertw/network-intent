@@ -355,7 +355,9 @@ mod tests {
     fn shell(script: &str, timeout: Duration, maximum: usize) -> Result<Value, ObservationError> {
         // Test fixtures only. The production command is the fixed native binary.
         let mut command = Command::new("/bin/sh");
-        command.args(["-c", script]);
+        // The real helper consumes the request before responding. Draining stdin
+        // also prevents a fast fixture exit from racing the parent's writes.
+        command.args(["-c", &format!("cat >/dev/null; {script}")]);
         run(&mut command, b"{}", Instant::now() + timeout, maximum)
     }
     #[test]
@@ -369,11 +371,12 @@ mod tests {
     }
     #[test]
     fn worker_cleanup_reaps_the_actual_child() {
-        let child = Command::new("/bin/sleep").arg("10").spawn().unwrap();
+        // Resolve test utilities from PATH so Nix sandboxes need no /bin tools.
+        let child = Command::new("sleep").arg("10").spawn().unwrap();
         let pid = child.id();
         drop(Worker(child));
         // A zombie still exists for kill(0); the PID must be absent after Drop.
-        assert!(!Command::new("/bin/kill")
+        assert!(!Command::new("kill")
             .args(["-0", &pid.to_string()])
             .stderr(Stdio::null())
             .status()

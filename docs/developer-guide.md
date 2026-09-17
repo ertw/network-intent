@@ -8,7 +8,8 @@ point.
 
 ## Local toolchains
 
-Recorded requirements; this file does not add OS support or installation recipes.
+Use `nix develop` for the pinned toolchain on macOS ARM64 and Linux x64.
+See the [Nix build commands](../README.md#build-and-use) for packages and checks.
 
 | Tool | Recorded requirement | Where recorded |
 |---|---|---|
@@ -19,10 +20,11 @@ Recorded requirements; this file does not add OS support or installation recipes
 | Node | invoked by the browser-parity script (`node -e`) | [scripts/check_browser_parity.py](../scripts/check_browser_parity.py) |
 
 Compiler package version is **0.3.0** ([network-intent.ipkg](../network-intent.ipkg)).
-Native macOS compiler builds and `make test` are recorded on the implementation
-host; Nix is unavailable there, so `nix develop` / `nix build .#netc` /
-`nix flake check` have not been run on that host ([README](../README.md),
-[verification notes](verification.md)).
+The flake provides native `netc` and `runtime` packages on both supported
+systems. `nix flake check` runs compiler acceptance and Rust workspace tests;
+frontend commands and browser parity remain separate checks in the development
+shell. Foreign-platform evaluation is available with
+`nix flake check --all-systems --no-build`; actual builds require that platform.
 
 QEMU, GnuPG, and OpenWrt image tooling are lab-only. Their workflow lives in
 the [OpenWrt lab](openwrt-lab.md) document and is not a `Makefile` target.

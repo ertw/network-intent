@@ -88,8 +88,9 @@ snapshots. Goldens intentionally exclude volatile timestamps and secret values.
 
 ## Trust boundary and unverified integration
 
-Verification uses macOS arm64, Idris 2 0.8.0, and Chez Scheme. Nix is unavailable
-on this host, so the flake is not locally verified. No physical router, OpenWrt
+The original verification used macOS arm64, Idris 2 0.8.0, and Chez Scheme.
+The flake now defines native macOS ARM64 and Linux x64 packages; see the
+[build instructions](../README.md#build-and-use) for Nix checks. No physical router, OpenWrt
 VM, or Cisco emulator has accepted these artifacts during this work.
 
 Firmware compatibility, native bonding support, LACP peer state, ISP leases and
