@@ -1,0 +1,185 @@
+{
+  "base_head": "9468988b5d5565c8320d012602f14aca8829cf3e",
+  "excluded_review_metadata": [
+    "docs/grok/REVIEW-GATES.md",
+    "docs/grok/reports/astra-turn-002.md",
+    "docs/grok/reports/astra-turn-002-manifest.json"
+  ],
+  "files": {
+    "docs/grok/reports/G03.md": {
+      "bytes": 6662,
+      "executable": false,
+      "sha256": "429dce3655797d75c6408f3b64edbcd0428ee39355dd921ff9373f077044e71f"
+    },
+    "docs/grok/reports/G03/desktop-1280x800-advanced.png": {
+      "bytes": 246937,
+      "executable": false,
+      "sha256": "ff4e0fafa208c54718f47b7da871e1e8c0672f760a7dc3ab035bfa8eec39f1b6"
+    },
+    "docs/grok/reports/G03/desktop-1280x800-default.png": {
+      "bytes": 182270,
+      "executable": false,
+      "sha256": "d35eec35c1d2747baddafa8c8131fce09882f5f7560717c0d95ae624bff32d06"
+    },
+    "docs/grok/reports/G03/desktop-1280x800-keyboard-focus.png": {
+      "bytes": 190194,
+      "executable": false,
+      "sha256": "8397cff3665a85b760eea5a1ad4bc149ff9b702ed0e6c701cb8f18f270b7e11a"
+    },
+    "docs/grok/reports/G03/mobile-390x844-default.png": {
+      "bytes": 173091,
+      "executable": false,
+      "sha256": "624c01bee8f8ec36b37d91760d90c82f58cbb833f32db4eb8219b082c68d5d46"
+    },
+    "docs/grok/reports/G04.md": {
+      "bytes": 7623,
+      "executable": false,
+      "sha256": "75a0d70bafa3698d09ae2a38f4491a1b305fa5c7099a4ba7026374aaa0ae889b"
+    },
+    "docs/grok/reports/G04/desktop-1280x800-committed.png": {
+      "bytes": 161053,
+      "executable": false,
+      "sha256": "2282e6663463b4e7b62f0961b0342f6a73084d042ce3322f2761787f6f592b68"
+    },
+    "docs/grok/reports/G04/desktop-1280x800-redacted-unknown.png": {
+      "bytes": 154528,
+      "executable": false,
+      "sha256": "74328f59f2f92132c5f053a414c818884c7c77f157c9bbd376da8adeda73be0d"
+    },
+    "docs/grok/reports/G04/mobile-390x844-long-text.png": {
+      "bytes": 214447,
+      "executable": false,
+      "sha256": "74438e5d434d7e742cdd89e91fab001cdda89f43da25f6dc1b6528db066f1a6c"
+    },
+    "docs/grok/reports/G05.md": {
+      "bytes": 6972,
+      "executable": false,
+      "sha256": "9e74dd813283aeb1de90ada8fe87f1c31b06a4805808235fc7db388eb82218c4"
+    },
+    "docs/grok/reports/G05/desktop-1280x800-all-outcomes.png": {
+      "bytes": 346252,
+      "executable": false,
+      "sha256": "8365b5b47e428dd963d97fe282ee9470404d08f890870f14ee637eff42dd882c"
+    },
+    "docs/grok/reports/G05/desktop-1280x800-stale-success-detail.png": {
+      "bytes": 408573,
+      "executable": false,
+      "sha256": "9c8f39cf86b2d9a6a295bc5e22e20d779d0bd68df3fe879a742bfe12ebfecb12"
+    },
+    "docs/grok/reports/G05/mobile-390x844-selection.png": {
+      "bytes": 399263,
+      "executable": false,
+      "sha256": "c38f2cb0dc070c690b27b589a46190baab04b6a82fc82638827127addc544093"
+    },
+    "docs/grok/reports/turn-002.md": {
+      "bytes": 9786,
+      "executable": false,
+      "sha256": "687f5f341a5e397b3452f12d2a631a47a314df993f4409e534133584624e2ebb"
+    },
+    "frontend/src/features/assurance-panel/AssurancePanel.svelte": {
+      "bytes": 6875,
+      "executable": false,
+      "sha256": "06df40214245b4740977fbc398b093cef535828c99e1f43b2457443208ff5045"
+    },
+    "frontend/src/features/assurance-panel/Demo.svelte": {
+      "bytes": 3324,
+      "executable": false,
+      "sha256": "1665b52cf6e226f8360f61d7baf10bbd86a09dde78c7779170ec5fe042b2b392"
+    },
+    "frontend/src/features/assurance-panel/display.test.ts": {
+      "bytes": 2941,
+      "executable": false,
+      "sha256": "8ba34f050581f3fcfbfaf7c3c5365b8d97734c1aa5d438cc1c051811ee3fdd1f"
+    },
+    "frontend/src/features/assurance-panel/display.ts": {
+      "bytes": 1187,
+      "executable": false,
+      "sha256": "df28344d313d5699998c68bb77b474f4b3115cec70a786484aa5c588541f8a5e"
+    },
+    "frontend/src/features/assurance-panel/fixtures.test.ts": {
+      "bytes": 1214,
+      "executable": false,
+      "sha256": "924fb9aae392db91e3ffd7640d8da0ed7ae6a498d4564b6ea6b8da569eb436e8"
+    },
+    "frontend/src/features/assurance-panel/fixtures.ts": {
+      "bytes": 7122,
+      "executable": false,
+      "sha256": "afe71770d7a53403f6e6ec032a97af2d664169fa93edd7107213fb31fca26e6e"
+    },
+    "frontend/src/features/snapshot-panel/Demo.svelte": {
+      "bytes": 2692,
+      "executable": false,
+      "sha256": "2cb4294d6f2f2d61358e034121efdedb8fb68898383590758b3b2ab109a2eae6"
+    },
+    "frontend/src/features/snapshot-panel/SnapshotPanel.svelte": {
+      "bytes": 8908,
+      "executable": false,
+      "sha256": "5ba982547b7af3fed87de3cdc24bbad444deb39436f0d702e1ada30f82518e42"
+    },
+    "frontend/src/features/snapshot-panel/cases.test.ts": {
+      "bytes": 2127,
+      "executable": false,
+      "sha256": "008954d329f44509311ab16bc005099a39bacbb0ebaf9293c6b6dce318a1cc81"
+    },
+    "frontend/src/features/snapshot-panel/cases.ts": {
+      "bytes": 9237,
+      "executable": false,
+      "sha256": "8ed8a35ebe289555e847974e6c26e4a0f3b949e68618e819c97a1b694e91eed1"
+    },
+    "frontend/src/features/snapshot-panel/labels.test.ts": {
+      "bytes": 2852,
+      "executable": false,
+      "sha256": "fd274961f45e660dbb43370313acadaa2c3221ca7a22de55b6e6162f73293ff2"
+    },
+    "frontend/src/features/snapshot-panel/labels.ts": {
+      "bytes": 1576,
+      "executable": false,
+      "sha256": "64b9d96fee22ef9eccdd571e99dc7905c92317218c994dc8285cf8c70e5c080d"
+    },
+    "frontend/src/features/snapshot-panel/scrollable-value.test.ts": {
+      "bytes": 831,
+      "executable": false,
+      "sha256": "c9b8606eeb77b62d2ef6ace5a92e3175acf79b0ab9b583eb7b80b8d933e325d0"
+    },
+    "frontend/src/features/snapshot-panel/scrollable-value.ts": {
+      "bytes": 1001,
+      "executable": false,
+      "sha256": "97d30c47a458a29f49c2886ce842c16c418b58bf435e129bbc26d1c0b0d400f5"
+    },
+    "frontend/src/features/view-controls/Demo.svelte": {
+      "bytes": 5851,
+      "executable": false,
+      "sha256": "ec3787ba73b3274f5047dad7116752524d4f4b94b065315038d5540751ab3d6d"
+    },
+    "frontend/src/features/view-controls/ViewControls.svelte": {
+      "bytes": 6918,
+      "executable": false,
+      "sha256": "fbc4e63f3d41cd4fe746dc40f3bd77d898e187fbe8354e4b3c0901dfbb9c4c02"
+    },
+    "frontend/src/features/view-controls/view-selection.test.ts": {
+      "bytes": 5143,
+      "executable": false,
+      "sha256": "ca26d910f398daab7c335e708b365de810498fdd9e6a8873daf5d3579c5eb3f0"
+    },
+    "frontend/src/features/view-controls/view-selection.ts": {
+      "bytes": 3081,
+      "executable": false,
+      "sha256": "1dc4185efaf51fc8cb1b5f8e6aaf5bcef78b96a903ef628bc71ef02e0b8777ec"
+    },
+    "frontend/tests/assurance-panel.spec.ts": {
+      "bytes": 11297,
+      "executable": false,
+      "sha256": "d38535f6279e73038455ff8295aecc5ad519ff03e3c3dde0340b23fb832c3acb"
+    },
+    "frontend/tests/snapshot-panel.spec.ts": {
+      "bytes": 14392,
+      "executable": false,
+      "sha256": "7f350b5e49e8ab1af4f491d0ab7da744c3ad6f03623b4a71f050286bffe7ff4d"
+    },
+    "frontend/tests/view-controls.spec.ts": {
+      "bytes": 17962,
+      "executable": false,
+      "sha256": "9af2baa4c770036e83c22bd1125e68069d3f8c666d83d371b5326d3c16d01f9b"
+    }
+  }
+}
