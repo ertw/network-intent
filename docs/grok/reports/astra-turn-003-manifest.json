@@ -1,0 +1,2400 @@
+{
+  "schema": 1,
+  "base_head": "a4baeaa8f8818eddef6e913f0e52bef6df4aba90",
+  "branch": "codex/grok-easy-tasks",
+  "excluded": [
+    "docs/grok/reports/astra-turn-003-manifest.json",
+    "docs/grok/reports/astra-turn-003.md",
+    "docs/grok/REVIEW-GATES.md"
+  ],
+  "files": [
+    {
+      "path": ".gitignore",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9e2829c3eb8b167b8555224c2001215feb3210f3f4f24d7244fab293fcacd02c"
+    },
+    {
+      "path": "Cargo.lock",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8db51456bfc7313a36b65f42eee3ef3691e5482bed44a2d201b86ce178aa9db5"
+    },
+    {
+      "path": "Cargo.toml",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "25d074c6258acbbb77b8ef6b3679610c0c12e078e29d16eb9e4aa97fa9c8f805"
+    },
+    {
+      "path": "DESIGN.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7253582b5ffec1e81fa9b06d16298008ff1e625fc64aa26ae4d8b083cc493846"
+    },
+    {
+      "path": "GROK_HANDOFF.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d232557dca0ff5d2d84e5b43b3a6f7a54967eae01df7ba7cd5f2ce27598f522a"
+    },
+    {
+      "path": "Makefile",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d9507b18e870626a6ba667deb36aec414795da1f8f615f4dcc4fc3e14ab7f702"
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a34a922f6acbac7fad8f97e18ed84e8706f5a94044fc8ebab1bcb98f50a92eb9"
+    },
+    {
+      "path": "browser.ipkg",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d8090664a57b11539c767575c67a90eb2b93a4e7fd52c2061e086510a9925abb"
+    },
+    {
+      "path": "core-tests.ipkg",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f9bcf3b0d5a2b821660ea6f9f4924b679f0ea8ce142c13e0a709ab7c71569482"
+    },
+    {
+      "path": "docs/README.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9128235b1fbe98ecd1f40db2f48340e55612708b8644dc4a7a4c66a54247f912"
+    },
+    {
+      "path": "docs/assurance-standards.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "93a7dcd8e393596aa39612958816f66f598ffa15fb194d51c9d62787c0f6da6d"
+    },
+    {
+      "path": "docs/backends.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "45ef72c3030bf24f9e25de4ea4d75b06862ad3f007bee71712aa253142879386"
+    },
+    {
+      "path": "docs/browser-compiler.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3801159a7cca525f0095bf2e6b5ee654702f93bec47ada77c3aca19b71a99dbb"
+    },
+    {
+      "path": "docs/core-router-parity.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6b44200a43a0a71cff62fef447abbc85821b6d9f489ffb9d2edd86a0e70d1377"
+    },
+    {
+      "path": "docs/developer-guide.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2a24fa1ec52877b53774c07f0aaaeff80fd85e6b7cc31f208fa56fc562d0dd93"
+    },
+    {
+      "path": "docs/diagnostics.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7cdca82e4219c6f93c3b86dcfd36f8c7cd032b284379627ab1d3f2358de2646c"
+    },
+    {
+      "path": "docs/goal-progress.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "daa9b5bad41ba3e79a730eb2a453b588933a50b1d777e0a8920b5b5a1df3a3f3"
+    },
+    {
+      "path": "docs/grok/ASTRA-REVIEW.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cf95f0f7038987b0da75766278d455ed5459e643c45978075cafd20806417b3f"
+    },
+    {
+      "path": "docs/grok/CURRENT.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b65d4d3d829c2fbb3e0bfde7a6222963ca41608283040fb7c2e030a6466125c8"
+    },
+    {
+      "path": "docs/grok/REPORT-TEMPLATE.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "5b2d53bed4265a6893ab97d705992e0d539f9b6bd7da30f00090d4df910feac5"
+    },
+    {
+      "path": "docs/grok/TURN-002.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "406b0eae1bbc642157fab3984df32f5a72ac10a969b7635b2fc96552d319b907"
+    },
+    {
+      "path": "docs/grok/contracts/presentation.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3a4e4db2e959c6e1b74adc63b7384d9191af56aa80aee10da4931b4c70c0bb85"
+    },
+    {
+      "path": "docs/grok/reports/G01.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d5ff284b815074c9235c0e853fec931293ca6af960e182971312dee59164d834"
+    },
+    {
+      "path": "docs/grok/reports/G02.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0863883a0d8bfa5115357e5f88420dd5a79a7ecef31707849b20749bbfa37df8"
+    },
+    {
+      "path": "docs/grok/reports/G02/desktop-1280x800-harness-example.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0646ecacd5cb9e461134a6e61c088ef9b232e73e6b373d1cfa62ccd9b7390f15"
+    },
+    {
+      "path": "docs/grok/reports/G02/desktop-1280x800-home.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "91ce3f699678dfb6916348957c7871e2a374d8ac1fd48565831dae3f251d7fc4"
+    },
+    {
+      "path": "docs/grok/reports/G02/desktop-1280x800-keyboard-focus.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7d35d0c7c954e8f80922c02878ae99fc1aa6b176c889d65656b84ecd2ac54493"
+    },
+    {
+      "path": "docs/grok/reports/G02/desktop-1280x800-unknown.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b4aaaab25e07fcec32bc6e990e5aebea5794138d0cbcd91f475144b4b1b111ec"
+    },
+    {
+      "path": "docs/grok/reports/G02/mobile-390x844-harness-example.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ab4b2fb9d018a8b96abd6440d78042fea637969089d0f473faa6b4910c68cf7f"
+    },
+    {
+      "path": "docs/grok/reports/G02/mobile-390x844-unknown-view-controls.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "85cd57903fc89fe87f8ca241d928dd4e06f8bb8e2a4c005ee55b4f2485612ae0"
+    },
+    {
+      "path": "docs/grok/reports/G02/mobile-390x844-unknown.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4b2a962bc26c90e6c3abb4f4016f5fd19955277abb000ea4d8bff86b093b8177"
+    },
+    {
+      "path": "docs/grok/reports/G03.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "429dce3655797d75c6408f3b64edbcd0428ee39355dd921ff9373f077044e71f"
+    },
+    {
+      "path": "docs/grok/reports/G03/desktop-1280x800-advanced.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ff4e0fafa208c54718f47b7da871e1e8c0672f760a7dc3ab035bfa8eec39f1b6"
+    },
+    {
+      "path": "docs/grok/reports/G03/desktop-1280x800-default.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d35eec35c1d2747baddafa8c8131fce09882f5f7560717c0d95ae624bff32d06"
+    },
+    {
+      "path": "docs/grok/reports/G03/desktop-1280x800-keyboard-focus.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8397cff3665a85b760eea5a1ad4bc149ff9b702ed0e6c701cb8f18f270b7e11a"
+    },
+    {
+      "path": "docs/grok/reports/G03/mobile-390x844-default.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "624c01bee8f8ec36b37d91760d90c82f58cbb833f32db4eb8219b082c68d5d46"
+    },
+    {
+      "path": "docs/grok/reports/G04.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "75a0d70bafa3698d09ae2a38f4491a1b305fa5c7099a4ba7026374aaa0ae889b"
+    },
+    {
+      "path": "docs/grok/reports/G04/desktop-1280x800-committed.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2282e6663463b4e7b62f0961b0342f6a73084d042ce3322f2761787f6f592b68"
+    },
+    {
+      "path": "docs/grok/reports/G04/desktop-1280x800-redacted-unknown.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "74328f59f2f92132c5f053a414c818884c7c77f157c9bbd376da8adeda73be0d"
+    },
+    {
+      "path": "docs/grok/reports/G04/mobile-390x844-long-text.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "74438e5d434d7e742cdd89e91fab001cdda89f43da25f6dc1b6528db066f1a6c"
+    },
+    {
+      "path": "docs/grok/reports/G05.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9e74dd813283aeb1de90ada8fe87f1c31b06a4805808235fc7db388eb82218c4"
+    },
+    {
+      "path": "docs/grok/reports/G05/desktop-1280x800-all-outcomes.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8365b5b47e428dd963d97fe282ee9470404d08f890870f14ee637eff42dd882c"
+    },
+    {
+      "path": "docs/grok/reports/G05/desktop-1280x800-stale-success-detail.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9c8f39cf86b2d9a6a295bc5e22e20d779d0bd68df3fe879a742bfe12ebfecb12"
+    },
+    {
+      "path": "docs/grok/reports/G05/mobile-390x844-selection.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c38f2cb0dc070c690b27b589a46190baab04b6a82fc82638827127addc544093"
+    },
+    {
+      "path": "docs/grok/reports/G06.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4be07273bc1b5cd439b2ebd58e36f53489970d4ccf8fdfb7ed6e4358c5e0a70f"
+    },
+    {
+      "path": "docs/grok/reports/G06/astra/desktop-1280x800-edit.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "db9fa13572c3d9a2b8f48af8d3fa8b6cb3fa99bce2c32fbabb651a5e2bb129ef"
+    },
+    {
+      "path": "docs/grok/reports/G06/astra/desktop-1280x800-view.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "54d090d29e31c9e161844adb24f37f39374f861271288b812dbd942a1689714f"
+    },
+    {
+      "path": "docs/grok/reports/G06/astra/mobile-390x844-edit.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7233fe72c8e517eaa5efaf2c5710de04fe5c275ee2b1a5dc57fa71afb35bec7b"
+    },
+    {
+      "path": "docs/grok/reports/G06/desktop-1280x800-edit.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "db9fa13572c3d9a2b8f48af8d3fa8b6cb3fa99bce2c32fbabb651a5e2bb129ef"
+    },
+    {
+      "path": "docs/grok/reports/G06/desktop-1280x800-view.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "54d090d29e31c9e161844adb24f37f39374f861271288b812dbd942a1689714f"
+    },
+    {
+      "path": "docs/grok/reports/G06/mobile-390x844-edit.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7233fe72c8e517eaa5efaf2c5710de04fe5c275ee2b1a5dc57fa71afb35bec7b"
+    },
+    {
+      "path": "docs/grok/reports/G07.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "97d6b6838c273c87d605e6b891fc0e5dcbb0c973e37741a62a95e65da29b9b14"
+    },
+    {
+      "path": "docs/grok/reports/G07/astra/desktop-1280x800-chain.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c2a063598e97886144ca4c69c58172386c26676598598bedc20e44705e69889c"
+    },
+    {
+      "path": "docs/grok/reports/G07/astra/desktop-1280x800-layers.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8179a3738b3a5077892de75258da8c0e49454d976539ab6d8463a9f18d0e0e24"
+    },
+    {
+      "path": "docs/grok/reports/G07/astra/mobile-390x844-html-long.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fc232a6a16a60f70f2f1e5998d3bb03d516fa15e60384d23fc236d68ba8cd112"
+    },
+    {
+      "path": "docs/grok/reports/G07/desktop-1280x800-chain.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c2a063598e97886144ca4c69c58172386c26676598598bedc20e44705e69889c"
+    },
+    {
+      "path": "docs/grok/reports/G07/desktop-1280x800-layers.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8179a3738b3a5077892de75258da8c0e49454d976539ab6d8463a9f18d0e0e24"
+    },
+    {
+      "path": "docs/grok/reports/G07/mobile-390x844-html-long.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fc232a6a16a60f70f2f1e5998d3bb03d516fa15e60384d23fc236d68ba8cd112"
+    },
+    {
+      "path": "docs/grok/reports/G08.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "12b329dd80f8e12247d4e80e2a8ec6be0eeb483e7a4037bba525ac9c9aa5c10c"
+    },
+    {
+      "path": "docs/grok/reports/G08/astra/desktop-1280x800-all-kinds.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6726bb5d0a76c9f850c5117810dd00589932e815832334f97ef479f6ff2578ae"
+    },
+    {
+      "path": "docs/grok/reports/G08/astra/desktop-1280x800-detail.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "510fedfae1c134ae63860f545d5e3cfbabdd429432722f880455aa5056132f23"
+    },
+    {
+      "path": "docs/grok/reports/G08/astra/mobile-390x844-before-after.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7dd397bd3f3efe8ba9ce3f995cda48b776a6e4212e85ad43014497e51a0adc26"
+    },
+    {
+      "path": "docs/grok/reports/G08/desktop-1280x800-all-kinds.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6726bb5d0a76c9f850c5117810dd00589932e815832334f97ef479f6ff2578ae"
+    },
+    {
+      "path": "docs/grok/reports/G08/desktop-1280x800-detail.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "510fedfae1c134ae63860f545d5e3cfbabdd429432722f880455aa5056132f23"
+    },
+    {
+      "path": "docs/grok/reports/G08/mobile-390x844-before-after.png",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7dd397bd3f3efe8ba9ce3f995cda48b776a6e4212e85ad43014497e51a0adc26"
+    },
+    {
+      "path": "docs/grok/reports/G09.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "de409a0da28f432760fa40dff5db4e5428412dee87bb21e02920872862bd9c6e"
+    },
+    {
+      "path": "docs/grok/reports/astra-turn-001-manifest.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "83703c70aff1d2ae9ef87b12b0cf6c11fb5d0fb67e4fac35eaba76a951de6e60"
+    },
+    {
+      "path": "docs/grok/reports/astra-turn-001.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "dd01bf3a038a66da1d3ad4c27c60efc4b837fc994fca8b505daa6aa24c4706f8"
+    },
+    {
+      "path": "docs/grok/reports/astra-turn-002-manifest.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d6caf650b707c809f9cd33ecd49047a5c1aebab054e97ec281331af5dda5febe"
+    },
+    {
+      "path": "docs/grok/reports/astra-turn-002.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "5a23f2e43bcb93a89d6358933ea5907025ea7eee016ff51e259c1a5e947f03a5"
+    },
+    {
+      "path": "docs/grok/reports/turn-001.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6475ba13e1762a4c0979d6ddcd6f48f1af9c959a163da769a2f88dc2bf68c43b"
+    },
+    {
+      "path": "docs/grok/reports/turn-002.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "687f5f341a5e397b3452f12d2a631a47a314df993f4409e534133584624e2ebb"
+    },
+    {
+      "path": "docs/grok/reports/turn-003.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "dbaca20e965550299b123e54b6ec5377bfe09df2642c3e344c8037377b5bf212"
+    },
+    {
+      "path": "docs/grok/tasks/G01-fixture-index.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "46c536ff629dc23ea06b28ac211fffda03c69afa07e9e4cf1c027f3a03942858"
+    },
+    {
+      "path": "docs/grok/tasks/G02-ui-harness.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "174366af9e2a5bae8da6991c9e9a216f08bf695f1b5af27d5cb64badc82109f4"
+    },
+    {
+      "path": "docs/grok/tasks/G03-view-controls.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8f922405abc1bf11829984e0780ca403e00247c32a46c126e221f937b35cc770"
+    },
+    {
+      "path": "docs/grok/tasks/G04-snapshot-panel.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a3d1095c742d63b997493bff37b73c46321a7670e91e9b2b4180164a3218dd80"
+    },
+    {
+      "path": "docs/grok/tasks/G05-assurance-panel.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9cd91e4e4ad8ab012b72a27b45d4a6e90378f334e002b659bf011cdd78cb669b"
+    },
+    {
+      "path": "docs/grok/tasks/G06-source-editor.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4e40c4e4de1c7f74f111be5054c1f3dc79154f8acf98dbec1ddd700231c31e6d"
+    },
+    {
+      "path": "docs/grok/tasks/G07-graph-renderer.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "455fe1aed855682f39dfa54d32ead7692b66ee51f9f9a4a1ec55d978dd3fb2de"
+    },
+    {
+      "path": "docs/grok/tasks/G08-changes-panel.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "820ccfdc8465fb932ff8adb8cf2f5194ece2f8161eb59919f81bc4f5fa61640f"
+    },
+    {
+      "path": "docs/grok/tasks/G09-documentation.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8f6d28d03e8705c06a7c23f23d11633ee8c6c4a2a0ab912f3ae0d34c3229c1c3"
+    },
+    {
+      "path": "docs/implementation-handoff.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9b26d5c75a40def839863aa9aae21ccebe6abb09faa804a6749efd728817311f"
+    },
+    {
+      "path": "docs/implementation-plan.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ad0ac8728c6e491394fe78667d05447a4730a3e0da865a50a36a7feeb5f0f287"
+    },
+    {
+      "path": "docs/language.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b0fed49d77d95d93eeddf858a018d2daeae2a1f5d0d3381ea82b2a705eeb4290"
+    },
+    {
+      "path": "docs/openwrt-lab.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b25f2e50ac52c16172643c33fd35d0aea54f9d2e4c0072317a20cffc2871b798"
+    },
+    {
+      "path": "docs/progress-history/2026-09-15.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "08393b1cfc7a6a8ecc176507174a700737179c5d848de9b221521ec234f47caa"
+    },
+    {
+      "path": "docs/router-settings.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "824bb245ba335298b78183cdfdcbb4cb279133cce83c7c0b8ba2706276536a46"
+    },
+    {
+      "path": "docs/runtime-contracts.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fed5a39d37f4ecf8e898e97104f4b3699f45beb20122754aa345142ff780f40d"
+    },
+    {
+      "path": "docs/schema/2.0.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fec7886b8901c854a4e22807c7ca00cdda1f8dbaa5cc39ce658643a17c944dd5"
+    },
+    {
+      "path": "docs/schema/3.0.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ba66132c71b333f07bf7fec67b25d145171fa5a1526740dbcc8e532d2871a782"
+    },
+    {
+      "path": "docs/secrets.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "855e5ddbb8267f274fc383d0aaeb24963ed44bd38375fe5343c3d3cec247a52c"
+    },
+    {
+      "path": "docs/verification-runs/.gitattributes",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ee37f7c42e18cc3ab9287d063b09e7e26e6cce107756fb6462928c2802cb8adc"
+    },
+    {
+      "path": "docs/verification-runs/browser-parity-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "10c67de18a96ca796df7d99c98ddab4f01e73670f25b5095fe78325266d0df39"
+    },
+    {
+      "path": "docs/verification-runs/compiler-admission-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d922ee87fc6339748cb0d45ff1ee754fae33b39ee10392cec17575254572e97e"
+    },
+    {
+      "path": "docs/verification-runs/compiler-full-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "33f71e69423dceef6544cba3ce031c19db2776e26fdec92d8ff9adc76443f932"
+    },
+    {
+      "path": "docs/verification-runs/confirmation-check.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "455b81a0b6ef0c9f3ab9339dc561be4977d19c8330bdcd3b11116d33a75d0705"
+    },
+    {
+      "path": "docs/verification-runs/deployment-confirmation.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "47c763b1bb542a0acf3bf6c5adc0c18d0af4584d37561c2ea89f658c485c2f4f"
+    },
+    {
+      "path": "docs/verification-runs/handoff-review-2026-09-16.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8723976ae39b586e3bcf22f79506ca11504ff6e0d23b3afb0cb2723a11fa6ffd"
+    },
+    {
+      "path": "docs/verification-runs/identity-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d3fcd6db0bc04c54e5cde04f424aec59b489450d9818be7d7ff4bedc563fcaa2"
+    },
+    {
+      "path": "docs/verification-runs/local-observation-check.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f7b574f232b0fc68dc909a7c748cf024fc8a659b626325bb4bfbd04ebafe1c6d"
+    },
+    {
+      "path": "docs/verification-runs/monitor-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "37914f0cf4dcfb5c2d298c7742af86f4c9222754fbd8085d6b5c74e214778fca"
+    },
+    {
+      "path": "docs/verification-runs/openwrt-24.10.8-baseline.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2a799ce287e07904fbbaddfac8634d3b2576b7c608227995eaca99bbe04442a6"
+    },
+    {
+      "path": "docs/verification-runs/openwrt-24.10.8-permissions.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c15844a74da93968010264a5365f7977b118e324568f1efc2d7fe67348bcb48a"
+    },
+    {
+      "path": "docs/verification-runs/openwrt-25.12.5-baseline.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "546a358a42c54e490859da4742287f805d490a93cc3be143a20b9213cf91e0d9"
+    },
+    {
+      "path": "docs/verification-runs/openwrt-25.12.5-permissions.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a711cb65716c4e8d1b4d3f88a3354ed255c0fecaacd41cca986a4ac3abaf354b"
+    },
+    {
+      "path": "docs/verification-runs/protocol-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6e7ba9794f4e4256e4ce2481794bf55207fb6e8de8b609edf606ea5c14eaea08"
+    },
+    {
+      "path": "docs/verification-runs/runtime-integration-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6b2416863a2d02185cb225aadaa72182f85067e7f1c0abf24c1d65f5f9d9a797"
+    },
+    {
+      "path": "docs/verification-runs/runtime-integration-2026-09-16.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "85d0e2948ea3b539c61a720cdcdc06c354326a4d921b0334f023769cd47f7fc0"
+    },
+    {
+      "path": "docs/verification-runs/witness-executor-check.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "47ab72c667a02242070af1ba1cad524dba518fa7275ee59ab355a18ec4480d29"
+    },
+    {
+      "path": "docs/verification-runs/witness-integration-2026-09-15.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8a98b00e589efc4a0588f8ed81dff5eecd67a98f25783cfb816825bb554e8b83"
+    },
+    {
+      "path": "docs/verification-runs/witness-queue-security.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6d4a7476cea54693c250bb36649fa756e0f06b2062018772002cef4678228582"
+    },
+    {
+      "path": "docs/verification-runs/workspace-2026-09-15-continued.log",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6b15c26dcc1f3c11f416bb425769f61bec75a417a9971af9b2eb2382858d89b8"
+    },
+    {
+      "path": "docs/verification.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fd4eb60aa5332977017a58a14dc4bd20930a19ebd23ce5eab3543d1012312f12"
+    },
+    {
+      "path": "docs/wds-network-parity.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "77185f651a661fb941d40b6a70b4921f49ea19bd17d8ba48dd550018288a73aa"
+    },
+    {
+      "path": "examples/core-router.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "90b54cba4a2679d37bf81393c87b630eae75b6f1767b205492ef99d79c6a64ae"
+    },
+    {
+      "path": "examples/dependencies.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e3d1fb1a6e71f8060628a720585b7e399e9147d3b49f565f5b198bb0cb45795f"
+    },
+    {
+      "path": "examples/generated/core-router.intended.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "212d45b4678e4798a1373dc58f5f1cc9d9092925aceadac2e9a8b02dda0109b0"
+    },
+    {
+      "path": "examples/generated/core-router.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ea8a62738f259f92a5d7103f8d557e940c92c2c94f842fb7879d29f5ccc02c53"
+    },
+    {
+      "path": "examples/generated/core-router.mmd",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f3c715a2c0a948238157609ebc84c9b94f9b0ef0c016745c42bf6f05ad822d2c"
+    },
+    {
+      "path": "examples/generated/core-router.semantic.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "73ccc724235ad137b0c37f374e601ae0c1d7b824248e35d3125f1d7c3399a301"
+    },
+    {
+      "path": "examples/generated/core-router/dhcp",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "790f2475148ecf5712914adb9cea64b57827ca06343178086753a44aa6faf1e3"
+    },
+    {
+      "path": "examples/generated/core-router/firewall",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c0c9f23e90c028f238425aa53686e669ded31c426370feb45c05edacff1f2912"
+    },
+    {
+      "path": "examples/generated/core-router/network",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "523d3214115c9ce9ea2f433ac2ee217304fd590a79b00369788419413b604b5e"
+    },
+    {
+      "path": "examples/generated/core-router/secret-bindings.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a037a5e23973ed4893d8ee25311bf068de448331f0ec24d83672068eaa1b3a83"
+    },
+    {
+      "path": "examples/generated/core-router/wireless.template",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cab0287e470b8b698db31ef8697227cdad83869ce52dd048a57d37cd8a5905be"
+    },
+    {
+      "path": "examples/generated/home.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "70622f0f3e4f1afc665449c95f912f42811d3de545004209963ee8f1d011b01c"
+    },
+    {
+      "path": "examples/generated/home.mmd",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "097af110488c2fdcb2c80580c113fa0944cf2ea7e2abb598a14e28ef7b3de316"
+    },
+    {
+      "path": "examples/generated/home.semantic.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d4f031c82a744dd4b63867232f87312c91d2adf2619c354ae18cb6fbd636403c"
+    },
+    {
+      "path": "examples/generated/intended.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4c72287e151c68bdb4665ff126906102e0d82ffd2c649c35462451f51e978eee"
+    },
+    {
+      "path": "examples/generated/wds-network.intended.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "00b2346caab36e1c13f338f0bc38c603baf279b23c6e8d9097e7eb78595f906b"
+    },
+    {
+      "path": "examples/generated/wds-network.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "70d121d544a0d59d24ca6d5f3dd266ae483b5c3d8cfcb0109183177356240798"
+    },
+    {
+      "path": "examples/generated/wds-network.mmd",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cf05267c89a453036af048d9690ce645b6752e5c776a0ab59d3b02759147f1b0"
+    },
+    {
+      "path": "examples/generated/wds-network.semantic.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "42eff9c044cb93ac2d6d1a5f338e3205f8e548744dd994343a300cd0d41232c7"
+    },
+    {
+      "path": "examples/generated/wds-network/gateway/dhcp",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "790f2475148ecf5712914adb9cea64b57827ca06343178086753a44aa6faf1e3"
+    },
+    {
+      "path": "examples/generated/wds-network/gateway/firewall",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c0c9f23e90c028f238425aa53686e669ded31c426370feb45c05edacff1f2912"
+    },
+    {
+      "path": "examples/generated/wds-network/gateway/network",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "523d3214115c9ce9ea2f433ac2ee217304fd590a79b00369788419413b604b5e"
+    },
+    {
+      "path": "examples/generated/wds-network/gateway/secret-bindings.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fbd9c6c4cdb72193d2ae80162503b6afe60aa4430b9d7cf01ef0e49b9428febb"
+    },
+    {
+      "path": "examples/generated/wds-network/gateway/wireless.template",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "09fd27d9c09f2dd4385157164915e7ae33d5e267d34cb1d4b8a249c662121dfd"
+    },
+    {
+      "path": "examples/generated/wds-network/satellite/dhcp",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "29d91f3652661cd79614ebdcbfac411607da9ed401504d763bea418126ccbd3d"
+    },
+    {
+      "path": "examples/generated/wds-network/satellite/firewall",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "eafcd355ee1442dd929e5311f730409e68d5d6c0a73d1a8f1bae8d731885e5ea"
+    },
+    {
+      "path": "examples/generated/wds-network/satellite/network",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3227c6f1f58b2259e34c5f5d686d131a757fb3c2fd549939841a77dcda859d8a"
+    },
+    {
+      "path": "examples/generated/wds-network/satellite/secret-bindings.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "da89754a98f10b45a21472ead6859e30cf211d561fc47a6300dac9742eb38de4"
+    },
+    {
+      "path": "examples/generated/wds-network/satellite/wireless.template",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c6e21692290ccf3e2fef5b28744397c5c2d1fee90ac336f2f3ef164da4edb0c6"
+    },
+    {
+      "path": "examples/home.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0e60c7632e0781c65a2da5a96a9fc27f7f694646fac339d547b71eaa924ef025"
+    },
+    {
+      "path": "examples/minimal.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c8a7791f7eca31ddcd2d7a53ae8e955efa50103779aa0b0e0ae3891fa1d6f92c"
+    },
+    {
+      "path": "examples/wds-network.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a5b2444a64c5723e66db8cade891198e93cbbd98e046fee2d0c0a2017b04f1e5"
+    },
+    {
+      "path": "flake.lock",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "afb01705904febb40c9199a4ad8227c1ecdb477402873c15cbe63db74efe8fb7"
+    },
+    {
+      "path": "flake.nix",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "eea28ba7837bab96d8f31f44b1955e0d30555246a22d21a8f46bf8176e4dfd2c"
+    },
+    {
+      "path": "frontend/.gitignore",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "236c5a49e0b294291399deb704c61c144e75eb30cea725c5fd7f7f1e0d87e92b"
+    },
+    {
+      "path": "frontend/README.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "00d9618bc3ca19cc1aa2d7eb4af8113f9eb28d6c0521f2f869a841be0c404dc5"
+    },
+    {
+      "path": "frontend/index.html",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "90b439309ed1ad81572a0f78b1bfaacaafd0290814b5883cc283a502074290f5"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3f1ea7d03e2831aa61d1e4a0c2fd31caed2706c5dc9b1ed9cc98df310410abd6"
+    },
+    {
+      "path": "frontend/package.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "815a1014d91072f3f1550730a6d9f1333e6b6bc136486413dd9a76fc66647e5b"
+    },
+    {
+      "path": "frontend/playwright.config.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8cd56045d824cadf965746251eb59d2a62d07d2df5e317d0fa6432544fc8c901"
+    },
+    {
+      "path": "frontend/src/App.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d48f4d899f34d129d642697c3b8abc9b5894e832fbd7d59b9441bbaec282cbeb"
+    },
+    {
+      "path": "frontend/src/app.css",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c523b4768886bb5ffab20b7808a285660cd63fd66d66a8d0bd8c57f57166549c"
+    },
+    {
+      "path": "frontend/src/contracts/presentation.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3a4e4db2e959c6e1b74adc63b7384d9191af56aa80aee10da4931b4c70c0bb85"
+    },
+    {
+      "path": "frontend/src/features/assurance-panel/AssurancePanel.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "06df40214245b4740977fbc398b093cef535828c99e1f43b2457443208ff5045"
+    },
+    {
+      "path": "frontend/src/features/assurance-panel/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1665b52cf6e226f8360f61d7baf10bbd86a09dde78c7779170ec5fe042b2b392"
+    },
+    {
+      "path": "frontend/src/features/assurance-panel/display.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8ba34f050581f3fcfbfaf7c3c5365b8d97734c1aa5d438cc1c051811ee3fdd1f"
+    },
+    {
+      "path": "frontend/src/features/assurance-panel/display.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "df28344d313d5699998c68bb77b474f4b3115cec70a786484aa5c588541f8a5e"
+    },
+    {
+      "path": "frontend/src/features/assurance-panel/fixtures.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "924fb9aae392db91e3ffd7640d8da0ed7ae6a498d4564b6ea6b8da569eb436e8"
+    },
+    {
+      "path": "frontend/src/features/assurance-panel/fixtures.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "afe71770d7a53403f6e6ec032a97af2d664169fa93edd7107213fb31fca26e6e"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/ChangesPanel.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "303022b33c3a500d7ea1e85bba5dd97f66a3dcad5dd4070afd481a27c6de06f0"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "425afac4c4fe574691cd7865fbe7a07f744673bb09deac28f36f4d773f185ff6"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/cases.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cf59780f56de2b0005be7492855f2755e5ba1ba0f0a113270e9da5b825c0b771"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/cases.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1a52b3de34a7ec02f1659aae5d1f09286086a51537fb7b58585901a2cb6e29dd"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/labels.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "864a62cc23c8eb2ce2fbfb9454e76d3b2038b2f78f5ae4c90611f2f5c6fd4d1e"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/labels.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ef797245379d56cd43ca762885575f7b3ff6d7d36537e85359c84a8f79f02dba"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/scrollable-value.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "03fe4c2a0d3ae43aced8eddcc3e41628f0be557283e86a561343b496c63cae65"
+    },
+    {
+      "path": "frontend/src/features/changes-panel/scrollable-value.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "97d30c47a458a29f49c2886ce842c16c418b58bf435e129bbc26d1c0b0d400f5"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1a77803202d0ea0503e64a86c894eadbc50099ba89a49c36614743ccb84ab14c"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/GraphCanvasNode.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "dc6f28e948989705a8925e34fb55a444c53c161502fd9a10e82bf74d93b2acb5"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/GraphRenderer.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "177ad2b6626502f1207366745073bbe1ec678c4b6fa63fcc93f806e1892cbd6e"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/elk-layout.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "01b6bd975e64d6476d960ff26353ff26c8e459afad2c230614f2e95ed0eb8711"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/fixtures.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "de0a48a42f579ddc5e8f65a2a38a3508e5007b0bfa79004b87a2ab5d3ceee846"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/fixtures.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6e64920a682080d5b70f10de0628d6ee5e8de353948b19ae40dfcd7ea998ba0c"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/graph-map.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fba4db0dba9aa6ab17e57719e0ac034009ff8e57035839fe516e961548ae6577"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/graph-map.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c2ddcb20c7993d0684ab90059e7d1dc7f4bd34107f4b649876b257e99d2243ff"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/layout-session.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4fefb889d4d206453b9a34811c398dee838117557145917c3f42450dab7ceb3f"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/layout-session.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ae65f72ecf96359c3f62a432d027892b2a49f20dcbd040be7cd0cb1a2ee0bcd6"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/validate.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "db663ac0fdb63313cf62dd710eede6f4304bc225c3ec97ae33cc4c55a43a8342"
+    },
+    {
+      "path": "frontend/src/features/graph-renderer/validate.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6e00ef6d4f34a7ee330d3278b62944e742552ab2da9e671325689286c669505b"
+    },
+    {
+      "path": "frontend/src/features/harness-discovery/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fcc404bfa5e271ab89091154a43f6a8b77023e4e686ee172ffeb49ba8c151585"
+    },
+    {
+      "path": "frontend/src/features/harness-example/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b21ac4084dda684d11ce44646b728ee52e6b300202c55ae19c39e8a72b8101e7"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2cb4294d6f2f2d61358e034121efdedb8fb68898383590758b3b2ab109a2eae6"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/SnapshotPanel.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "5ba982547b7af3fed87de3cdc24bbad444deb39436f0d702e1ada30f82518e42"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/cases.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "008954d329f44509311ab16bc005099a39bacbb0ebaf9293c6b6dce318a1cc81"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/cases.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8ed8a35ebe289555e847974e6c26e4a0f3b949e68618e819c97a1b694e91eed1"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/labels.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fd274961f45e660dbb43370313acadaa2c3221ca7a22de55b6e6162f73293ff2"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/labels.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "64b9d96fee22ef9eccdd571e99dc7905c92317218c994dc8285cf8c70e5c080d"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/scrollable-value.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c9b8606eeb77b62d2ef6ace5a92e3175acf79b0ab9b583eb7b80b8d933e325d0"
+    },
+    {
+      "path": "frontend/src/features/snapshot-panel/scrollable-value.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "97d30c47a458a29f49c2886ce842c16c418b58bf435e129bbc26d1c0b0d400f5"
+    },
+    {
+      "path": "frontend/src/features/source-editor/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1a1e496b908e6a5ac20da6868a7fc020595c2b889d60b5fb775bbadc239b84c3"
+    },
+    {
+      "path": "frontend/src/features/source-editor/SourceEditor.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "33904305ee796678c30bc8f2c01b359c85cf7e0bc8fb939e8be3d1fda55cb9d2"
+    },
+    {
+      "path": "frontend/src/features/source-editor/fixtures.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "62837e61d42f7a9d1146282173fc31a49a0b4ed2c522e5499ab1a20d438f9393"
+    },
+    {
+      "path": "frontend/src/features/source-editor/fixtures.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "74d1839b5a9526286be6325d84f21b10205cc3727ba3e5a6dd7dbc0c1f6e3920"
+    },
+    {
+      "path": "frontend/src/features/source-editor/newlines.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b16ea177d8c295e5d0851683d8cca29a89f34464e1a738d6650b3cc4ddcb8814"
+    },
+    {
+      "path": "frontend/src/features/source-editor/newlines.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a434c30b74aa6df4e715a9053f5d305a806a2462ed84530cb58bf30edb579310"
+    },
+    {
+      "path": "frontend/src/features/source-editor/selection.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fd38edfba9d3a8966b44aef56ed194c5e53db78e2e8292b7a0d90888f51f8c03"
+    },
+    {
+      "path": "frontend/src/features/source-editor/selection.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ea425fc03426cfa905933582972dc193cdfd706a63b3d678710fd76a2d1c17d9"
+    },
+    {
+      "path": "frontend/src/features/source-editor/user-edit.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c5d0f305ff032c33ed027873d37392c9c91141d0d02f59603037ebae0aa46a2a"
+    },
+    {
+      "path": "frontend/src/features/view-controls/Demo.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ec3787ba73b3274f5047dad7116752524d4f4b94b065315038d5540751ab3d6d"
+    },
+    {
+      "path": "frontend/src/features/view-controls/ViewControls.svelte",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fbc4e63f3d41cd4fe746dc40f3bd77d898e187fbe8354e4b3c0901dfbb9c4c02"
+    },
+    {
+      "path": "frontend/src/features/view-controls/view-selection.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ca26d910f398daab7c335e708b365de810498fdd9e6a8873daf5d3579c5eb3f0"
+    },
+    {
+      "path": "frontend/src/features/view-controls/view-selection.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1dc4185efaf51fc8cb1b5f8e6aaf5bcef78b96a903ef628bc71ef02e0b8777ec"
+    },
+    {
+      "path": "frontend/src/lib/discover.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2b6d6f01a31f1b5f9ce912595683b1402f2aec43ab951d5b5acb837af30073fd"
+    },
+    {
+      "path": "frontend/src/lib/fixtures.test.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "16dbf5670fd2ce34319654693db72f9a5d5b30bc31106e5807b8dacbd7470474"
+    },
+    {
+      "path": "frontend/src/lib/fixtures.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "83da0cccf57b27604c6c50843909eed198f775e3ff404268af02affc46a82560"
+    },
+    {
+      "path": "frontend/src/main.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ab0cc88043da8a24fa7334ae0f26732aa1fa34f22141d56538c48e5ba405e94b"
+    },
+    {
+      "path": "frontend/src/vite-env.d.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cc9c01ab82cd866d596b11028637a284c3cca4b115d2aa5a02c31d2c59977fc1"
+    },
+    {
+      "path": "frontend/svelte.config.js",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "738f1704ab9154e6a8cc1eb9d691f0a0309776140765474bdff7678fa429d438"
+    },
+    {
+      "path": "frontend/tests/assurance-panel.spec.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "006c1b2de238dd8575233ab3f1d8ac039a72b900720b9b64c5e09d079e0fceda"
+    },
+    {
+      "path": "frontend/tests/changes-panel.spec.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "909ac736da258e50f43f0f1cec53dbdcd62d443cc7647c07c9a7ee921f19c3c3"
+    },
+    {
+      "path": "frontend/tests/graph-renderer.spec.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7c6a76a5564e2cb66be048b721d10be9ac546af7ce185d6f368aa6c978aba70c"
+    },
+    {
+      "path": "frontend/tests/harness.spec.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fb44ed56b4a9be7bf07e626e4ec4757760a1ef88ca9270d305eff3b377a04650"
+    },
+    {
+      "path": "frontend/tests/snapshot-panel.spec.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8c676cb42ed6d77eb6a94e48ada1b7b44b8a70109a4aad2fcf3c54b222b8427f"
+    },
+    {
+      "path": "frontend/tests/source-editor.spec.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9f8b55160e890beb338cd41ed177250185510faa3546e4dab7e9f20b26e9f1d4"
+    },
+    {
+      "path": "frontend/tests/view-controls.spec.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c1e84460acde207ebad3a654c2337ac6fb83761181cf1ecc6c87b419f7743825"
+    },
+    {
+      "path": "frontend/tsconfig.app.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3833abf60ea7b3baa2f0d46252c7ae3aa81186cdf3c9e30fa73fd504de701a6e"
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808"
+    },
+    {
+      "path": "frontend/tsconfig.node.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e00415a24436f0a50c362f9a530791e636a27ce49b09a281f2b785cda6c318c3"
+    },
+    {
+      "path": "frontend/tsconfig.tests.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "045e63e99702a45ff9fb9c63a25cbb90df2109fecf93af8ccd7a12aa2fede15a"
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "67a64ef504a6e045dd515c82c19cd67ac1a8ce93b81919a5109991a8609de029"
+    },
+    {
+      "path": "lab/openwrt/.gitignore",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cd2ee3a0021ef29ba4b47e2968de9ce3754135865ae0f7ddcca9429811546a4f"
+    },
+    {
+      "path": "lab/openwrt/build-native/Dockerfile",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "5faf072a64089bba524690ce0ee72d473175311166b730b220b238c307dc3f51"
+    },
+    {
+      "path": "lab/openwrt/build-native/README.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "694b42d30c333e53691e64c5150577cbd38f49d78bbf9d0f46b6efc61f1e2a60"
+    },
+    {
+      "path": "lab/openwrt/build-native/build-native",
+      "type": "file",
+      "mode": "100755",
+      "sha256": "231c90ff1dce9df79748fcd2a3891fa2f72fa4a9354ae431876ecc2c286c22b7"
+    },
+    {
+      "path": "lab/openwrt/build-native/intent_ubus_smoke.c",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2e300dff4a523ef8dbed54dcaec8381f50c89155dd1beac3d70dff84c8bd9028"
+    },
+    {
+      "path": "lab/openwrt/capture-console.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2550669bb93268759421e363acecac5bccbf5cce188ccf9c65a4c5a91a87cc0d"
+    },
+    {
+      "path": "lab/openwrt/check-witness-permissions.sh",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0fdda6aef6bb9cf2cbdc6d95d61040a5f9e7bc0c048054e326d766a7ae23f63f"
+    },
+    {
+      "path": "lab/openwrt/fixtures/24.10.8/capabilities.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6b00fa8fa7b8741b54faf95c41ebab076a70520bf1241503393220b36e2f8f88"
+    },
+    {
+      "path": "lab/openwrt/fixtures/24.10.8/netifd-devices.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "12bd380dde7453b3927550dbac5f503b6f591c16cb8c790c07e3dcd22f6aa511"
+    },
+    {
+      "path": "lab/openwrt/fixtures/24.10.8/netifd-interfaces.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a265a019f830714fe4edf8df7531f8a867bb62c8d56bee5369724ec6f0514b0c"
+    },
+    {
+      "path": "lab/openwrt/fixtures/24.10.8/netifd-wireless.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "lab/openwrt/fixtures/24.10.8/uci-changes.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7104436211d3e256d0fd8216269af13723b1a2c1314bb924f069ae7f84c61f0d"
+    },
+    {
+      "path": "lab/openwrt/fixtures/24.10.8/uci-network.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a9bad1b07dd86fa43222d365aed81f20fbe4bd027fe4eec9f42d19ae0e55be37"
+    },
+    {
+      "path": "lab/openwrt/fixtures/25.12.5/capabilities.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "69cd47d906948d5c4ceddb44a5f6add49e5c070b81a5dc35885941ae12a5ae7a"
+    },
+    {
+      "path": "lab/openwrt/fixtures/25.12.5/netifd-devices.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f38c43154a7d0913601ead661e159d6292bb67374f6abebc721359ed4675955c"
+    },
+    {
+      "path": "lab/openwrt/fixtures/25.12.5/netifd-interfaces.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ca0c80616fe4b67cefcb8bb290b76c73a73f626ffa46041b583014336978f894"
+    },
+    {
+      "path": "lab/openwrt/fixtures/25.12.5/uci-changes.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7104436211d3e256d0fd8216269af13723b1a2c1314bb924f069ae7f84c61f0d"
+    },
+    {
+      "path": "lab/openwrt/fixtures/25.12.5/uci-network.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1d7b18a2186e20395b714c7812b09464bf00fdca5ad21bc6c2f7151edf94e4d9"
+    },
+    {
+      "path": "lab/openwrt/fixtures/index.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4515eba79d64b443bd677f682dec4ee900a98e9849406418ee65619c6f47b634"
+    },
+    {
+      "path": "lab/openwrt/manifest.tsv",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a27f8303490a1e2f50a303c598c0e910980cdc282555b77634deea949620bbbc"
+    },
+    {
+      "path": "lab/openwrt/openwrt-lab",
+      "type": "file",
+      "mode": "100755",
+      "sha256": "d77ef90c0a17b42f4481740c13d106db57d29cc5e92123f70a0e37635dee9726"
+    },
+    {
+      "path": "netc",
+      "type": "file",
+      "mode": "100755",
+      "sha256": "e7de3e8fb97c1089302b6269cfee69a967828ab266dd3e2ce912c9065f948d40"
+    },
+    {
+      "path": "network-intent.ipkg",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3b4cf42c1433851b062380e20b49e58d5d4fbadec7bd0c7090be30b811c64337"
+    },
+    {
+      "path": "runtime/apply-agent/Cargo.toml",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "5c7d4587ac2944b9cd88ea6f1bbd90269f3c5656e40d25a3f97cf8404eea1471"
+    },
+    {
+      "path": "runtime/apply-agent/README.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4ff866799662a834efbae8d3dc1bfdb50afcabf885bd0b055f766707f66cc0ca"
+    },
+    {
+      "path": "runtime/apply-agent/src/journal.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e44c13edda900bdafcc5a1d928a9a03303351915c7a119a2166698f814c62b04"
+    },
+    {
+      "path": "runtime/apply-agent/src/journal/tests.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "5e4e09eb7316956ecb52817872735c2224c94a9b2f5f50564f07a7ea3b6b4435"
+    },
+    {
+      "path": "runtime/apply-agent/src/lib.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a336d3718220568e72277ce424fb054d50f34869cd3fcc7d643b5e37955dd07e"
+    },
+    {
+      "path": "runtime/apply-agent/src/main.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d3dc8670ba08b51d50d0983c2151984005ef6e38654661302b9618d9bbfef078"
+    },
+    {
+      "path": "runtime/authorization/Cargo.toml",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "95bba9e147230850bf2ef3cb0b3b2e2245bdc75fd59caf95d548391f8c0e5618"
+    },
+    {
+      "path": "runtime/authorization/src/lib.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3bb8caf7ff4d08f22b2da5c23168af369dcf49e9afdd2315c6dec488d158a547"
+    },
+    {
+      "path": "runtime/authorization/src/policy.cedar",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a10794bf9f914fdfc547f667e17c0259ce0167ee6668d14f8e30e4887343b87e"
+    },
+    {
+      "path": "runtime/authorization/src/schema.cedar.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e6662fe83a5f50aa8e6f05697f70673128035e5c26667bbc61736a19deea6b09"
+    },
+    {
+      "path": "runtime/authorization/tests/matrix.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c2fbfb2db393df6b99dbbbd61ae4709fe4b79ecdb59c3b8382e7467bf2e03abd"
+    },
+    {
+      "path": "runtime/controller/Cargo.toml",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "949d22353e25c6700e44774c9ef3a3665025252048d4a3149897f73d7f6f48bc"
+    },
+    {
+      "path": "runtime/controller/src/admission.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8a3f5536750e5f1c26bd8d77350b34af2aa43673404e356be705ee51403cb211"
+    },
+    {
+      "path": "runtime/controller/src/health.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ea2ba65f137bd85236255b87af3c33c86ab709769df67730906af446b1413fbf"
+    },
+    {
+      "path": "runtime/controller/src/ingress.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e28bd800a99e4bf214b17a18b4870e3f9f805b1a3d78508dd56d43781f3ad1ab"
+    },
+    {
+      "path": "runtime/controller/src/lib.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "91ef1e3a5259c522a57795cb2097ca9e3503b1ae2e46eea0a702d68337e48bf6"
+    },
+    {
+      "path": "runtime/controller/src/main.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b0e91a40a56170403af5c70c175d93c7d2b1949bd99a62777d869f18823e1914"
+    },
+    {
+      "path": "runtime/controller/src/monitor.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "001e4aab619128928ec471f91105f7644fbeda78da8d69149e01aa3b81c723c9"
+    },
+    {
+      "path": "runtime/controller/src/storage.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b638d72c9815323ec57d135418b0b3cd1ae58d89c8e406bc89892e3c2ae0d043"
+    },
+    {
+      "path": "runtime/controller/tests/compiler_admission.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ab3e7268e0f246b5e9f3ea4747c18a8268f93eb05c6602015c980d9eb7074ad3"
+    },
+    {
+      "path": "runtime/controller/tests/ingress.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d43032cf4c6db6f5433ba1a541988130159043eb0c7bf72fc57afaf1203b2bc7"
+    },
+    {
+      "path": "runtime/identity/Cargo.toml",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8469db2af69eea9b14e2d3911377073f080d8fe552309a049fbf4b328b07f841"
+    },
+    {
+      "path": "runtime/identity/src/confirmation.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "58d4b1917660914aa0b5775b1d4f4a91385e4b7ef6ea95662cc551a39212c26f"
+    },
+    {
+      "path": "runtime/identity/src/evidence.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6ab12be25a27158bd876178f1ad77383696c3c0c693713fc3f5ef0bc640099b3"
+    },
+    {
+      "path": "runtime/identity/src/lib.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3862c327e0842ad6e5273ce2b52b583223bef9d2b87733b40850b2e7dc39d05e"
+    },
+    {
+      "path": "runtime/identity/src/pki.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e1682260d322199bb338a556c7624b990474f97e20ec753118d28eaabf2d86d8"
+    },
+    {
+      "path": "runtime/identity/src/tls.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e37db109d4ddb5c40f4a1417f727e1eef02c2c573c0ff16f02f36d52e49e5f23"
+    },
+    {
+      "path": "runtime/identity/tests/evidence.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ef5638f23c045f120ab97a22eb25e6a5e6e51022dbe982135174b3c60f1fa79e"
+    },
+    {
+      "path": "runtime/identity/tests/pki.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a16cc48691e57728d56c9584bdd6ad103f2853051b5db9c878e8e650b28aedf8"
+    },
+    {
+      "path": "runtime/protocol/Cargo.toml",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "34e8cd71c4a557e81ee5214bbe38cbe9af1bf888a496b778ebb64db0106a760e"
+    },
+    {
+      "path": "runtime/protocol/src/assurance.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7a8948974cc5283e50496cfd5abd41cf0ea756d314f42370a6ce11793f399f0a"
+    },
+    {
+      "path": "runtime/protocol/src/check.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2363dd9c222df0e696f906654dff3d22756a7d3a8d4706950a830db8fc1269e6"
+    },
+    {
+      "path": "runtime/protocol/src/evidence.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ca0793c9dc6cb28aecc539dc5b84988e89372a2c6774c1f46cafa500ee853896"
+    },
+    {
+      "path": "runtime/protocol/src/lib.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4d11ec697e32fd42113f38d39e815fa0bb7b80bb17adeb6a47e5bda63333eafa"
+    },
+    {
+      "path": "runtime/protocol/src/state.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9641925702c9ac3d6ff891c82a6b21486baf7f1381ddeb5e24a352c25bccdda2"
+    },
+    {
+      "path": "runtime/protocol/tests/contracts.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7439a919368c531efbca81bde98e069e6e4b4fdd6ab7ce999de36235f61f7c04"
+    },
+    {
+      "path": "runtime/witness-agent/Cargo.toml",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "85a2f1dcc38f9e43823bf7a2a284b1fb61e9c0434e0ba96ceb6f70b92dd9e9a0"
+    },
+    {
+      "path": "runtime/witness-agent/NATIVE-UBUS.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b0dd59496320728e8d68efaf5da254764dbe754f80076c2ab54bd52fd308d8b6"
+    },
+    {
+      "path": "runtime/witness-agent/build.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fb9a70bac717a26dface32274f5565a370cc26e745c90db247f405802c1d772a"
+    },
+    {
+      "path": "runtime/witness-agent/native/acl/rpcd-witness.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "709ccec2edd1dcccf83bf257cf6b56a2c739638b977fb5ac65aad65c852b226e"
+    },
+    {
+      "path": "runtime/witness-agent/native/ubus_readonly.c",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4ca41f3bedfd9072ad35853e1e12c2dbc6461e771c16f55c4c9cdedb4a623583"
+    },
+    {
+      "path": "runtime/witness-agent/src/adapters.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b17dfd794fd6bd1c09091fbd6ff20b5afab83803b3801f5ab5d6d0847a0ffea7"
+    },
+    {
+      "path": "runtime/witness-agent/src/bin/intent-ubus-observe.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "dcee910ae65bfbbe0cfc500c15ef5b6fadf460c329c398c355b10a3e2e864199"
+    },
+    {
+      "path": "runtime/witness-agent/src/execution.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2b66c1e6f9e728f9c5188a369a41b3c800b2b070aaca4fc25235cf72c6b38b76"
+    },
+    {
+      "path": "runtime/witness-agent/src/lib.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "89d1bba9827fd78aa945e2911914077e87ac923272fe8b1c5fccac3e0f299085"
+    },
+    {
+      "path": "runtime/witness-agent/src/local.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "bf8d10724b966480d1d838e2c1a4e28c46ba98412648ffc6f3b81bfb2afd8e13"
+    },
+    {
+      "path": "runtime/witness-agent/src/main.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1ce3eb5a63a59e44b0f65d52e07250edce501610c1e8d9303df8002bd263bd19"
+    },
+    {
+      "path": "runtime/witness-agent/src/native_ubus.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3ba0853811d2ecb51e1e7c1dffffcfb2f1bdc43c8fdab58c42c17ac0560e4a3c"
+    },
+    {
+      "path": "runtime/witness-agent/src/native_worker.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0fb5601ce9f106f564b0015c14ba9903106effa26b0f98891374f33c7313bce5"
+    },
+    {
+      "path": "runtime/witness-agent/src/queue.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "bfab2942ba6da63407699906f68818984dac119641492ee6b8f456a11cb10504"
+    },
+    {
+      "path": "runtime/witness-agent/tests/execution.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8e9bf01cbc630d0c6bc8b19dd7b35fbdec8e2218576b61f6726e319265054c37"
+    },
+    {
+      "path": "runtime/witness-agent/tests/local_observation.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a1cd769023b60b307a967cb873c8478d417f5540c20e755f6313eee5521688ef"
+    },
+    {
+      "path": "runtime/witness-agent/tests/openwrt_fixtures.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "98ff97300e8cf5bf9162a939a56409fe12664d5b651fb80c3dac7de7edd3a0d3"
+    },
+    {
+      "path": "runtime/witness-agent/tests/queue.rs",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "153c268046eaab2a2cd5ebfc06e32b938ab93b547b82bdf04fb9fc71216bf466"
+    },
+    {
+      "path": "scripts/check_browser_parity.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9016d2cc304364f488618f89c5a8f335dccbafe7e1bf797247f088e141cb3687"
+    },
+    {
+      "path": "scripts/check_core_probes.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0030a8938d522cf91c1419a9b9456e9d596beb28fc4d24e6e48fbe39d135a2b4"
+    },
+    {
+      "path": "scripts/check_release.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4447529253ffd10d7f2a352680e4e3a1f1fdee1495eed4f6210fcbac9e932397"
+    },
+    {
+      "path": "scripts/check_typestate.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a499dc23430d8aafa0fac1e6ed58f3761194ebe1754e8cebbf5b7aad9540fa86"
+    },
+    {
+      "path": "scripts/core-probes/CoreAPI.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f55d1bd1b0900e623eda9865c7cd621c872fa382a52ab74731130911400daa83"
+    },
+    {
+      "path": "scripts/core-probes/ForgedGraphDuplicateInventory.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "213e2c1b13a587730cd94afc36ec6d5fbaaa480c03f4e60706a8e91997d321d9"
+    },
+    {
+      "path": "scripts/core-probes/ForgedGraphMissing.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e0b88a1efa7919376cb0de66e8edaa49565a563db19ec1c89121f92a97eb761b"
+    },
+    {
+      "path": "scripts/core-probes/ForgedGraphReverse.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "07ae7382a1bde1990ad6b884ca60b4b545e9594f105c3d06d1a6d99c850f728a"
+    },
+    {
+      "path": "scripts/core-probes/ForgedIPv4.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "146140b033560c1ef95da6bf743d48d2b86ea74d74f1c736fab1c9f603e609a0"
+    },
+    {
+      "path": "scripts/core-probes/ForgedIPv6.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "853b5b49936260fc503eafaa217526344156be6383e3bf19d6f6cec23c49e119"
+    },
+    {
+      "path": "scripts/core-probes/ForgedPrefix6.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f80de0a6e90a35791cf738172a3b501db8e3de0275d7c3f37800a36c27c61b88"
+    },
+    {
+      "path": "scripts/core-probes/ForgedPrefixCanonical.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3c016782967cfefd0fa55c7dd31f2020c891692eb0107ee7e1d4b2d86a7e9fd8"
+    },
+    {
+      "path": "scripts/core-probes/ForgedPrefixSize.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7b26385f867698f93f8b94897ef18bc97d9c73fa060a425c2f01eb46eb5aaa2f"
+    },
+    {
+      "path": "scripts/core-probes/ForgedPrefixWidth.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "8ef895e487623f35fa745605df97269460570e5512da9827e2a002ffb8285ea8"
+    },
+    {
+      "path": "scripts/core-probes/ForgedVlan.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "97572d642397660bd33a0d6ed1342014e65882f4786091bc91b412c9e00a67ee"
+    },
+    {
+      "path": "scripts/core-probes/GraphProperties.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e2185e6b13e49fe94befaeadac8ef3cff8fbb22ac082b7cdaa134b23a9436b73"
+    },
+    {
+      "path": "scripts/core-probes/README.md",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ccb5ab4abd15835b6308ec8b760c71d5089674abedab717530db4d8b97e4b8e9"
+    },
+    {
+      "path": "scripts/core-probes/RouterAPI.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b490261ac44ea09bdfb4c82678b76546ef50b955b03f88394c8aa6378e54bb5e"
+    },
+    {
+      "path": "scripts/core-probes/WirelessAPI.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b3cfbe706421e1767d10177e96bcfb722784380c5dd05f8db0d6a970ae173b1c"
+    },
+    {
+      "path": "scripts/core-probes/WitnessAPI.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "affc624f692f2060c9b787be36d1d5f0abeef4d847c3e20080706a034dd9d4b0"
+    },
+    {
+      "path": "scripts/core-probes/WrongRefKind.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2c147f7e5101fa6289b32c81a54d0419ca25220b98d505f1541718d6f9e0425b"
+    },
+    {
+      "path": "scripts/core-probes/WrongRouterRef.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4665a18c2f9aa22e5ecc3256e2bf7d1d913ee911d3ae051dbf6fc4ea106c9aaf"
+    },
+    {
+      "path": "scripts/core-probes/WrongWiFiRef.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "387d6afd5cc8d99762ff62d9f1c55a1f0cddb205b767d21c3120e9a6a95aed11"
+    },
+    {
+      "path": "scripts/core-probes/WrongWirelessEndpoint.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d93994f0717a09cdb0eb35333b07b10073ded0da297baaed8040fa5e6d65240b"
+    },
+    {
+      "path": "scripts/index_openwrt_fixtures.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2724647486f7d999cd276752c2b4e9f1cda2028fbc80ca3aff4517bbb48b7e76"
+    },
+    {
+      "path": "scripts/release.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b0c7f5616313b91137898c197747493d97c33b8bc28ba90eb113fbb52dd55394"
+    },
+    {
+      "path": "src/Browser.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "251a7a7cf250bb7804db45fdf94d2eeb564735761f3eac330fcee4598fe4cb50"
+    },
+    {
+      "path": "src/Main.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e18afab209f10a2f23ed0d8339bf6821253b116f3b5fa260684bb1bd82a0a4f2"
+    },
+    {
+      "path": "src/NetDSL/AAA.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4e3d4456e8ab1a9197d8ca4b1c8d304c1a5e3927421ecfdbe513b35612206a7a"
+    },
+    {
+      "path": "src/NetDSL/Assurance/Witness.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e683f90670c914aba7049a15cebf15754e65031874ca6a29c8f32dac00b471b9"
+    },
+    {
+      "path": "src/NetDSL/Backend/AST.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "78b652ab7e56b97c539238cec1047f941f649de4f87426c3ad23362168394fb0"
+    },
+    {
+      "path": "src/NetDSL/Backend/Compile.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6c7e913414c0984bdff3dc64d94ffb8cabfc3f14eccabba4019d06c6ff79aa2d"
+    },
+    {
+      "path": "src/NetDSL/Backend/Render.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c63c7256f063cefa3dc7f1856d76d881a7adc79d14022b553e92835f2b86ff0e"
+    },
+    {
+      "path": "src/NetDSL/Common.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f33de43e5aa7a3f7ad8aa683aaf6621f42518e7a01c85c4644f4ded7bfa382eb"
+    },
+    {
+      "path": "src/NetDSL/Compiler.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "502327e8b2cb56ab9612b318eac0b7cf86016216d0e7b7e11fb7f7b4285d8204"
+    },
+    {
+      "path": "src/NetDSL/Docs.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fd793596be18587294ee167cad9fff20e07c86ffe3138547d4f29c5460b0ed05"
+    },
+    {
+      "path": "src/NetDSL/Domain/Address.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c7ec0d73eb506637dc4c36fcba8402d10d342069017125d12d8cc1ab3d9aa22a"
+    },
+    {
+      "path": "src/NetDSL/Domain/Model.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e43846df24cdf6edcb540d91c2a6e38d4f3c442514b4c7d31a91dcdb184c48d2"
+    },
+    {
+      "path": "src/NetDSL/Graph/DAG.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ed60016f356af87d5c713f9e3736e9192ce6246ec046ab1c403dc6fb10edf9af"
+    },
+    {
+      "path": "src/NetDSL/Migration.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6f2b7aa1a13491f273b1ae574f30c5e938854961847ba6630699236eb49db49b"
+    },
+    {
+      "path": "src/NetDSL/Resolve.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2e6dcd2aa3981b91d06dcf43634ccb41caae32e724ed6988ba19b6678fd7965d"
+    },
+    {
+      "path": "src/NetDSL/Router/Address.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fd94bdadd2fb4fc2b1226978aec1facba181b593850d76cd001e079639d6ebef"
+    },
+    {
+      "path": "src/NetDSL/Router/CheckOptions.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "aad84ed6a4a05c92d933dede213582a8fa0076db7e82def0abf224bcd7914b7c"
+    },
+    {
+      "path": "src/NetDSL/Router/Compile.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "2a1bc5efb47d08a5d3e4eee99e2a95d143941330919aa59ed51d48f0fa64c9f2"
+    },
+    {
+      "path": "src/NetDSL/Router/Docs.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "16744d1b3183f6f65533d159a6592a930ae674cc66587655413a2fa86988c3b4"
+    },
+    {
+      "path": "src/NetDSL/Router/Fields.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7ff37c166f7d2b39c2f6fa09d09994ea86516c6c7528273e4fc33e3f15aaddfd"
+    },
+    {
+      "path": "src/NetDSL/Router/Model.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "084a18e49eddcd3310434e5d67eaf9a9ce15ba6abac89523a849a52f7e2884c1"
+    },
+    {
+      "path": "src/NetDSL/Router/OptionFields.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0b63b6c6e48a9ff37ad394ab83d4186bc68289bae3e4b07b3df4bd68233fac9b"
+    },
+    {
+      "path": "src/NetDSL/Router/OptionJSON.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "f79bf27f85180048caeed5df4f3a82e9fdc610f732df288b69e5e4c0280ca2c6"
+    },
+    {
+      "path": "src/NetDSL/Router/Options.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "7fdbca4d138acae837e38a270fe3e997d2733606f200a0a33d69dd31bd1edd71"
+    },
+    {
+      "path": "src/NetDSL/Router/Parse.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a519b81468d530dc85da167a00aae9a17bf9fd56101bfc68888d30f8b3a69f7b"
+    },
+    {
+      "path": "src/NetDSL/Router/ParseOptions.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "939d5504828dae6a828ee2730be6776b4326d38d4b7ea5f9fd446be25f92c263"
+    },
+    {
+      "path": "src/NetDSL/Router/Schema.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "36163738568f0902e9549526846a1597c18111114c2258a4996c2f142843ff0c"
+    },
+    {
+      "path": "src/NetDSL/Router/Validate.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "dc2f35347c598aa76a840fc759080afd4eace012cca09346f6609478224aef61"
+    },
+    {
+      "path": "src/NetDSL/State.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ff0eb23bb40c1d894dd73fed7868ee76d250f4e3a7623ac46c7fb6662ee903da"
+    },
+    {
+      "path": "src/NetDSL/Syntax/Parser.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "45a2c4411277e64bd3ace821b85e4fa68fdae817bfa64d942c900ae0c8223173"
+    },
+    {
+      "path": "src/NetDSL/Tests.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "498f24d7b3b008ee7504bc02d0244e6826e8f6e002051835eff851b7a61cbd65"
+    },
+    {
+      "path": "src/NetDSL/Validate.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3d7d9b4b0392ea80210e537dae85f7063782764c40787ea5cdc0e56b288ebbac"
+    },
+    {
+      "path": "src/NetDSL/Version.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "aa8ddf3d1d7bf9d2d03630b11391841fd1cbfb5387a2ff6c0cf2f70b58968b4e"
+    },
+    {
+      "path": "src/NetDSL/Wireless.idr",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "6712ff9ae9058033b6f61228fd5fd1a3fa1488e1a22c3d486102b44b6d3c9558"
+    },
+    {
+      "path": "tests/fixtures/core-router/backup/dhcp.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1d2356d235a93f47a0b0a3cb474f19279c3debc662bfdbce244cf5bc14843172"
+    },
+    {
+      "path": "tests/fixtures/core-router/backup/firewall.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c7bd5597b5fb9c422d7ed01742ea7cb1f8c63f89572cf329af1c1178223c0d09"
+    },
+    {
+      "path": "tests/fixtures/core-router/backup/network.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1a65a0bed2b66342fb9335f2401e4b41341f6aebac7e0b270b0973035d51a1ab"
+    },
+    {
+      "path": "tests/fixtures/core-router/backup/wireless.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "3bf7230cb92c8a81f9df240b269bd5b4494f352d7a5e218e6cbbc5767badd78c"
+    },
+    {
+      "path": "tests/fixtures/core-router/golden/dhcp",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "790f2475148ecf5712914adb9cea64b57827ca06343178086753a44aa6faf1e3"
+    },
+    {
+      "path": "tests/fixtures/core-router/golden/firewall",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c0c9f23e90c028f238425aa53686e669ded31c426370feb45c05edacff1f2912"
+    },
+    {
+      "path": "tests/fixtures/core-router/golden/network",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "523d3214115c9ce9ea2f433ac2ee217304fd590a79b00369788419413b604b5e"
+    },
+    {
+      "path": "tests/fixtures/core-router/golden/secret-bindings.json",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a037a5e23973ed4893d8ee25311bf068de448331f0ec24d83672068eaa1b3a83"
+    },
+    {
+      "path": "tests/fixtures/core-router/golden/wireless.template",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cab0287e470b8b698db31ef8697227cdad83869ce52dd048a57d37cd8a5905be"
+    },
+    {
+      "path": "tests/fixtures/dependencies.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "e3d1fb1a6e71f8060628a720585b7e399e9147d3b49f565f5b198bb0cb45795f"
+    },
+    {
+      "path": "tests/fixtures/errors/bad-cidr.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "00771d1c504c7607b250028b581d7f1e2b119b5016a2fa7e999f757410087ff8"
+    },
+    {
+      "path": "tests/fixtures/errors/duplicate-ip.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "ce59081163487079da887dec9aae3fa3025a76e82688f28dd49d2d788254f822"
+    },
+    {
+      "path": "tests/fixtures/errors/offset-outside-prefix.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "377f5ab15d91267c39bc3f1968e147fe2c3808f77e7bca677a9915943c98200a"
+    },
+    {
+      "path": "tests/fixtures/errors/renderer-newline.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "d73ef06f27454ccbf498d0a0a219d96b28e5dc7636e59f1e7e206181e08e8838"
+    },
+    {
+      "path": "tests/fixtures/errors/route-cycle.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "fb815692c4fb3742ff373147fac5e1909745768a0f4c1734cf11b6d412209ba6"
+    },
+    {
+      "path": "tests/fixtures/errors/static-dhcp-overlap.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c8206ae82b239dce99b47ed8803e1d768ad0e5b05c6ac1510ea2275e6f706fa0"
+    },
+    {
+      "path": "tests/fixtures/errors/unknown-vlan.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a87947df7afb43c91ec53fe68652553a00b28838f3778ebf31a2a09520908d0a"
+    },
+    {
+      "path": "tests/fixtures/errors/vlan-out-of-range.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "cec91c1c7c76d825f03f3f78067b854d313fcd18b31b6a39cfaf050ecbda48cf"
+    },
+    {
+      "path": "tests/fixtures/golden/core.config.ios",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "9c519ee9888654e9fd61dd10ef60d501aaaba9f940f5b80534be36036a4dff10"
+    },
+    {
+      "path": "tests/fixtures/golden/gateway.dhcp.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "94bdb24186a34569a011dcb3ce1529a2265ca0e3a443c010598b9b8d15e0a6f1"
+    },
+    {
+      "path": "tests/fixtures/golden/gateway.firewall.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "083a4574696bc9277fc05537e17ac844f5985ff03c09625ce43c3b06fadb3bdb"
+    },
+    {
+      "path": "tests/fixtures/golden/gateway.network.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "39f98149d1fa491ebc126977f4fcb629c7a32819534bbc2874f6c008d4658d60"
+    },
+    {
+      "path": "tests/fixtures/minimal.net",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c8a7791f7eca31ddcd2d7a53ae8e955efa50103779aa0b0e0ae3891fa1d6f92c"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/gateway/dhcp.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1d2356d235a93f47a0b0a3cb474f19279c3debc662bfdbce244cf5bc14843172"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/gateway/firewall.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "c7bd5597b5fb9c422d7ed01742ea7cb1f8c63f89572cf329af1c1178223c0d09"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/gateway/network.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "1a65a0bed2b66342fb9335f2401e4b41341f6aebac7e0b270b0973035d51a1ab"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/gateway/wireless.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "34c9bc70c61041d8c050f9405fa17c9c7edafee223e41287128e9d3a60817b5c"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/satellite/dhcp.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "4961731c2f9afe8c4a5c0c0eca1d2dc04982a0cba9c28135af9ff43e3729a130"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/satellite/firewall.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "70c92ec48b6ef02ff19c068d24ae3772b63d6545a35a06267ed52cc1a56b296f"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/satellite/network.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "0c4d28c4349ed0baffcdc5e2d478dd225829045fe7d63e26c019844821e9c224"
+    },
+    {
+      "path": "tests/fixtures/wds-network/backup/satellite/wireless.uci",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "b7b5aa82338db2e1e002cb90b21578920e6e0ab773bf59332e23b27f79a4ded4"
+    },
+    {
+      "path": "tests/router.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "dd2a768ffb3ac016e829120ecaaf786df98247d51432f8cab52494eb8469cb0d"
+    },
+    {
+      "path": "tests/router_parity.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "99fb0a9b04935f9cfa744f39728c1f7b536234a60d908c7a18a266aeae8c8c45"
+    },
+    {
+      "path": "tests/run.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "021e051e02624a464dc5bef8d3013aca6376047429c50f245f793264a9108651"
+    },
+    {
+      "path": "tests/test_fixture_index.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "a52cea7258f37ca5bd580605b66c0c933e230a8465496da74aef94dc9b6a96fd"
+    },
+    {
+      "path": "tests/wireless.py",
+      "type": "file",
+      "mode": "100644",
+      "sha256": "06832daa9b7a396ea41922961bf75453132eea030ce4feb79feeb2b0b60a6d4b"
+    }
+  ]
+}
